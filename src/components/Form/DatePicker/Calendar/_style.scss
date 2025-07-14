@@ -1,0 +1,300 @@
+@charset "UTF-8";
+/* @/components/Form/DatePicker/Calendar/_style.scss */
+
+@use 'sass:map';
+@use 'sass:color';
+@use '@/assets/styles/components' as _;
+
+.select-calendar-wrap {
+  width: 100%;
+  height: 19rem;
+  padding: 0.4rem 0.4rem;
+  border-radius: 0.4rem;
+  position: relative;
+  z-index: 1;
+  overflow: hidden; // 트랜지션 중 넘치는 부분 숨김
+
+  .select-calendar {
+    margin: 0 auto;
+
+    ul {
+      display: table;
+      font-size: 0.8rem;
+      margin: 0;
+      padding-left: 0;
+      border-spacing: 0.2rem;
+      width: 100%;
+
+      li {
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+        width: 2.2rem;
+        height: 2.2rem;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 0.4rem;
+        position: relative;
+        font-weight: 500;
+        color: _.$text-default;
+
+        &:focus {
+          outline: 2px solid _.$primary;
+          outline-offset: 2px;
+          z-index: 1;
+        }
+
+        &:focus:not(:focus-visible) {
+          outline: none;
+        }
+      }
+
+      &.header li {
+        // 일 - 토 라인
+        color: color.change(_.$text-default, $lightness: 40%);
+        cursor: default !important;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        height: 2.2rem;
+        line-height: 2.2rem;
+        border: none;
+        background: rgba(_.$primary, 0.1);
+        border-radius: 0.4rem;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &:not(.header) li {
+        &:first-child {
+          // 일요일 컬러 표시
+          color: _.$danger;
+        }
+
+        &:last-child {
+          // 토요일 컬러 표시
+          color: _.$primary;
+        }
+
+        &.beforeMonth,
+        &.afterMonth {
+          // 이전달, 다음달 날짜 표시
+          color: color.change(_.$text-default, $lightness: 40%) !important;
+          cursor: default;
+          opacity: 0.6;
+          background: rgba(_.$gray-200, 0.5);
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        &.today {
+          // 오늘 날짜 표시
+          border-color: _.$accent;
+          font-weight: 700;
+          position: relative;
+          background: linear-gradient(135deg, rgba(_.$accent, 0.1), rgba(_.$accent, 0.05));
+          box-shadow: 0 2px 8px rgba(_.$accent, 0.2);
+
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0.3rem;
+            height: 0.3rem;
+            background: linear-gradient(
+              135deg,
+              _.$accent,
+              color.change(_.$accent, $lightness: 80%)
+            );
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(_.$accent, 0.4);
+          }
+        }
+
+        &.disabled {
+          color: _.$text-disabled !important;
+          cursor: default;
+          opacity: 0.3;
+          background: rgba(_.$gray-200, 0.2);
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        &.focused {
+          background: linear-gradient(135deg, rgba(_.$primary, 0.12), rgba(_.$primary, 0.08));
+          border-color: _.$primary;
+          box-shadow:
+            0 0 0 1px _.$primary,
+            0 4px 12px rgba(_.$primary, 0.15);
+          transform: scale(1.05);
+        }
+
+        $_button-colors: _.getButtonColors();
+        @if map.has-key($_button-colors, primary) {
+          $_color: map.get($_button-colors, primary, default);
+
+          &.selected {
+            // 선택된 날짜
+            background: linear-gradient(135deg, $_color, color.change($_color, $lightness: 90%));
+            color: white;
+            font-weight: 700;
+            box-shadow:
+              0 4px 16px rgba($_color, 0.4),
+              0 2px 8px rgba($_color, 0.2);
+            transform: scale(1.05);
+
+            &:hover {
+              background: linear-gradient(
+                135deg,
+                map.get($_button-colors, primary, hover),
+                color.change(map.get($_button-colors, primary, hover), $lightness: 85%)
+              );
+              transform: scale(1.08) translateY(-1px);
+              box-shadow:
+                0 6px 20px rgba($_color, 0.5),
+                0 3px 12px rgba($_color, 0.3);
+            }
+
+            &:focus {
+              outline: 2px solid white;
+              outline-offset: 2px;
+            }
+          }
+
+          &.date-range {
+            // 기간 내 선택된 날짜
+            background: linear-gradient(135deg, rgba($_color, 0.15), rgba($_color, 0.08));
+            color: $_color;
+            font-weight: 600;
+            border: 1px solid rgba($_color, 0.3);
+            box-shadow: 0 2px 8px rgba($_color, 0.1);
+
+            &:hover {
+              background: linear-gradient(135deg, rgba($_color, 0.2), rgba($_color, 0.12));
+              transform: scale(1.02);
+            }
+          }
+        }
+
+        &:not(.selected, .date-range, .disabled, .beforeMonth, .afterMonth):hover {
+          color: _.$text-default !important;
+          background: linear-gradient(135deg, rgba(_.$gray-100, 0.8), rgba(_.$gray-100, 0.6));
+          transform: translateY(-1px) scale(1.02);
+          box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.08),
+            0 2px 6px rgba(0, 0, 0, 0.04);
+          border-color: rgba(_.$gray-300, 0.5);
+        }
+
+        // 키보드 포커스 시 시각적 피드백
+        &:focus-visible {
+          outline: 2px solid _.$primary;
+          outline-offset: 2px;
+          z-index: 2;
+        }
+      }
+    }
+  }
+}
+
+// 트랜지션 애니메이션 개선 - 더 부드럽고 자연스러운 전환
+.trans-left-enter-from {
+  opacity: 0;
+  transform: translateX(2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-left-leave-to {
+  opacity: 0;
+  transform: translateX(-2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-left-enter-active,
+.trans-left-leave-active {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.trans-right-enter-from {
+  opacity: 0;
+  transform: translateX(-2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-right-leave-to {
+  opacity: 0;
+  transform: translateX(2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-right-enter-active,
+.trans-right-leave-active {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.trans-down-enter-from {
+  opacity: 0;
+  transform: translateY(-2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-down-leave-to {
+  opacity: 0;
+  transform: translateY(2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-down-enter-active,
+.trans-down-leave-active {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.trans-up-enter-from {
+  opacity: 0;
+  transform: translateY(2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-up-leave-to {
+  opacity: 0;
+  transform: translateY(-2rem) scale(0.98);
+  filter: blur(1px);
+}
+.trans-up-enter-active,
+.trans-up-leave-active {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .select-calendar-wrap {
+    width: 100%;
+    padding: 1rem 1.5rem;
+
+    .select-calendar {
+      width: 100%;
+      max-width: 30rem;
+
+      ul {
+        font-size: 1.1rem;
+        border-spacing: 0.15rem;
+
+        li {
+          width: 3rem;
+          height: 3rem;
+          line-height: 2.8rem;
+          border-radius: 0.7rem;
+        }
+
+        &.header li {
+          font-size: 0.8rem;
+          height: 2.6rem;
+          line-height: 2.4rem;
+        }
+      }
+    }
+  }
+}

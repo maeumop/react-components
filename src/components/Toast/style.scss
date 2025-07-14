@@ -1,0 +1,150 @@
+@charset "UTF-8";
+/* @/components/Toast/_style.scss */
+@use 'sass:map';
+@use 'sass:meta';
+@use '@/assets/styles/components' as _;
+
+.toast-bg {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 10010;
+  background-color: transparent;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  pointer-events: none;
+  max-width: 400px;
+
+  .toast-body {
+    margin: 0;
+    height: auto;
+    min-height: 3.5rem;
+    padding: 0.875rem 1rem;
+    min-width: 280px;
+    max-width: 100%;
+    border-radius: 0.75rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    pointer-events: initial;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    // 접근성을 위한 포커스 스타일
+    &:focus {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+      box-shadow:
+        0 0 0 4px rgba(59, 130, 246, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    // 호버 효과
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    // 클릭 시 제거 애니메이션
+    &.toast-leaving {
+      opacity: 0;
+      transform: translateX(100%) scale(0.9);
+      pointer-events: none;
+    }
+
+    @if meta.mixin-exists('mx-toastColorStyle', _) {
+      @include _.mx-toastColorStyle using ($color-map) {
+        border-left: 0.25rem solid map.get($color-map, border);
+        background-color: map.get($color-map, default);
+        color: #fff;
+      }
+    }
+
+    .icon {
+      display: block;
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+      font-size: 1.25rem;
+      opacity: 0.9;
+      color: #ffffff;
+    }
+
+    .message {
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.4;
+      word-break: break-word;
+      flex: 1;
+      margin: 0;
+      color: #ffffff;
+    }
+  }
+
+  .toast-view-enter-from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+
+  .toast-view-leave-to {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+
+  .toast-view-enter-active,
+  .toast-view-leave-active {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .toast-view-move {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  // 반응형 디자인
+  @media (max-width: 768px) {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
+    max-width: none;
+
+    .toast-body {
+      min-width: auto;
+      width: 100%;
+      padding: 0.75rem 0.875rem;
+      min-height: 3rem;
+
+      .icon {
+        font-size: 1.125rem;
+        margin-right: 0.625rem;
+      }
+
+      .message {
+        font-size: 0.8125rem;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .toast-body {
+      padding: 0.625rem 0.75rem;
+      min-height: 2.75rem;
+      border-radius: 0.5rem;
+
+      .icon {
+        font-size: 1rem;
+        margin-right: 0.5rem;
+      }
+
+      .message {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

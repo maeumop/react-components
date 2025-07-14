@@ -1,0 +1,157 @@
+@charset "UTF-8";
+/* @/components/Spinner/_style.scss */
+@use '@/assets/styles/variables' as *;
+@use '@/assets/styles/components' as _;
+
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  transition: opacity 0.3s ease-in-out;
+
+  &.spinner-overlay--fade-enter-active,
+  &.spinner-overlay--fade-leave-active {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &.spinner-overlay--fade-enter-from,
+  &.spinner-overlay--fade-leave-to {
+    opacity: 0;
+  }
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-lg;
+  min-width: 120px;
+  min-height: 120px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+
+  .spinner-icon {
+    font-size: 2.5rem;
+    color: $white;
+    margin-bottom: $spacing-md;
+    animation: spin 3s linear infinite;
+    transform-origin: center;
+  }
+
+  .spinner-text {
+    color: $white;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    margin: 0;
+    line-height: $line-height-tight;
+    max-width: 200px;
+    word-wrap: break-word;
+  }
+
+  .spinner-timeout {
+    color: $white;
+    font-size: $font-size-xs;
+    opacity: 0.7;
+    margin-top: $spacing-sm;
+  }
+
+  // 색상 테마 클래스 정의
+  &.primary,
+  &.secondary,
+  &.success,
+  &.warning,
+  &.error,
+  &.info {
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  &.primary .spinner-icon,
+  &.primary .spinner-text,
+  &.primary .spinner-timeout {
+    color: $primary-color;
+  }
+  &.secondary .spinner-icon,
+  &.secondary .spinner-text,
+  &.secondary .spinner-timeout {
+    color: $secondary-color;
+  }
+  &.success .spinner-icon,
+  &.success .spinner-text,
+  &.success .spinner-timeout {
+    color: $success-color;
+  }
+  &.warning .spinner-icon,
+  &.warning .spinner-text,
+  &.warning .spinner-timeout {
+    color: $warning-color;
+  }
+  &.error .spinner-icon,
+  &.error .spinner-text,
+  &.error .spinner-timeout {
+    color: $error-color;
+  }
+  &.info .spinner-icon,
+  &.info .spinner-text,
+  &.info .spinner-timeout {
+    color: $info-color;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// 반응형 디자인
+@media (max-width: $breakpoint-sm) {
+  .spinner-container {
+    padding: $spacing-lg;
+    min-width: 100px;
+    min-height: 100px;
+
+    .spinner-icon {
+      font-size: 2rem;
+    }
+
+    .spinner-text {
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in;
+}

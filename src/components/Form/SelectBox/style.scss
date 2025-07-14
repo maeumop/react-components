@@ -1,0 +1,314 @@
+@charset "UTF-8";
+/* @/components/Form/SelectBox/_style.scss */
+@use 'sass:map';
+@use '@/assets/styles/components' as _;
+@use '../../common';
+@use '../common' as form-common;
+
+.select-box {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 100%;
+  max-width: 300px;
+
+  &.block {
+    display: block;
+    max-width: none;
+  }
+
+  .options-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-label {
+    font-weight: 500;
+    margin: 0;
+
+    .required {
+      color: #dc3545;
+      margin-left: 0.25rem;
+    }
+  }
+
+  .control-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #e9ecef;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    padding: 0.75rem;
+    font-size: form-common.$form-input-font-size;
+    line-height: 1.5;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+
+    &:hover {
+      border-color: #adb5bd;
+    }
+
+    &.active {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    &.error {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .text {
+      flex: 1;
+      text-align: left;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      align-items: center;
+      line-height: 1.5;
+
+      &.ph {
+        color: #6c757d;
+      }
+
+      .item {
+        background-color: #e9ecef;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: form-common.$form-feedback-font-size;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        .remove-icon {
+          cursor: pointer;
+          color: #6c757d;
+          font-size: form-common.$form-input-font-size;
+
+          &:hover {
+            color: #dc3545;
+          }
+        }
+      }
+    }
+
+    .arrow {
+      color: #adb5bd;
+      transition: transform 0.2s ease;
+      margin-left: 0.5rem;
+      flex-shrink: 0;
+
+      &.rotate {
+        transform: rotate(180deg);
+      }
+    }
+
+    .btn-clear {
+      position: absolute;
+      right: 2.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+      text-decoration: none;
+      font-size: form-common.$form-input-font-size;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out;
+
+      &:hover {
+        color: #333;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .option-list {
+    position: fixed;
+    z-index: 30;
+    background-color: #fff;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+
+    .search {
+      .search-wrap {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e9ecef;
+
+        input {
+          padding: 0 1rem;
+          height: 2.75rem;
+          color: #333;
+          border: 0;
+          width: calc(100% - 3rem);
+          outline: none;
+          font-size: form-common.$form-input-font-size;
+
+          &::placeholder {
+            color: #6c757d;
+          }
+        }
+
+        svg {
+          padding-right: 1rem;
+          width: 1.5rem;
+          box-sizing: content-box;
+          color: #495057;
+        }
+      }
+    }
+
+    @each $value in top bottom {
+      &.show-#{$value} {
+        transform-origin: $value;
+      }
+    }
+
+    .btn-accept {
+      text-align: center;
+      display: block;
+      line-height: 2.75rem;
+      background-color: #fff;
+      border-top: 1px solid #e9ecef;
+      color: #333;
+      font-size: form-common.$form-input-font-size;
+      text-decoration: none;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+
+    ul {
+      max-height: 15rem;
+      overflow-y: auto;
+
+      .option-item {
+        padding: 0.75rem;
+        transition: background-color 0.15s ease-in-out;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        font-size: form-common.$form-input-font-size;
+        font-weight: 400;
+        color: #333;
+        cursor: pointer;
+
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &:hover {
+          background-color: #f8f9fa;
+        }
+
+        .checkbox {
+          margin-right: 0.75rem;
+          width: 1.25rem;
+          height: 1.25rem;
+          min-width: 1.25rem;
+          min-height: 1.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          svg {
+            width: 1.25rem;
+            height: 1.25rem;
+          }
+
+          &.checked {
+            color: #667eea;
+          }
+        }
+
+        &.key-selected {
+          color: #667eea;
+          background-color: rgba(102, 126, 234, 0.1);
+        }
+
+        &.selected {
+          color: #667eea;
+          font-weight: 500;
+        }
+      }
+
+      li {
+        &.items-loading svg {
+          margin: 0 auto;
+          animation: spin 1s ease-out infinite;
+          -webkit-animation: spin 1s ease-out infinite;
+        }
+      }
+    }
+  }
+
+  .options-view-enter-from,
+  .options-view-leave-to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  .options-view-enter-active,
+  .options-view-leave-active {
+    transition: all 0.2s ease;
+  }
+
+  .options-view-bottom-enter-from,
+  .options-view-bottom-leave-to {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  .options-view-bottom-enter-active,
+  .options-view-bottom-leave-active {
+    transition: all 0.2s ease;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-0.25rem);
+  }
+  75% {
+    transform: translateX(0.25rem);
+  }
+}
+
+.feedback.error {
+  animation: errorShake 0.3s ease-in-out;
+}

@@ -1,0 +1,194 @@
+@charset "UTF-8";
+/* @/components/Form/common.scss - Form 컴포넌트 공통 스타일 */
+
+/*
+ * Form 컴포넌트들의 공통 스타일 정의
+ *
+ * 사용법:
+ * 1. 각 Form 컴포넌트의 style.scss 파일에서 @use '../common.scss' as form; 추가
+ * 2. 공통 스타일은 자동으로 적용되며, 필요한 경우 직접 스타일을 정의
+ *
+ * CSS 변수 (커스터마이징 가능):
+ * - $form-label-font-size: 라벨 폰트 크기 (기본값: 0.875rem)
+ * - $form-label-font-weight: 라벨 폰트 굵기 (기본값: 400)
+ * - $form-label-color: 라벨 색상 (기본값: #333)
+ * - $form-input-font-size: 입력 필드 폰트 크기 (기본값: 0.875rem)
+ * - $form-feedback-font-size: 피드백 메시지 폰트 크기 (기본값: 0.75rem)
+ *
+ * 제공되는 공통 클래스:
+ * - .options-wrap: 옵션 래퍼 스타일 (display: flex, justify-content: space-between, align-items: center)
+ * - .input-label: 입력 라벨 스타일 (CSS 변수 사용)
+ * - .feedback, .description: 에러 메시지 스타일 (트랜지션과 애니메이션 포함)
+ * - .form-input: 입력 필드 스타일 (기본 input 스타일)
+ * - .block: 블록 레이아웃 (display: block, width: 100%)
+ * - .inline-block: 인라인 블록 레이아웃 (display: inline-block, position: relative, vertical-align: middle)
+ *
+ * 제공되는 믹스인:
+ * - @mixin form-focus: 포커스 스타일
+ * - @mixin form-error: 에러 스타일
+ * - @mixin form-disabled: 비활성화 스타일
+ *
+ * 공통 애니메이션:
+ * - errorShake: 에러 상태일 때 셰이크 애니메이션
+ *
+ * 적용된 컴포넌트:
+ * - TextField, CheckButton, SwitchButton, NumberFormat, SelectBox, DatePicker, ValidateWrap
+ */
+
+// Form 컴포넌트 공통 CSS 변수
+$form-label-font-size: 0.875rem;
+$form-label-font-weight: 400;
+$form-label-color: #333;
+$form-input-font-size: 0.875rem;
+$form-feedback-font-size: 0.7rem;
+
+// 공통 옵션 래퍼 스타일
+.options-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  .input-label {
+    font-size: $form-label-font-size;
+    font-weight: 500;
+    color: $form-label-color;
+    margin: 0;
+
+    .required {
+      color: #dc3545;
+      margin-left: 0.25rem;
+    }
+  }
+}
+
+// 공통 에러 메시지 스타일 (feedback과 description 모두 지원)
+.feedback,
+.description {
+  margin-top: 0.25rem;
+  font-size: $form-feedback-font-size;
+  color: #dc3545;
+  min-height: 1rem;
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
+
+  &.error {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 공통 에러 셰이크 애니메이션
+@keyframes errorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-0.25rem);
+  }
+  75% {
+    transform: translateX(0.25rem);
+  }
+}
+
+// 에러 상태일 때 셰이크 애니메이션 적용
+.feedback.error,
+.description.error {
+  animation: errorShake 0.3s ease-in-out;
+}
+
+// 공통 입력 필드 스타일
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 0.375rem;
+  font-size: $form-input-font-size;
+  line-height: 1.5;
+  color: #333;
+  background-color: #fff;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+
+  &:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+
+  &.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
+
+  &::placeholder {
+    color: #6c757d;
+  }
+}
+
+// 공통 textarea 스타일
+textarea {
+  @extend .form-input;
+  resize: vertical;
+}
+
+// 공통 블록 스타일
+.block {
+  display: block;
+  width: 100%;
+}
+
+// 공통 인라인 블록 스타일
+.inline-block {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+
+// 공통 포커스 스타일 믹스인
+@mixin form-focus {
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+}
+
+// 공통 에러 스타일 믹스인
+@mixin form-error {
+  &.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
+}
+
+// 공통 비활성화 스타일 믹스인
+@mixin form-disabled {
+  &:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+}
+
+@keyframes shaking {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}

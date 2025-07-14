@@ -1,0 +1,293 @@
+@charset "UTF-8";
+/* @/components/Form/DatePicker/_style.scss */
+
+@use 'sass:map';
+@use '@/assets/styles/components' as _;
+@use '../../common';
+@use '../common' as form-common;
+
+/// date-picker의 a 버튼 공통 스타일
+@mixin picker-button {
+  display: inline-block;
+  text-decoration: none;
+  border: 0.1rem solid _.$gray-300;
+  border-radius: 0.4rem;
+  font-size: form-common.$form-input-font-size;
+  padding: 0.5rem 0.8rem;
+  color: _.$text-default;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/// @access private
+$_button-colors: _.getButtonColors();
+
+.date-picker {
+  position: relative;
+  display: inline-block;
+  max-width: 300px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  &.block {
+    max-width: none;
+    width: 100%;
+  }
+
+  .wrap {
+    width: 100%;
+  }
+
+  .picker-popup {
+    position: fixed;
+    box-shadow: 0.2rem 0.2rem 0.5rem 0.2rem rgba(0, 0, 0, 0.3);
+    border-radius: 0.4rem;
+    background: #fff;
+    z-index: 100;
+    line-height: 1;
+
+    .pick-name-text {
+      border-bottom: 0.1rem solid _.$gray-300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        line-height: 3;
+        font-size: 1rem;
+        font-weight: 400;
+        width: 100%;
+        text-align: center;
+
+        & + li {
+          border-left: 0.1rem solid _.$gray-300;
+        }
+      }
+    }
+
+    .picker-wrap {
+      .calendar {
+        display: inline-block;
+        box-sizing: border-box;
+        vertical-align: top;
+
+        & + .calendar {
+          border-left: 0.1rem solid _.$gray-300;
+        }
+      }
+    }
+  }
+
+  .search-date {
+    padding: 0.8rem;
+    border-bottom: 0.1rem solid _.$gray-300;
+    text-align: left;
+
+    a {
+      @include picker-button;
+
+      & + a {
+        margin-left: 0.3rem;
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(_.$primary, 0.1), rgba(_.$primary, 0.05));
+        border-color: rgba(_.$primary, 0.3);
+        color: _.$primary;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(_.$primary, 0.15);
+      }
+
+      &.active {
+        @if map.has-key($_button-colors, primary) {
+          color: white;
+          border-color: map.get($_button-colors, primary, default);
+          background: linear-gradient(
+            135deg,
+            map.get($_button-colors, primary, default),
+            map.get($_button-colors, primary, hover)
+          );
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(map.get($_button-colors, primary, default), 0.3);
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+
+  .btn-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem;
+    border-top: 0.1rem solid _.$gray-300;
+
+    .select-date {
+      font-size: 0.9em;
+      color: _.$text-default;
+
+      &.selected-error {
+        color: _.$danger;
+      }
+    }
+
+    a {
+      @include picker-button;
+
+      &.okay {
+        margin-left: 0.5rem;
+
+        @if map.has-key($_button-colors, primary) {
+          color: #fff;
+          border-color: map.get($_button-colors, primary, default);
+          background-color: map.get($_button-colors, primary, default);
+
+          &:hover {
+            border-color: map.get($_button-colors, primary, hover);
+            background-color: map.get($_button-colors, primary, hover);
+          }
+        }
+      }
+    }
+  }
+
+  .picker-date-text {
+    width: 100%;
+    border: 1px solid #e9ecef;
+    border-radius: 0.375rem;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #fff;
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #adb5bd;
+    }
+
+    input {
+      border: 0 !important;
+      flex: 1;
+      padding: 0.75rem;
+      margin: 0;
+      width: 100%;
+      text-align: center;
+      background-color: transparent;
+      color: _.$text-default;
+      font-size: form-common.$form-input-font-size;
+      line-height: 1.5;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+
+      &::placeholder {
+        font-size: form-common.$form-input-font-size;
+        font-weight: 400;
+        color: _.$text-placeholder;
+      }
+    }
+
+    .input-group-text {
+      margin: 0 0.5rem;
+      color: _.$gray-600;
+      font-weight: 500;
+    }
+
+    svg {
+      margin-right: 0.75rem;
+      color: #6c757d;
+    }
+
+    &.active {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    &.error {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    &.disabled {
+      background-color: _.$gray-100;
+      color: _.$gray-500;
+      cursor: not-allowed;
+
+      input {
+        color: _.$gray-500;
+        cursor: not-allowed;
+      }
+
+      svg {
+        color: #adb5bd;
+      }
+    }
+
+    &.readonly {
+      background-color: _.$gray-100;
+      cursor: default;
+    }
+  }
+
+  // feedback 스타일은 공통 스타일에서 상속
+}
+
+// 트랜지션 애니메이션
+.picker-scale-enter-from,
+.picker-scale-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.picker-scale-enter-active,
+.picker-scale-leave-active {
+  transition: all 0.2s ease;
+}
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .date-picker {
+    .picker-popup {
+      position: fixed;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 90vw;
+      max-width: 400px;
+    }
+
+    .picker-wrap {
+      .calendar {
+        display: block;
+        width: 100%;
+
+        & + .calendar {
+          border-left: none;
+          border-top: 0.1rem solid _.$gray-300;
+        }
+      }
+    }
+
+    .search-date {
+      a {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+      }
+    }
+  }
+}

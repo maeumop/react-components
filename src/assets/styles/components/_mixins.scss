@@ -1,0 +1,63 @@
+@charset "UTF-8";
+/* @\components\styles\_mixins.scss */
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:color';
+@use './variables' as *;
+@use './functions' as *;
+
+/// 지정된 색상으로 스타일 정의
+/// [CheckButton|SwitchButton|StyledButton|Badge]
+/// [default|disabled|hover|text] 기본 컬러 스타일
+/// @content
+/// @output
+@mixin buttonColorStyle {
+  /// 지역변수
+  /// 변경 할 수 있는 컬러 정의
+  /// 색마다 채도, 명도가 달라서 균일하게 색지정이 불가하니 미세 조정을 지정하는게 제일 좋을 것 같습니다.
+  $_button-colors: getButtonColors();
+
+  @each $key, $color in $_button-colors {
+    &.#{$key} {
+      @content ($color);
+    }
+  }
+}
+
+/// 지정된 색상으로 스타일 정의
+/// [Toast]
+/// [default|border] 기본 컬러 스타일
+/// @content
+/// @output
+@mixin toastColorStyle {
+  /// 지역변수
+  /// 변경 할 수 있는 컬러 정의
+  /// 색마다 채도, 명도가 달라서 균일하게 색지정이 불가하니 미세 조정을 지정하는게 제일 좋을 것 같습니다.
+  $_colors: (
+    info: (
+      default: $info,
+      border: #008ead,
+    ),
+
+    success: (
+      default: $success,
+      border: #389e0d,
+    ),
+
+    warning: (
+      default: $warning,
+      border: #f29e02,
+    ),
+
+    error: (
+      default: $danger,
+      border: #cc2828,
+    ),
+  );
+
+  @each $key, $color in $_colors {
+    &.bg-#{$key} {
+      @content ($color);
+    }
+  }
+}

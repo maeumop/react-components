@@ -1,0 +1,297 @@
+@charset "UTF-8";
+/* @/components/DropMenu/_style.scss */
+@use 'sass:map';
+@use 'sass:meta';
+@use '@/assets/styles/components' as _;
+
+/// 컴포넌트 color 스타일 정의
+/// @output - .drop-menu.#{color-name} { ... }
+@mixin defineColorStyle {
+  @if meta.mixin-exists('mx-buttonColorStyle', _) {
+    @include _.mx-buttonColorStyle using ($color-map) {
+      .drop-menu-wrap {
+        border-color: map.get($color-map, border);
+        background-color: map.get($color-map, default);
+
+        li > a {
+          color: white;
+          &:hover {
+            background-color: map.get($color-map, hover);
+          }
+        }
+      }
+    }
+  }
+}
+
+$transitionList: slide, scale, fade, bounce, flip, elastic, swing;
+$transitionDirection: top, right, bottom, left;
+
+@each $item in $transitionList {
+  @each $direct in $transitionDirection {
+    .drop-menu-#{$item}-#{$direct}-enter-from,
+    .drop-menu-#{$item}-#{$direct}-leave-to {
+      opacity: 0;
+
+      @if $item == slide {
+        @if $direct == bottom {
+          transform: translateY(-1em);
+        } @else if $direct == right {
+          transform: translateX(-1em);
+        } @else if $direct == left {
+          transform: translateX(1em);
+        } @else {
+          transform: translateY(1em);
+        }
+      } @else if $item == scale {
+        transform: scale(0.5);
+      } @else if $item == bounce {
+        @if $direct == bottom {
+          transform: translateY(-2em) scale(0.8);
+        } @else if $direct == right {
+          transform: translateX(-2em) scale(0.8);
+        } @else if $direct == left {
+          transform: translateX(2em) scale(0.8);
+        } @else {
+          transform: translateY(2em) scale(0.8);
+        }
+      } @else if $item == flip {
+        @if $direct == bottom {
+          transform: translateY(-1em) rotateX(-90deg);
+        } @else if $direct == right {
+          transform: translateX(-1em) rotateY(-90deg);
+        } @else if $direct == left {
+          transform: translateX(1em) rotateY(90deg);
+        } @else {
+          transform: translateY(1em) rotateX(90deg);
+        }
+      } @else if $item == elastic {
+        @if $direct == bottom {
+          transform: translateY(-3em) scale(0.7);
+        } @else if $direct == right {
+          transform: translateX(-3em) scale(0.7);
+        } @else if $direct == left {
+          transform: translateX(3em) scale(0.7);
+        } @else {
+          transform: translateY(3em) scale(0.7);
+        }
+      } @else if $item == swing {
+        @if $direct == bottom {
+          transform: translateY(-1em) rotate(-15deg);
+        } @else if $direct == right {
+          transform: translateX(-1em) rotate(15deg);
+        } @else if $direct == left {
+          transform: translateX(1em) rotate(-15deg);
+        } @else {
+          transform: translateY(1em) rotate(15deg);
+        }
+      }
+    }
+
+    .drop-menu-#{$item}-#{$direct}-enter-active,
+    .drop-menu-#{$item}-#{$direct}-leave-active {
+      @if $item == bounce {
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      } @else if $item == elastic {
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      } @else if $item == swing {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      } @else if $item == flip {
+        transition: all 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+        transform-style: preserve-3d;
+      } @else {
+        transition: all 0.3s ease;
+      }
+    }
+  }
+}
+
+.drop-menu {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .drop-menu-wrap {
+    width: fit-content;
+    min-width: fit-content;
+    z-index: 30;
+    position: fixed;
+    padding: 0.2rem;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0.1rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.4);
+    border: 0.1rem solid transparent;
+    border-radius: 0.4rem;
+    background-color: white;
+
+    &.top {
+      transform-origin: bottom center;
+      margin-bottom: 0.1rem;
+    }
+    &.right {
+      transform-origin: top left;
+      margin-left: 0.1rem;
+    }
+    &.left {
+      transform-origin: top right;
+      margin-right: 0.1rem;
+    }
+    &.bottom {
+      transform-origin: top center;
+      margin-top: 0.1rem;
+    }
+
+    li > a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: _.$text-default;
+      transition: background-color 0.2s ease;
+      text-decoration: none;
+      outline: none;
+      border-radius: 0.2rem;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      &:focus {
+        outline: 2px solid #262626;
+        outline-offset: -2px;
+      }
+
+      &.disabled {
+        color: #6c757d;
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.6;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+
+      svg {
+        margin-left: 2.5rem;
+      }
+    }
+  }
+
+  // 색상 테마 스타일
+  &.primary .drop-menu-wrap {
+    border-color: #007bff;
+    background-color: #007bff;
+
+    li > a {
+      color: white;
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+
+  &.secondary .drop-menu-wrap {
+    border-color: #6c757d;
+    background-color: #6c757d;
+
+    li > a {
+      color: white;
+      &:hover {
+        background-color: #545b62;
+      }
+    }
+  }
+
+  &.success .drop-menu-wrap {
+    border-color: #28a745;
+    background-color: #28a745;
+
+    li > a {
+      color: white;
+      &:hover {
+        background-color: #1e7e34;
+      }
+    }
+  }
+
+  &.warning .drop-menu-wrap {
+    border-color: #ffc107;
+    background-color: #ffc107;
+
+    li > a {
+      color: #212529;
+      &:hover {
+        background-color: #e0a800;
+      }
+    }
+  }
+
+  &.error .drop-menu-wrap {
+    border-color: #dc3545;
+    background-color: #dc3545;
+
+    li > a {
+      color: white;
+      &:hover {
+        background-color: #c82333;
+      }
+    }
+  }
+
+  &.info .drop-menu-wrap {
+    border-color: #17a2b8;
+    background-color: #17a2b8;
+
+    li > a {
+      color: white;
+      &:hover {
+        background-color: #138496;
+      }
+    }
+  }
+
+  &.light .drop-menu-wrap {
+    border-color: #f8f9fa;
+    background-color: #f8f9fa;
+
+    li > a {
+      color: #212529;
+      &:hover {
+        background-color: #e2e6ea;
+      }
+    }
+  }
+
+  &.dark .drop-menu-wrap {
+    border-color: #343a40;
+    background-color: #343a40;
+
+    li > a {
+      color: white;
+      &:hover {
+        background-color: #191b1d;
+      }
+      &:focus {
+        outline: 2px solid #919191;
+        outline-offset: -2px;
+      }
+    }
+  }
+
+  @include defineColorStyle;
+}

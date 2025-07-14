@@ -1,0 +1,274 @@
+@charset "UTF-8";
+/* @/components/MessageBox/_style.scss */
+@use 'sass:map';
+@use 'sass:color';
+@use '@/assets/styles/variables' as vars;
+@use '@/assets/styles/components' as _;
+
+.msg-box-fade-enter-from,
+.msg-box-fade-leave-to {
+  opacity: 0;
+}
+.msg-box-fade-enter-active,
+.msg-box-fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.msg-box-scale-enter-from,
+.msg-box-scale-leave-to {
+  opacity: 0;
+  transform: scale(0.4);
+}
+.msg-box-scale-enter-active,
+.msg-box-scale-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.msg-box-slide-enter-from,
+.msg-box-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+.msg-box-slide-enter-active,
+.msg-box-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.msg-box-slide-up-enter-from,
+.msg-box-slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(50px);
+}
+.msg-box-slide-up-enter-active,
+.msg-box-slide-up-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.msg-box-zoom-enter-from,
+.msg-box-zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+}
+.msg-box-zoom-enter-active,
+.msg-box-zoom-leave-active {
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.msg-box-bounce-enter-from,
+.msg-box-bounce-leave-to {
+  opacity: 0;
+  transform: scale(0.3);
+}
+.msg-box-bounce-enter-active {
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.msg-box-bounce-leave-active {
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.msg-box-flip-enter-from,
+.msg-box-flip-leave-to {
+  opacity: 0;
+  transform: rotateX(-90deg);
+}
+.msg-box-flip-enter-active,
+.msg-box-flip-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.msg-box-elastic-enter-from,
+.msg-box-elastic-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.msg-box-elastic-enter-active {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.msg-box-elastic-leave-active {
+  transition: all 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.msg-box-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+
+  .msg-box {
+    background-color: #fff;
+    box-sizing: border-box;
+    border-radius: 8px;
+    max-height: 90vh;
+    max-width: 90vw;
+    padding: 1.2rem 1.2rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e8e8e8;
+
+    .title {
+      box-sizing: border-box;
+      border-radius: 8px 8px 0 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    .contents {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #34495e;
+      box-sizing: border-box;
+      overflow-y: auto;
+      display: block;
+      padding-bottom: 1.5rem;
+      line-height: 1.5;
+      max-height: 60vh;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      align-items: center;
+
+      button {
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        text-align: center;
+        height: 2.5rem;
+        padding: 0 1.25rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 80px;
+        white-space: nowrap;
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        &:focus {
+          outline: 2px solid vars.$primary-color;
+          outline-offset: 2px;
+        }
+      }
+
+      .btn-okay {
+        > .loading {
+          transform-origin: center center;
+          animation: spinner 1s infinite;
+        }
+
+        $_button-colors: _.getButtonColors();
+        @if map.has-key($_button-colors, primary) {
+          color: #fff;
+          background-color: map.get($_button-colors, primary, default);
+          &:hover:not(:disabled) {
+            background-color: map.get($_button-colors, primary, hover);
+          }
+        }
+      }
+
+      .btn-cancel {
+        color: #6c757d;
+        border: 1px solid #dee2e6;
+        background-color: transparent;
+
+        &:hover:not(:disabled) {
+          background-color: #f8f9fa;
+          border-color: #adb5bd;
+        }
+      }
+    }
+  }
+}
+
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// 반응형 디자인
+@media (max-width: 768px) {
+  .msg-box-bg {
+    .msg-box {
+      margin: 1rem;
+      padding: 1.5rem 1rem;
+      max-width: calc(100vw - 2rem);
+
+      .title {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .contents {
+        font-size: 0.9rem;
+        padding-bottom: 1rem;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 0.5rem;
+
+        button {
+          width: 100%;
+          height: 2.75rem;
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .msg-box-bg {
+    .msg-box {
+      padding: 1.25rem 0.75rem;
+
+      .title {
+        font-size: 1.1rem;
+      }
+
+      .contents {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// 스크롤바 공간을 고려한 스타일
+html {
+  scrollbar-gutter: stable;
+}
+
+body.hide-scroll {
+  overflow: hidden !important;
+  padding-right: var(--scrollbar-width, 0px) !important;
+
+  // 고정 요소들도 스크롤바 공간만큼 조정
+  .fixed,
+  [class*='fixed'] {
+    padding-right: var(--scrollbar-width, 0px);
+  }
+}

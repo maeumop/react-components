@@ -1,0 +1,231 @@
+@charset "utf-8";
+/* @/components/ListTable/_style.scss */
+
+@use 'sass:map';
+@use 'sass:meta';
+@use '@/assets/styles/components' as _;
+@use '@/assets/styles/components/keyframes';
+
+/// TableSpinner 스타일 정의
+/// @/components/ListTable/TableSpinner.vue
+@mixin useTableSpinner {
+  .spinner-wrap {
+    margin: 2rem 0;
+    text-align: center;
+    width: 100%;
+
+    .spinner {
+      display: inline-block;
+      margin: 0 auto;
+      animation: spin 1s ease-out infinite;
+      -webkit-animation: spin 1s ease-out infinite;
+    }
+  }
+}
+
+/// ListCheck 스타일 정의
+/// @/components/ListTable/listCheck.vue
+@mixin useListCheck {
+  .checkbox-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:has(> input:disabled) {
+      cursor: default;
+    }
+
+    input + .iconify {
+      color: _.$gray-400;
+    }
+
+    input:disabled + .iconify {
+      color: _.$gray-300;
+    }
+
+    input:not(:disabled):where(:hover, :checked) + .iconify {
+      color: _.$primary;
+    }
+
+    input:disabled:checked + .iconify {
+      color: _.$gray-300;
+    }
+  }
+}
+
+.list-table {
+  --table-header-height: 5rem;
+  --table-row-height: 5rem;
+  --table-padding: 1rem 1.6rem;
+  --table-border-color: var(--gray-300, #e5e7eb);
+  --table-font-size: 0.9rem;
+  --table-header-font-weight: 500;
+  --table-body-font-weight: 400;
+  --table-border-radius: 0.5rem;
+  --table-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+  overflow: auto;
+  position: relative;
+  border-radius: var(--table-border-radius);
+  box-shadow: var(--table-shadow);
+
+  @if (meta.mixin-exists('scrollbar')) {
+    // global scrollbar가 정의 되었있을 경우
+    @include scrollbar;
+  }
+
+  // 반응형 디자인
+  @media (max-width: 768px) {
+    --table-header-height: 4rem;
+    --table-row-height: 4rem;
+    --table-padding: 0.8rem 1.2rem;
+    --table-font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    --table-header-height: 3.5rem;
+    --table-row-height: 3.5rem;
+    --table-padding: 0.6rem 1rem;
+    --table-font-size: 0.8rem;
+  }
+
+  table {
+    min-width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+
+    &.is-scroll::after {
+      position: absolute;
+      left: 0;
+      z-index: 20;
+      height: 0.6rem;
+      width: 100%;
+      background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(rgba(0, 0, 0, 0.1)),
+        to(rgba(0, 0, 0, 0))
+      );
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+      content: '';
+    }
+  }
+
+  // slot 으로 외부 스타일 적용시, scoped 영역 해제 되므로
+  // ::v-deep 감싸워 스타일 정의.
+  &::v-deep() {
+    @include useListCheck;
+    @include useTableSpinner;
+  }
+
+  &::v-deep(table) {
+    > :where(thead, tbody) :where(td, th):has(.checkbox-wrap) {
+      text-align: center;
+    }
+
+    > :where(thead, tbody, tfoot) :where(td, th) {
+      @each $align in center left right {
+        &.#{$align} {
+          text-align: $align;
+        }
+      }
+    }
+  }
+
+  &::v-deep(table > thead th) {
+    height: var(--table-header-height);
+    font-size: var(--table-font-size);
+    font-weight: var(--table-header-font-weight);
+    color: _.$text-default;
+    padding: var(--table-padding);
+    text-align: left;
+    background-color: white;
+    border-width: 0 0 0.1rem 0;
+    border-style: solid;
+    border-color: var(--table-border-color);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: _.$gray-100;
+    }
+  }
+
+  &::v-deep(table > tbody) {
+    > tr {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: _.$gray-100;
+      }
+
+      .no-data {
+        border-bottom: 0 !important;
+        text-align: center;
+        color: _.$text-default;
+        font-size: var(--table-font-size);
+        font-weight: var(--table-body-font-weight);
+        padding: 2rem;
+        width: 100%;
+        height: 10rem;
+        background-color: #f9fafb;
+        border: 1px solid var(--table-border-color);
+      }
+
+      td {
+        height: var(--table-row-height);
+        padding: var(--table-padding);
+        border-style: solid;
+        border-color: var(--table-border-color);
+        border-width: 0 0 0.1rem 0;
+        font-size: var(--table-font-size);
+        font-weight: var(--table-body-font-weight);
+        text-align: left;
+        word-break: break-all;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  // 스크롤 감지용 요소
+  .observer-target {
+    height: 1px;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  // 접근성 개선
+  &::v-deep(table) {
+    // 포커스 표시
+    th:focus,
+    td:focus {
+      outline: 2px solid #667eea;
+      outline-offset: -2px;
+    }
+
+    // 스크린 리더 지원
+    th[scope] {
+      font-weight: var(--table-header-font-weight);
+    }
+  }
+
+  // 로딩 상태 스타일
+  &::v-deep(.spinner-wrap) {
+    .spinner {
+      color: _.$primary;
+    }
+  }
+
+  // 빈 데이터 상태 스타일
+  &::v-deep(.no-data) {
+    color: _.$gray-400;
+    font-style: italic;
+  }
+}

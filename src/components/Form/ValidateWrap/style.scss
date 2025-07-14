@@ -1,0 +1,28 @@
+@charset "UTF-8";
+/* @/components/Form/ValidateWrap/_style.scss */
+@use '../../common';
+@use '../common' as form-common;
+
+.validate-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+
+  .add-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .input-wrap {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+
+    &.error {
+      .input-field {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+      }
+    }
+  }
+}

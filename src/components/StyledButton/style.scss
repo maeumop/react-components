@@ -1,0 +1,342 @@
+@charset "UTF-8";
+/* @/components/StyledButton/_style.scss */
+
+@use 'sass:color';
+@use 'sass:map';
+@use '@/assets/styles/variables' as *;
+
+//================================================================================
+// 버튼 색상 팔레트
+//================================================================================
+$button-colors: (
+  primary: (
+    default: $primary-color,
+    hover: color.adjust($primary-color, $lightness: -10%),
+    disabled: color.adjust($primary-color, $lightness: 20%),
+    text: $primary-color,
+  ),
+  secondary: (
+    default: $secondary-color,
+    hover: color.adjust($secondary-color, $lightness: -10%),
+    disabled: color.adjust($secondary-color, $lightness: 20%),
+    text: $secondary-color,
+  ),
+  success: (
+    default: $success-color,
+    hover: color.adjust($success-color, $lightness: -10%),
+    disabled: color.adjust($success-color, $lightness: 20%),
+    text: $success-color,
+  ),
+  warning: (
+    default: $warning-color,
+    hover: color.adjust($warning-color, $lightness: -10%),
+    disabled: color.adjust($warning-color, $lightness: 20%),
+    text: $warning-color,
+  ),
+  error: (
+    default: $error-color,
+    hover: color.adjust($error-color, $lightness: -10%),
+    disabled: color.adjust($error-color, $lightness: 20%),
+    text: $error-color,
+  ),
+  info: (
+    default: $info-color,
+    hover: color.adjust($info-color, $lightness: -10%),
+    disabled: color.adjust($info-color, $lightness: 20%),
+    text: $info-color,
+  ),
+  light: (
+    default: $gray-100,
+    hover: color.adjust($gray-100, $lightness: -10%),
+    disabled: color.adjust($gray-100, $lightness: 20%),
+    text: $gray-800,
+  ),
+  dark: (
+    default: $gray-800,
+    hover: color.adjust($gray-800, $lightness: -10%),
+    disabled: color.adjust($gray-800, $lightness: 20%),
+    text: $gray-800,
+  ),
+);
+
+//================================================================================
+// 버튼 크기 정의
+//================================================================================
+$button-sizes: (
+  small: (
+    padding-x: $spacing-xs,
+    padding-y: $spacing-xs,
+    height: 2rem,
+    font-size: $font-size-xs,
+    icon-size: 16,
+  ),
+  default: (
+    padding-x: $spacing-sm,
+    padding-y: $spacing-xs,
+    height: 2.4rem,
+    font-size: $font-size-sm,
+    icon-size: 18,
+  ),
+  large: (
+    padding-x: $spacing-md,
+    padding-y: $spacing-sm,
+    height: 3.2rem,
+    font-size: $font-size-base,
+    icon-size: 20,
+  ),
+);
+
+//================================================================================
+// 믹스인
+//================================================================================
+
+/// 버튼 색상 스타일 믹스인
+@mixin button-color($color-name) {
+  $color-map: map.get($button-colors, $color-name);
+
+  @if $color-map {
+    background-color: map.get($color-map, default);
+    color: white;
+    border: 1px solid map.get($color-map, default);
+
+    &:not(.disabled):hover {
+      background-color: map.get($color-map, hover);
+      border-color: map.get($color-map, hover);
+    }
+
+    &:not(.disabled):focus {
+      outline: 2px solid map.get($color-map, default);
+      outline-offset: 2px;
+    }
+
+    &.disabled {
+      background-color: map.get($color-map, disabled);
+      border-color: map.get($color-map, disabled);
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/// 버튼 크기 믹스인
+@mixin button-size($size-name) {
+  $size-map: map.get($button-sizes, $size-name);
+
+  @if $size-map {
+    padding: map.get($size-map, padding-y) map.get($size-map, padding-x);
+    height: map.get($size-map, height);
+    font-size: map.get($size-map, font-size);
+    line-height: 1;
+  }
+}
+
+/// 텍스트 버튼 색상 믹스인
+@mixin text-button-color($color-name) {
+  $color-map: map.get($button-colors, $color-name);
+
+  @if $color-map {
+    background-color: transparent;
+    color: map.get($color-map, text);
+    border: 1px solid transparent;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust(map.get($color-map, default), $alpha: -0.9);
+      color: map.get($color-map, default);
+    }
+
+    &:not(.disabled):focus {
+      outline: 2px solid map.get($color-map, default);
+      outline-offset: 2px;
+    }
+
+    &.disabled {
+      color: $gray-400;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/// 아웃라인 버튼 색상 믹스인
+@mixin outline-button-color($color-name) {
+  $color-map: map.get($button-colors, $color-name);
+
+  @if $color-map {
+    background-color: transparent;
+    color: map.get($color-map, default);
+    border: 1px solid map.get($color-map, default);
+
+    &:not(.disabled):hover {
+      background-color: map.get($color-map, default);
+      color: white;
+    }
+
+    &:not(.disabled):focus {
+      outline: 2px solid map.get($color-map, default);
+      outline-offset: 2px;
+    }
+
+    &.disabled {
+      color: $gray-400;
+      border-color: $gray-300;
+      cursor: not-allowed;
+    }
+  }
+}
+
+//================================================================================
+// 기본 버튼 스타일
+//================================================================================
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-family-base;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: $border-radius-base;
+  cursor: pointer;
+  transition: all $transition-base;
+  user-select: none;
+  white-space: nowrap;
+  gap: $spacing-sm;
+
+  // 기본 크기
+  @include button-size(small);
+
+  // 기본 색상 (primary)
+  @include button-color(primary);
+
+  // 아이콘 스타일
+  svg {
+    transition: transform $transition-base;
+
+    &.rotate {
+      transform: rotate(180deg);
+    }
+  }
+
+  // 로딩 상태
+  .loading {
+    animation: spinner 1s linear infinite;
+  }
+
+  // 비활성화 상태
+  &.disabled {
+    pointer-events: none;
+  }
+
+  // 블록 레벨
+  &.block {
+    width: 100%;
+  }
+
+  // 래퍼
+  .btn-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    width: 100%;
+    height: 100%;
+  }
+
+  // 텍스트 버튼
+  &.text {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: $primary-color;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($primary-color, $alpha: -0.9);
+    }
+
+    &:not(.disabled):focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+
+    &.disabled {
+      color: $gray-400;
+      cursor: not-allowed;
+    }
+  }
+
+  // 아이콘 전용 버튼
+  &.icon {
+    width: 4rem;
+    padding: 0;
+
+    .only-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  // 아웃라인 버튼
+  &.outline {
+    background-color: transparent;
+    border: 1px solid $gray-300;
+    color: $gray-700;
+
+    &:not(.disabled):hover {
+      background-color: $gray-50;
+      border-color: $gray-400;
+    }
+
+    &:not(.disabled):focus {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+
+    &.disabled {
+      color: $gray-400;
+      border-color: $gray-200;
+      cursor: not-allowed;
+    }
+  }
+}
+
+//================================================================================
+// 색상 변형
+//================================================================================
+@each $color-name, $color-map in $button-colors {
+  .btn.#{$color-name} {
+    @include button-color($color-name);
+
+    &.text {
+      @include text-button-color($color-name);
+    }
+
+    &.outline {
+      @include outline-button-color($color-name);
+    }
+  }
+}
+
+//================================================================================
+// 크기 변형
+//================================================================================
+@each $size-name, $size-map in $button-sizes {
+  .btn.#{$size-name} {
+    @include button-size($size-name);
+
+    &.icon {
+      width: map.get($size-map, height);
+    }
+  }
+}
+
+//================================================================================
+// 애니메이션
+//================================================================================
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,120 @@
+@charset "UTF-8";
+/* @/components/Form/SwitchButton/_style.scss */
+@use 'sass:map';
+@use 'sass:color';
+@use '@/assets/styles/components' as _;
+@use '../../common';
+@use '../common' as form-common;
+
+.switch-wrap {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+
+  @include _.buttonColorStyle using ($color-map) {
+    .switch input[type='checkbox']:checked {
+      & + span {
+        background-color: map.get($color-map, default);
+      }
+
+      &:not(&:disabled) + span:hover {
+        background-color: map.get($color-map, hover);
+      }
+
+      & + svg {
+        color: map.get($color-map, default);
+      }
+    }
+  }
+
+  .switch {
+    cursor: pointer;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.checkbox {
+      svg {
+        margin-right: 0.3rem;
+        color: _.$gray-400;
+      }
+
+      input[type='checkbox'] {
+        &:not(:disabled, :checked) + svg:hover {
+          color: color.adjust(_.$gray-400, $lightness: -15%);
+        }
+
+        &:disabled + svg {
+          color: _.$gray-300;
+        }
+      }
+    }
+
+    input[type='checkbox'] {
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+
+      & + span {
+        display: flex;
+        align-items: center;
+        width: 3rem;
+        height: 1.6rem;
+        background: _.$gray-400;
+        border-radius: 0.8rem;
+        margin-right: 0.5rem;
+
+        i {
+          display: inline-block;
+          width: 1.2rem;
+          height: 1.2rem;
+          margin: 0 0.2rem;
+          background: white;
+          border-radius: 50%;
+          transition: all 0.2s;
+        }
+      }
+
+      &:not(&:disabled) + span:hover {
+        background-color: color.adjust(_.$gray-400, $lightness: -15%);
+      }
+
+      &:disabled + span {
+        background: _.$gray-300;
+      }
+
+      &:checked + span > i {
+        transform: translateX(3rem - 0.9rem - 0.6rem);
+      }
+    }
+
+    &:has(input[type='checkbox']:disabled) {
+      cursor: default;
+
+      .label-text {
+        color: _.$text-disabled;
+      }
+    }
+  }
+
+  // transition
+  .check-scale-enter-from,
+  .check-scale-leave-to {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  .check-scale-enter-active,
+  .check-scale-leave-active {
+    transition: all 0.1s ease;
+  }
+
+  .label-fade-enter-from,
+  .label-fade-leave-to {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  .label-fade-enter-active,
+  .label-fade-leave-active {
+    transition: all 0.1s ease;
+  }
+}

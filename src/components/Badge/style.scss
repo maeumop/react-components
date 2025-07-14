@@ -1,0 +1,219 @@
+@charset "UTF-8";
+/* @/components/Badge/_style.scss */
+
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:meta';
+@use '../common' as *;
+@use '@/assets/styles/variables' as *;
+
+/// 컴포넌트 size 스타일 정의
+/// @param {string} $size [default] - default|large
+/// @output - .badge.size-#{modifier} { ... }
+@mixin defineSizeStyle($size: default) {
+  @if meta.type-of($size) != 'string' {
+    @error "$modifier 는 문자열 값이 와야합니다.";
+  }
+
+  // 기본 값
+  $_x: -0.4rem;
+  $_y: -0.4rem;
+
+  @if $size == large {
+    $_x: -0.6rem;
+    $_y: -0.6rem;
+  }
+
+  .badge.#{$size} {
+    &.right {
+      right: $_x;
+      top: $_y;
+    }
+
+    &.left {
+      left: $_x;
+      top: $_y;
+    }
+
+    &.bottom-right {
+      right: $_x;
+      bottom: $_y;
+    }
+
+    &.bottom-left {
+      left: $_x;
+      bottom: $_y;
+    }
+
+    @content;
+  }
+}
+
+/// 컴포넌트 color 스타일 정의
+/// @output - .badge.#{color-name} { ... }
+@mixin defineColorStyle {
+  @each $name, $color in $component-colors {
+    .badge.#{$name} {
+      background-color: $color;
+      color: white;
+
+      &:not(&.disabled):hover {
+        background-color: color.adjust($color, $lightness: -10%);
+      }
+
+      &.disabled {
+        background-color: color.adjust($color, $lightness: 20%);
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+.badge-wrapper {
+  position: relative;
+  display: inline-block;
+
+  .badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    font-weight: 900;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 0.6rem;
+    @include transition('all', 0.2s ease);
+  }
+
+  // 색상 스타일을 직접 정의
+  .badge.primary {
+    background-color: $primary-color;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($primary-color, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($primary-color, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.secondary {
+    background-color: $secondary-color;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($secondary-color, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($secondary-color, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.success {
+    background-color: $success-color;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($success-color, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($success-color, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.warning {
+    background-color: $warning-color;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($warning-color, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($warning-color, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.error {
+    background-color: $error-color;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($error-color, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($error-color, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.info {
+    background-color: $info-color;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($info-color, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($info-color, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.light {
+    background-color: $gray-100;
+    color: $gray-800;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($gray-100, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($gray-100, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  .badge.dark {
+    background-color: $gray-800;
+    color: white;
+
+    &:not(.disabled):hover {
+      background-color: color.adjust($gray-800, $lightness: -10%);
+    }
+
+    &.disabled {
+      background-color: color.adjust($gray-800, $lightness: 20%);
+      opacity: 0.6;
+    }
+  }
+
+  @include defineSizeStyle() {
+    font-size: 0.6rem;
+    line-height: normal;
+    border-radius: 0.8rem;
+  }
+
+  @include defineSizeStyle(large) {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 0.9rem;
+
+    &.icon {
+      font-size: 0;
+      line-height: 0;
+    }
+  }
+}

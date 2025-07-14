@@ -1,0 +1,131 @@
+@charset "UTF-8";
+/* @/components/Form/CheckButton/_style.scss */
+@use 'sass:map';
+@use 'sass:color';
+@use '@/assets/styles/components' as _;
+@use '../../common';
+@use '../common' as form-common;
+
+.check-button {
+  .origin-check-button {
+    display: inline-block;
+
+    &:not(&.block) {
+      margin-right: 1rem;
+    }
+
+    label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-weight: 400;
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      input {
+        position: absolute;
+        clip: rect(0, 0, 0, 0);
+      }
+
+      svg {
+        width: 1.4rem;
+        height: 1.4rem;
+        margin-right: 0.3rem;
+        color: _.$gray-400;
+        transition: color 0.2s ease;
+      }
+
+      &:has(input:disabled) {
+        color: _.$text-disabled;
+        cursor: not-allowed;
+
+        input:disabled + svg {
+          color: _.$gray-300;
+        }
+      }
+
+      @include _.buttonColorStyle using ($color-map) {
+        & input:not(:disabled):hover + svg {
+          color: map.get($color-map, hover);
+        }
+
+        & input:not(:disabled):checked + svg {
+          color: map.get($color-map, default);
+        }
+
+        input:checked:disabled + svg {
+          color: map.get($color-map, disabled);
+        }
+      }
+    }
+  }
+
+  .check-button-group {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.4rem;
+    border: 0.1rem solid _.$gray-300;
+
+    input {
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+    }
+
+    label {
+      display: inline-block;
+      padding: 0 1rem;
+      height: 2.5rem;
+      line-height: 2.5rem;
+      font-weight: 400;
+      transition: all 0.2s ease;
+      border-right: 0.1rem solid color.adjust(_.$gray-300, $lightness: 5%);
+      cursor: pointer;
+
+      &.last {
+        border-right: 0 !important;
+      }
+    }
+
+    @include _.buttonColorStyle using ($color-map) {
+      border-color: map.get($color-map, default);
+
+      label {
+        border-color: color.adjust(map.get($color-map, default), $lightness: 25%);
+        color: map.get($color-map, default);
+
+        &:hover {
+          background-color: color.change(map.get($color-map, default), $lightness: 95%);
+        }
+      }
+
+      input:checked + label {
+        color: #fff;
+        font-weight: 500;
+        background-color: map.get($color-map, default);
+      }
+
+      &.disabled {
+        border-color: _.$gray-300;
+
+        label {
+          color: _.$text-disabled;
+          background-color: _.$gray-100;
+          cursor: not-allowed;
+          border-color: color.adjust(_.$gray-300, $lightness: 5%);
+        }
+
+        input:checked + label {
+          color: #fff;
+          background-color: map.get($color-map, disabled);
+        }
+      }
+    }
+  }
+
+  .line-break {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}

@@ -1,0 +1,49 @@
+// error message shaking
+/// @/components/Form/*.vue
+@keyframes shaking {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(1rem);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(1rem);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/// 적용 대상 컴포넌트
+/// @/components/ListTable/TableSpinner.vue
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+/// 적용 대상 컴포넌트
+/// @/components/Spinner/index.vue
+/// @/components/StyledButton/index.vue
+@keyframes spinner {
+  from {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

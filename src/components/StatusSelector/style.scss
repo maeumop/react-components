@@ -1,0 +1,250 @@
+@charset "UTF-8";
+/* @/components/StatusSelector/_style.scss */
+@use 'sass:map';
+@use 'sass:selector';
+@use '@/assets/styles/components' as _;
+@use '@/assets/styles/components/keyframes';
+
+.status-selector {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+
+  &:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+
+  &.readonly {
+    cursor: default;
+  }
+
+  .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    border-radius: 0.7rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+
+    &:hover:not(.readonly) {
+      border-color: #667eea;
+    }
+
+    &.readonly {
+      padding: 0.4rem 0.8rem;
+      background-color: _.$gray-300;
+      cursor: default;
+    }
+
+    svg {
+      margin-left: 0.5rem;
+      transform-origin: center;
+      transition: transform 0.2s ease;
+
+      &.rotate {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  // 사이즈 변형
+  &.size-small {
+    .wrap {
+      font-size: 0.875rem;
+      padding: 0.25rem 0.4rem 0.25rem 0.6rem;
+      border-radius: 0.5rem;
+
+      svg {
+        width: 10px;
+        height: 10px;
+        margin-left: 0.3rem;
+      }
+    }
+
+    .circle {
+      width: 0.5rem;
+      height: 0.5rem;
+      margin-right: 0.25rem;
+    }
+
+    ul {
+      margin-top: 0.3rem;
+      padding: 0.2rem;
+
+      li {
+        font-size: 0.875rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 0.25rem;
+
+        .selector-wrap {
+          gap: 0.35rem;
+        }
+      }
+    }
+  }
+
+  &.size-medium {
+    .wrap {
+      font-size: 1rem;
+      padding: 0.4rem 0.5rem 0.4rem 0.8rem;
+      border-radius: 0.7rem;
+
+      svg {
+        width: 12px;
+        height: 12px;
+        margin-left: 0.5rem;
+      }
+    }
+
+    .circle {
+      width: 0.6rem;
+      height: 0.6rem;
+      margin-right: 0.3rem;
+    }
+
+    ul {
+      margin-top: 0.5rem;
+      padding: 0.3rem;
+
+      li {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.3rem;
+
+        .selector-wrap {
+          gap: 0.5rem;
+        }
+      }
+    }
+  }
+
+  &.size-large {
+    .wrap {
+      font-size: 1.125rem;
+      padding: 0.5rem 0.6rem 0.5rem 1rem;
+      border-radius: 0.8rem;
+
+      svg {
+        width: 14px;
+        height: 14px;
+        margin-left: 0.6rem;
+      }
+    }
+
+    .circle {
+      width: 0.7rem;
+      height: 0.7rem;
+      margin-right: 0.4rem;
+    }
+
+    ul {
+      margin-top: 0.6rem;
+      padding: 0.4rem;
+
+      li {
+        font-size: 1.125rem;
+        padding: 0.6rem 1.25rem;
+        border-radius: 0.4rem;
+
+        .selector-wrap {
+          gap: 0.6rem;
+        }
+      }
+    }
+  }
+
+  ul {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+    width: max-content;
+    min-width: 100%;
+    z-index: 1000;
+    border: 1px solid #e9ecef;
+    list-style: none;
+
+    li {
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      outline: none;
+
+      &:focus {
+        background-color: #f8f9fa;
+        outline: 2px solid #667eea;
+        outline-offset: -2px;
+      }
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      &.selected {
+        background-color: #e3f2fd;
+        color: #1976d2;
+      }
+
+      .selector-wrap {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .circle {
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    // 미리 정의된 색상 클래스
+    &.primary {
+      background-color: _.$primary;
+    }
+
+    &.secondary {
+      background-color: _.$secondary;
+    }
+
+    &.success {
+      background-color: _.$success;
+    }
+
+    &.warning {
+      background-color: _.$warning;
+    }
+
+    &.error {
+      background-color: _.$danger;
+    }
+
+    &.info {
+      background-color: _.$info;
+    }
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-0.5rem);
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+}
+.page-fade-leave-from {
+  display: none;
+}
+.page-fade-enter-active {
+  transition: opacity 0.5s;
+}

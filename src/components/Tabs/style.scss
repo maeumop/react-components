@@ -1,0 +1,302 @@
+@charset "UTF-8";
+/* @/components/Tabs/_style.scss */
+
+@use 'sass:map';
+@use 'sass:meta';
+@use '@/assets/styles/variables' as vars;
+
+.tabs {
+  .tab-item-wrap {
+    .tab-items {
+      position: relative;
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      &::after {
+        display: block;
+        position: absolute;
+        content: '';
+        bottom: 0;
+        width: 100%;
+        height: 0.1rem;
+        background: var(--tab-underline-bg, vars.$gray-300);
+      }
+
+      li {
+        flex-grow: 0;
+        min-width: 8rem;
+        padding: 1rem 1.25rem;
+        text-align: center;
+        color: var(--tab-text-color, vars.$gray-600);
+        background: var(--tab-bg, transparent);
+        cursor: pointer;
+        position: relative;
+        font-size: 1rem;
+        font-weight: 500;
+        border: none;
+        outline: none;
+        transition: all 0.2s;
+        border-radius: 0.5rem 0.5rem 0 0;
+        user-select: none;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 0.25rem;
+          background-color: transparent;
+          border-radius: 0.2rem;
+          transition: background 0.2s;
+        }
+
+        &:hover:not(.disabled) {
+          background: var(--tab-hover-bg, vars.$gray-100);
+          color: var(--tab-hover-color, vars.$primary-color);
+        }
+
+        &.active {
+          color: var(--tab-active-color, vars.$primary-color);
+          font-weight: 700;
+          background: var(--tab-active-bg, vars.$white);
+          z-index: 2;
+          &::after {
+            background-color: var(--tab-active-underline, vars.$primary-color);
+          }
+        }
+
+        &.disabled {
+          color: var(--tab-disabled-color, vars.$gray-400);
+          background: var(--tab-disabled-bg, vars.$gray-100);
+          cursor: not-allowed;
+          pointer-events: none;
+          opacity: 0.6;
+        }
+
+        // pills variant
+        &.pills {
+          border-radius: 999px 999px 0 0;
+          margin-right: 0.5rem;
+          &.active {
+            background: var(--tab-active-bg, vars.$primary-color);
+            color: var(--tab-active-color, vars.$white);
+            &::after {
+              background: none;
+            }
+          }
+        }
+
+        // underline variant
+        &.underline {
+          border-radius: 0;
+          background: none;
+          &.active {
+            background: none;
+            color: var(--tab-active-color, vars.$primary-color);
+            &::after {
+              background-color: var(--tab-active-underline, vars.$primary-color);
+            }
+          }
+        }
+      }
+    }
+
+    .tab-items.mode-flot li {
+      flex-grow: 0;
+      flex-basis: auto;
+    }
+
+    .tab-items.mode-full li {
+      flex-grow: 1;
+    }
+  }
+
+  .tab-contents {
+    width: 100%;
+    &.in-box {
+      padding: 1rem;
+      border-width: 0 0.1rem 0.1rem 0.1rem;
+      border-style: solid;
+      border-color: vars.$gray-300;
+      border-radius: 0 0 0.4rem 0.4rem;
+      background: vars.$white;
+    }
+  }
+}
+
+// 트랜지션 컨테이너
+.transition-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: max-content;
+  overflow: hidden;
+
+  .tab-panel {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// 슬라이드 애니메이션
+.tab-slide-left-enter-active,
+.tab-slide-left-leave-active,
+.tab-slide-right-enter-active,
+.tab-slide-right-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// 왼쪽으로 슬라이드
+.tab-slide-left-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.tab-slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+// 오른쪽으로 슬라이드
+.tab-slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.tab-slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+// 페이드 애니메이션
+.tab-fade-enter-active,
+.tab-fade-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.tab-fade-enter-from,
+.tab-fade-leave-to {
+  opacity: 0;
+}
+
+// 스케일 애니메이션
+.tab-scale-enter-active,
+.tab-scale-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-scale-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.tab-scale-leave-to {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+// 플립 애니메이션 (기본)
+.tab-flip-enter-active,
+.tab-flip-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.tab-flip-enter-from {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+
+.tab-flip-leave-to {
+  opacity: 0;
+  transform: rotateY(90deg);
+}
+
+// 왼쪽으로 플립
+.tab-flip-left-enter-active,
+.tab-flip-left-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform-origin: left center;
+}
+
+.tab-flip-left-enter-from {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+
+.tab-flip-left-leave-to {
+  opacity: 0;
+  transform: rotateY(90deg);
+}
+
+// 오른쪽으로 플립
+.tab-flip-right-enter-active,
+.tab-flip-right-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform-origin: right center;
+}
+
+.tab-flip-right-enter-from {
+  opacity: 0;
+  transform: rotateY(90deg);
+}
+
+.tab-flip-right-leave-to {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+
+// 바운스 애니메이션
+.tab-bounce-enter-active {
+  animation: tab-bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.tab-bounce-leave-active {
+  animation: tab-bounce-out 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes tab-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(-50px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(10px);
+  }
+  70% {
+    transform: scale(0.9) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tab-bounce-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) translateY(50px);
+  }
+}
+
+// 반응형
+@media (max-width: 768px) {
+  .tabs .tab-item-wrap .tab-items li {
+    min-width: 5rem;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.95rem;
+  }
+}
