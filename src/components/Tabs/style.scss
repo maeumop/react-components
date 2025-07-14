@@ -140,156 +140,171 @@
   }
 }
 
-// 슬라이드 애니메이션
-.tab-slide-left-enter-active,
-.tab-slide-left-leave-active,
-.tab-slide-right-enter-active,
-.tab-slide-right-leave-active {
+// react-transition-group용 트랜지션 클래스
+// slide left
+.tab-slide-left-enter {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.tab-slide-left-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tab-slide-left-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.tab-slide-left-exit-active {
+  opacity: 0;
+  transform: translateX(-30px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// 왼쪽으로 슬라이드
-.tab-slide-left-enter-from {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.tab-slide-left-leave-to {
+// slide right
+.tab-slide-right-enter {
   opacity: 0;
   transform: translateX(-30px);
 }
-
-// 오른쪽으로 슬라이드
-.tab-slide-right-enter-from {
-  opacity: 0;
-  transform: translateX(-30px);
+.tab-slide-right-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.tab-slide-right-leave-to {
+.tab-slide-right-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.tab-slide-right-exit-active {
   opacity: 0;
   transform: translateX(30px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// 페이드 애니메이션
-.tab-fade-enter-active,
-.tab-fade-leave-active {
+// fade
+.tab-fade-enter {
+  opacity: 0;
+}
+.tab-fade-enter-active {
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+.tab-fade-exit {
+  opacity: 1;
+}
+.tab-fade-exit-active {
+  opacity: 0;
   transition: all 0.3s ease-in-out;
 }
 
-.tab-fade-enter-from,
-.tab-fade-leave-to {
-  opacity: 0;
-}
-
-// 스케일 애니메이션
-.tab-scale-enter-active,
-.tab-scale-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.tab-scale-enter-from {
+// scale
+.tab-scale-enter {
   opacity: 0;
   transform: scale(0.8);
 }
-
-.tab-scale-leave-to {
+.tab-scale-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tab-scale-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.tab-scale-exit-active {
   opacity: 0;
   transform: scale(1.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// 플립 애니메이션 (기본)
-.tab-flip-enter-active,
-.tab-flip-leave-active {
+// flip (기본)
+.tab-flip-enter {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+.tab-flip-enter-active {
+  opacity: 1;
+  transform: rotateY(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.tab-flip-exit {
+  opacity: 1;
+  transform: rotateY(0);
+}
+.tab-flip-exit-active {
+  opacity: 0;
+  transform: rotateY(90deg);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
-.tab-flip-enter-from {
+// flip left
+.tab-flip-left-enter {
   opacity: 0;
   transform: rotateY(-90deg);
 }
-
-.tab-flip-leave-to {
+.tab-flip-left-enter-active {
+  opacity: 1;
+  transform: rotateY(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform-origin: left center;
+}
+.tab-flip-left-exit {
+  opacity: 1;
+  transform: rotateY(0);
+}
+.tab-flip-left-exit-active {
   opacity: 0;
   transform: rotateY(90deg);
-}
-
-// 왼쪽으로 플립
-.tab-flip-left-enter-active,
-.tab-flip-left-leave-active {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
   transform-origin: left center;
 }
 
-.tab-flip-left-enter-from {
-  opacity: 0;
-  transform: rotateY(-90deg);
-}
-
-.tab-flip-left-leave-to {
+// flip right
+.tab-flip-right-enter {
   opacity: 0;
   transform: rotateY(90deg);
 }
-
-// 오른쪽으로 플립
-.tab-flip-right-enter-active,
-.tab-flip-right-leave-active {
+.tab-flip-right-enter-active {
+  opacity: 1;
+  transform: rotateY(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform-origin: right center;
+}
+.tab-flip-right-exit {
+  opacity: 1;
+  transform: rotateY(0);
+}
+.tab-flip-right-exit-active {
+  opacity: 0;
+  transform: rotateY(-90deg);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
   transform-origin: right center;
 }
 
-.tab-flip-right-enter-from {
+// bounce
+.tab-bounce-enter {
   opacity: 0;
-  transform: rotateY(90deg);
+  transform: scale(0.3) translateY(-50px);
 }
-
-.tab-flip-right-leave-to {
-  opacity: 0;
-  transform: rotateY(-90deg);
-}
-
-// 바운스 애니메이션
 .tab-bounce-enter-active {
-  animation: tab-bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-
-.tab-bounce-leave-active {
-  animation: tab-bounce-out 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+.tab-bounce-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
-
-@keyframes tab-bounce-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) translateY(-50px);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05) translateY(10px);
-  }
-  70% {
-    transform: scale(0.9) translateY(-5px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes tab-bounce-out {
-  0% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  30% {
-    opacity: 1;
-    transform: scale(1.1) translateY(-10px);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.3) translateY(50px);
-  }
+.tab-bounce-exit-active {
+  opacity: 0;
+  transform: scale(0.3) translateY(50px);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 // 반응형

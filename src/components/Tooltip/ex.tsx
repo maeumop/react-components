@@ -1,3 +1,4 @@
+import FloatingBackButton from '@/views/FloatingBackButton/index';
 import React, { useCallback, useState } from 'react';
 import { tooltipColor, tooltipPosition } from './const';
 import './ex.scss';
@@ -281,6 +282,7 @@ const TooltipExample: React.FC = () => {
           </section>
         </div>
       </main>
+      <FloatingBackButton />
     </div>
   );
 };

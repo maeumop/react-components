@@ -33,9 +33,9 @@ export interface TooltipProps {
 
 export interface TooltipSlots {
   /** 기본 슬롯 - 툴팁이 감쌀 요소 */
-  default: (props: { toggle: () => void }) => any;
+  default: (props: { toggle: () => void }) => unknown;
   /** 커스텀 내용 슬롯 */
-  content: (props: { close: () => void }) => any;
+  content: (props: { close: () => void }) => unknown;
 }
 
 export interface TooltipEmits {

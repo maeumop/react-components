@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import BadgeExample from './components/Badge/ex';
+import StyledButtonExample from './components/StyledButton/ex';
 import TooltipExample from './components/Tooltip/ex';
 import ComponentsPage from './views/components';
-// import BadgeExample from './components/Badge/ex';
-// import StyledButtonExample from './components/StyledButton/ex';
 // import DropMenuExample from './components/DropMenu/ex';
 // import SpinnerExample from './components/Spinner/ex';
 // import MessageBoxExample from './components/MessageBox/ex';
 // import ToastExample from './components/Toast/ex';
-// import TabsExample from './components/Tabs/ex';
+import TabsExample from './components/Tabs/ex';
 // import StatusSelectorExample from './components/StatusSelector/ex';
 // import ListTableExample from './components/ListTable/ex';
 // import PaginationExample from './components/Pagination/ex';
@@ -27,13 +27,13 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/" element={<ComponentsPage />} />
       <Route path="/components/tooltip" element={<TooltipExample />} />
-      {/* <Route path="/components/badge" element={<BadgeExample />} /> */}
-      {/* <Route path="/components/buttons" element={<StyledButtonExample />} /> */}
+      <Route path="/components/badge" element={<BadgeExample />} />
+      <Route path="/components/buttons" element={<StyledButtonExample />} />
       {/* <Route path="/components/dropmenu" element={<DropMenuExample />} /> */}
       {/* <Route path="/components/spinner" element={<SpinnerExample />} /> */}
       {/* <Route path="/components/messagebox" element={<MessageBoxExample />} /> */}
       {/* <Route path="/components/toast" element={<ToastExample />} /> */}
-      {/* <Route path="/components/tabs" element={<TabsExample />} /> */}
+      <Route path="/components/tabs" element={<TabsExample />} />
       {/* <Route path="/components/statusselector" element={<StatusSelectorExample />} /> */}
       {/* <Route path="/components/listtable" element={<ListTableExample />} /> */}
       {/* <Route path="/components/pagination" element={<PaginationExample />} /> */}

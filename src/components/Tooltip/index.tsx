@@ -93,10 +93,14 @@ const Tooltip: React.FC<
 
   // 마우스 이벤트
   const onMouseEnter = useCallback(() => {
-    if (hovering) showTooltip();
+    if (hovering) {
+      showTooltip();
+    }
   }, [hovering, showTooltip]);
   const onMouseLeave = useCallback(() => {
-    if (hovering) hideTooltip();
+    if (hovering) {
+      hideTooltip();
+    }
   }, [hovering, hideTooltip]);
   const onClick = useCallback(() => {
     if (!hovering) {
@@ -119,7 +123,9 @@ const Tooltip: React.FC<
 
   // 리사이즈 감지
   useEffect(() => {
-    if (!isShow) return;
+    if (!isShow) {
+      return;
+    }
     const handleResize = () => setTimeout(calculatePosition, 0);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);

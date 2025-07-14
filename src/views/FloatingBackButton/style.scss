@@ -1,21 +1,3 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const goBack = () => {
-  router.push('/');
-};
-</script>
-
-<template>
-  <div class="floating-back-button" @click="goBack">
-    <Icon icon="mdi:arrow-left" width="24" height="24" />
-    <span class="button-text">목록으로</span>
-  </div>
-</template>
-
-<style lang="scss" scoped>
 .floating-back-button {
   position: fixed;
   bottom: 2rem;
@@ -58,4 +40,3 @@ const goBack = () => {
     }
   }
 }
-</style>

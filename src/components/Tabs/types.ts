@@ -10,6 +10,8 @@ export interface TabsProps {
   disabled?: boolean[];
   variant?: TabsVariant;
   transition?: TabsTransition;
+  onChangeTab?: (index: number) => void; // 추가
+  onUpdateActiveTab?: (index: number) => void; // 추가
 }
 
 export type TabsEmits = {

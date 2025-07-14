@@ -1,21 +1,16 @@
-import type { buttonColors, buttonSizes, buttonStyles } from './const';
-
-export type ButtonColors = (typeof buttonColors)[keyof typeof buttonColors];
-export type ButtonSizes = (typeof buttonSizes)[keyof typeof buttonSizes];
-export type ButtonStyles = (typeof buttonStyles)[keyof typeof buttonStyles];
+import type { IconifyIcon } from '@iconify/react';
+import type { MouseEventHandler, ReactNode } from 'react';
 
 export interface StyledButtonProps {
-  color?: ButtonColors;
-  class?: string;
   href?: string;
   target?: string;
-  style?: ButtonStyles;
-  icon?: string;
-  iconRight?: boolean;
-  onlyIcon?: boolean;
+  style?: string;
+  color?: string;
   block?: boolean;
+  onlyIcon?: boolean;
   loading?: boolean;
   disabled?: boolean;
+  iconRight?: boolean;
   small?: boolean;
   default?: boolean;
   large?: boolean;
@@ -23,6 +18,11 @@ export interface StyledButtonProps {
   tag?: string;
   dropMenuToggle?: boolean;
   width?: string | number;
+  icon?: string | IconifyIcon;
+  children?: ReactNode;
+  className?: string;
+  onClick?: MouseEventHandler<HTMLElement>;
+  type?: string;
 }
 
 export interface StyledButtonOptions {
