@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { badgeColor, badgePosition, badgeSize } from './const';
 
 export type BadgeColor = (typeof badgeColor)[keyof typeof badgeColor];
@@ -13,6 +12,5 @@ export interface BadgeProps {
   icon?: string;
   wrapperClass?: string;
   badgeClass?: string;
-  children?: ReactNode;
   style?: React.CSSProperties;
 }

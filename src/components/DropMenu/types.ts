@@ -30,10 +30,10 @@ export interface DropMenuProps {
   disabled?: boolean;
   /** 자동 닫힘 비활성화 */
   disableAutoClose?: boolean;
-}
-
-export interface DropMenuEmits {
-  (event: 'open'): void;
-  (event: 'close'): void;
-  (event: 'itemClick', item: DropMenuItem, index: number): void;
+  /** 메뉴 열릴 때 콜백 */
+  onOpen?: () => void;
+  /** 메뉴 닫힐 때 콜백 */
+  onClose?: () => void;
+  /** 아이템 클릭 시 콜백 */
+  onItemClick?: (item: DropMenuItem, index: number) => void;
 }

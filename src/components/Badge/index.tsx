@@ -4,7 +4,7 @@ import './style.scss';
 import type { BadgeProps } from './types';
 
 // Badge 컴포넌트
-const Badge: React.FC<BadgeProps> = ({
+const Badge: React.FC<React.PropsWithChildren<BadgeProps>> = ({
   color = 'primary',
   position = 'right',
   size = 'default',
@@ -21,15 +21,19 @@ const Badge: React.FC<BadgeProps> = ({
     if (color) {
       classes.push(color);
     }
+
     if (position) {
       classes.push(position);
     }
+
     if (size) {
       classes.push(size);
     }
+
     if (badgeClass) {
       classes.push(badgeClass);
     }
+
     return classes.join(' ');
   }, [color, position, size, badgeClass]);
 

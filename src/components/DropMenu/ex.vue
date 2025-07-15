@@ -253,79 +253,6 @@ const changeColor = (color: DropMenuColor) => {
 </template>
 
 <style lang="scss" scoped>
-.app-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem 0;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-  h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2.5rem;
-    font-weight: 700;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1.1rem;
-    opacity: 0.9;
-  }
-}
-
-.main-content {
-  padding: 3rem 0;
-  background-color: #f8f9fa;
-  min-height: calc(100vh - 200px);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.example-section {
-  margin-bottom: 4rem;
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-
-  h2 {
-    margin: 0 0 2rem 0;
-    color: #333;
-    font-size: 1.5rem;
-    font-weight: 600;
-    border-bottom: 2px solid #667eea;
-    padding-bottom: 0.5rem;
-  }
-}
-
-.example-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-}
-
-.example-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  background: #f8f9fa;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-}
-
 .demo-button {
   padding: 0.75rem 1.5rem;
   background: #667eea;
@@ -341,14 +268,6 @@ const changeColor = (color: DropMenuColor) => {
     background: #5a6fd8;
   }
 }
-
-.example-label {
-  font-size: 0.9rem;
-  color: #6c757d;
-  font-weight: 500;
-  text-align: center;
-}
-
 .position-controls,
 .transition-controls,
 .color-controls {
@@ -450,22 +369,6 @@ const changeColor = (color: DropMenuColor) => {
     color: #333;
     font-size: 1.3rem;
     font-weight: 600;
-  }
-}
-
-@media (max-width: 768px) {
-  .example-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .app-header h1 {
-    font-size: 2rem;
-  }
-
-  .position-controls,
-  .transition-controls,
-  .color-controls {
-    flex-direction: column;
   }
 }
 </style>

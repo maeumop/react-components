@@ -1,7 +1,3 @@
-export interface KeyIndex<T> {
-  [index: string]: T;
-}
-
 export interface RuleFunc {
   (v: string | string[] | number | number[]): string | boolean;
 }

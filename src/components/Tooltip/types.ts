@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { tooltipColor, tooltipPosition } from './const';
 
 export interface TooltipModel {
@@ -29,6 +30,7 @@ export interface TooltipProps {
   width?: number;
   /** 툴팁 패딩 */
   padding?: string;
+  content?: (props: { close: () => void }) => ReactNode;
 }
 
 export interface TooltipSlots {

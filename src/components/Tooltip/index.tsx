@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { tooltipColor, tooltipPosition } from './const';
@@ -8,12 +8,7 @@ import type { TooltipPosition, TooltipProps } from './types';
 
 // TooltipProps는 types.ts로 분리(이미 정의됨)
 
-const Tooltip: React.FC<
-  TooltipProps & {
-    children: ReactNode;
-    content?: (props: { close: () => void }) => ReactNode;
-  }
-> = ({
+const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
   message,
   title,
   position = tooltipPosition.bottom,
