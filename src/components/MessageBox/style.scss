@@ -5,87 +5,153 @@
 @use '@/assets/styles/variables' as vars;
 @use '@/assets/styles/components' as _;
 
-.msg-box-fade-enter-from,
-.msg-box-fade-leave-to {
+.msg-box-fade-enter {
   opacity: 0;
 }
-.msg-box-fade-enter-active,
-.msg-box-fade-leave-active {
+.msg-box-fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+.msg-box-fade-exit {
+  opacity: 1;
+}
+.msg-box-fade-exit-active {
+  opacity: 0;
   transition: opacity 0.2s ease-out;
 }
 
-.msg-box-scale-enter-from,
-.msg-box-scale-leave-to {
+.msg-box-scale-enter {
   opacity: 0;
   transform: scale(0.4);
 }
-.msg-box-scale-enter-active,
-.msg-box-scale-leave-active {
+.msg-box-scale-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.2s ease-out;
+}
+.msg-box-scale-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.msg-box-scale-exit-active {
+  opacity: 0;
+  transform: scale(0.4);
   transition: all 0.2s ease-out;
 }
 
-.msg-box-slide-enter-from,
-.msg-box-slide-leave-to {
+.msg-box-slide-enter {
   opacity: 0;
   transform: translateY(-50px);
 }
-.msg-box-slide-enter-active,
-.msg-box-slide-leave-active {
+.msg-box-slide-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.msg-box-slide-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.msg-box-slide-exit-active {
+  opacity: 0;
+  transform: translateY(-50px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.msg-box-slide-up-enter-from,
-.msg-box-slide-up-leave-to {
+.msg-box-slide-up-enter {
   opacity: 0;
   transform: translateY(50px);
 }
-.msg-box-slide-up-enter-active,
-.msg-box-slide-up-leave-active {
+.msg-box-slide-up-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.msg-box-slide-up-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.msg-box-slide-up-exit-active {
+  opacity: 0;
+  transform: translateY(50px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.msg-box-zoom-enter-from,
-.msg-box-zoom-leave-to {
+.msg-box-zoom-enter {
   opacity: 0;
   transform: scale(0.8);
 }
-.msg-box-zoom-enter-active,
-.msg-box-zoom-leave-active {
+.msg-box-zoom-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.msg-box-zoom-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.msg-box-zoom-exit-active {
+  opacity: 0;
+  transform: scale(0.8);
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.msg-box-bounce-enter-from,
-.msg-box-bounce-leave-to {
+.msg-box-bounce-enter {
   opacity: 0;
   transform: scale(0.3);
 }
 .msg-box-bounce-enter-active {
+  opacity: 1;
+  transform: scale(1);
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-.msg-box-bounce-leave-active {
+.msg-box-bounce-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.msg-box-bounce-exit-active {
+  opacity: 0;
+  transform: scale(0.3);
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.msg-box-flip-enter-from,
-.msg-box-flip-leave-to {
+.msg-box-flip-enter {
   opacity: 0;
   transform: rotateX(-90deg);
 }
-.msg-box-flip-enter-active,
-.msg-box-flip-leave-active {
+.msg-box-flip-enter-active {
+  opacity: 1;
+  transform: rotateX(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.msg-box-flip-exit {
+  opacity: 1;
+  transform: rotateX(0);
+}
+.msg-box-flip-exit-active {
+  opacity: 0;
+  transform: rotateX(-90deg);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
-.msg-box-elastic-enter-from,
-.msg-box-elastic-leave-to {
+.msg-box-elastic-enter {
   opacity: 0;
   transform: scale(0.5);
 }
 .msg-box-elastic-enter-active {
+  opacity: 1;
+  transform: scale(1);
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.msg-box-elastic-leave-active {
+.msg-box-elastic-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.msg-box-elastic-exit-active {
+  opacity: 0;
+  transform: scale(0.5);
   transition: all 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 

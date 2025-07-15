@@ -1,0 +1,107 @@
+.transition-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+
+  label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 150px;
+  }
+
+  .transition-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: white;
+    min-width: 200px;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+    }
+  }
+}
+
+.demo-button {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+
+  &:hover {
+    background: #5a6fd8;
+  }
+
+  // 테마별 색상
+  &.theme-default {
+    background: #6c757d;
+    &:hover {
+      background: #5a6268;
+    }
+  }
+
+  &.theme-primary {
+    background: #007bff;
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  &.theme-secondary {
+    background: #6c757d;
+    &:hover {
+      background: #5a6268;
+    }
+  }
+
+  &.theme-success {
+    background: #28a745;
+    &:hover {
+      background: #1e7e34;
+    }
+  }
+
+  &.theme-warning {
+    background: #ffc107;
+    color: #212529;
+    &:hover {
+      background: #e0a800;
+    }
+  }
+
+  &.theme-error {
+    background: #dc3545;
+    &:hover {
+      background: #c82333;
+    }
+  }
+
+  &.theme-info {
+    background: #17a2b8;
+    &:hover {
+      background: #138496;
+    }
+  }
+}
+
+.app-footer {
+  background: #343a40;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+}

@@ -6,7 +6,7 @@ import StyledButtonExample from './components/StyledButton/ex';
 import TooltipExample from './components/Tooltip/ex';
 import ComponentsPage from './views/components';
 // import SpinnerExample from './components/Spinner/ex';
-// import MessageBoxExample from './components/MessageBox/ex';
+import MessageBoxExample from './components/MessageBox/ex';
 // import ToastExample from './components/Toast/ex';
 import StatusSelectorExample from './components/StatusSelector/ex';
 import TabsExample from './components/Tabs/ex';
@@ -32,7 +32,7 @@ const App: React.FC = () => (
       <Route path="/components/buttons" element={<StyledButtonExample />} />
       <Route path="/components/dropmenu" element={<DropMenuExample />} />
       {/* <Route path="/components/spinner" element={<SpinnerExample />} /> */}
-      {/* <Route path="/components/messagebox" element={<MessageBoxExample />} /> */}
+      <Route path="/components/messagebox" element={<MessageBoxExample />} />
       {/* <Route path="/components/toast" element={<ToastExample />} /> */}
       <Route path="/components/tabs" element={<TabsExample />} />
       <Route path="/components/statusselector" element={<StatusSelectorExample />} />
