@@ -1,13 +1,11 @@
-import type { ReactNode } from 'react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import './style.scss';
 import type { TabsProps } from './types';
 
 // Tabs 컴포넌트
-const Tabs: React.FC<TabsProps & { children: ReactNode[] }> = ({
+const Tabs: React.FC<TabsProps> = ({
   tabItems,
-  inBox = false,
   activeTab = 0,
   disabled = [],
   variant = 'default',
@@ -35,9 +33,11 @@ const Tabs: React.FC<TabsProps & { children: ReactNode[] }> = ({
       if (transition === 'slide') {
         return direction === 'left' ? 'tab-slide-left' : 'tab-slide-right';
       }
+
       if (transition === 'flip') {
         return direction === 'left' ? 'tab-flip-left' : 'tab-flip-right';
       }
+
       return `tab-${transition}`;
     },
     [transition],
@@ -95,7 +95,7 @@ const Tabs: React.FC<TabsProps & { children: ReactNode[] }> = ({
           ))}
         </ul>
       </div>
-      <div className={['tab-contents', inBox ? 'in-box' : ''].join(' ')}>
+      <div className="tab-contents">
         <div className="transition-wrapper">
           <SwitchTransition mode="out-in">
             <CSSTransition

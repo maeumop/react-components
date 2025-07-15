@@ -231,45 +231,6 @@ const TabsExample: React.FC = () => {
               </div>
             </div>
           </section>
-          {/* 박스 스타일 */}
-          <section className="example-section">
-            <h2>박스 스타일</h2>
-            <div className="example-grid">
-              <div className="example-item">
-                <Tabs tabItems={['정보', '설정', '도움말']} inBox>
-                  <div className="tab-content none-border">
-                    <h3>정보</h3>
-                    <p>박스 스타일로 감싸진 탭 콘텐츠입니다.</p>
-                    <ul>
-                      <li>테두리가 있는 박스 형태</li>
-                      <li>내부 패딩이 적용됨</li>
-                      <li>깔끔한 구분선 제공</li>
-                    </ul>
-                  </div>
-                  <div className="tab-content none-border">
-                    <h3>설정</h3>
-                    <p>설정 관련 내용을 박스 안에 표시합니다.</p>
-                    <div className="setting-item">
-                      <label>테마 설정:</label>
-                      <select>
-                        <option>라이트</option>
-                        <option>다크</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="tab-content none-border">
-                    <h3>도움말</h3>
-                    <p>사용법과 FAQ를 제공합니다.</p>
-                    <div className="help-item">
-                      <strong>Q: 탭을 어떻게 전환하나요?</strong>
-                      <p>A: 탭을 클릭하거나 키보드 방향키를 사용하세요.</p>
-                    </div>
-                  </div>
-                </Tabs>
-                <span className="example-label">박스 스타일 (in-box)</span>
-              </div>
-            </div>
-          </section>
           {/* 트랜지션 효과 */}
           <section className="example-section">
             <h2>트랜지션 효과</h2>
@@ -295,7 +256,6 @@ const TabsExample: React.FC = () => {
                   transition={currentTransition}
                   activeTab={transitionActiveTab}
                   onUpdateActiveTab={setTransitionActiveTab}
-                  inBox
                 >
                   <div className="tab-content none-border">
                     <h3>첫 번째 탭</h3>

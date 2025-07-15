@@ -74,10 +74,7 @@
 
 .tab-content {
   padding: 1rem;
-  background: white;
-  border-radius: 0 0 6px 6px;
-  border: 1px solid #e9ecef;
-  border-top: none !important;
+  background: transparent;
 
   &.none-border {
     border: none !important;
@@ -397,37 +394,6 @@
       font-size: 0.9rem;
     }
   }
-}
-
-.tabs {
-  width: 100%;
-  max-width: 100%;
-}
-
-.tab-item-wrap {
-  width: 100%;
-}
-
-.tab-items {
-  width: 100%;
-  display: flex;
-}
-
-.tab-items li {
-  flex-grow: 1;
-  min-width: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.tab-contents {
-  width: 100%;
-  max-width: 100%;
-}
-
-.tab-panel {
-  width: 100%;
-  max-width: 100%;
 }
 
 @media (max-width: 768px) {
