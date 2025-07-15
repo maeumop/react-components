@@ -1,3 +1,4 @@
+import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useCallback, useState } from 'react';
 import { tabsTransition, tabsVariant } from './const';
 import './ex.scss';
@@ -332,7 +333,7 @@ const TabsExample: React.FC = () => {
           </section>
         </div>
       </main>
-      {/* <FloatingBackButton /> */}
+      <FloatingBackButton />
     </div>
   );
 };

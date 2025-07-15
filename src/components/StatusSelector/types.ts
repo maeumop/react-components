@@ -14,7 +14,7 @@ export interface StatusSelectorItem {
 
 export interface StatusSelectorProps {
   /** 현재 선택된 값 (v-model) */
-  modelValue: string;
+  value: string;
   /** 선택 가능한 옵션 목록 */
   options: StatusSelectorItem[];
   /** 원형 표시기 사용 여부 */
@@ -25,10 +25,6 @@ export interface StatusSelectorProps {
   bgColor?: string;
   /** 컴포넌트 크기 */
   size?: StatusSelectorSize;
-}
-
-export interface StatusSelectorEmits {
-  (event: 'update:modelValue', value: string): void;
-  (event: 'update:selectedIndex', value: number): void;
-  (event: 'change', value: string, index: number): void;
+  /** 값 변경 시 콜백 */
+  onChange?: (value: string, index: number) => void;
 }

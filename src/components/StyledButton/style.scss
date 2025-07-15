@@ -104,11 +104,6 @@ $button-sizes: (
       border-color: map.get($color-map, hover);
     }
 
-    &:not(.disabled):focus {
-      outline: 2px solid map.get($color-map, default);
-      outline-offset: 2px;
-    }
-
     &.disabled {
       background-color: map.get($color-map, disabled);
       border-color: map.get($color-map, disabled);

@@ -8,8 +8,8 @@ import ComponentsPage from './views/components';
 // import SpinnerExample from './components/Spinner/ex';
 // import MessageBoxExample from './components/MessageBox/ex';
 // import ToastExample from './components/Toast/ex';
+import StatusSelectorExample from './components/StatusSelector/ex';
 import TabsExample from './components/Tabs/ex';
-// import StatusSelectorExample from './components/StatusSelector/ex';
 // import ListTableExample from './components/ListTable/ex';
 // import PaginationExample from './components/Pagination/ex';
 // import ModalExample from './components/Modal/ex';
@@ -21,6 +21,7 @@ import TabsExample from './components/Tabs/ex';
 // import DatePickerExample from './components/Form/DatePicker/ex';
 // import ValidateWrapExample from './components/Form/ValidateWrap/ex';
 // import ValidateFormExample from './components/Form/ValidateForm/ex';
+import '@/assets/styles/ex.scss';
 
 const App: React.FC = () => (
   <BrowserRouter>
@@ -34,7 +35,7 @@ const App: React.FC = () => (
       {/* <Route path="/components/messagebox" element={<MessageBoxExample />} /> */}
       {/* <Route path="/components/toast" element={<ToastExample />} /> */}
       <Route path="/components/tabs" element={<TabsExample />} />
-      {/* <Route path="/components/statusselector" element={<StatusSelectorExample />} /> */}
+      <Route path="/components/statusselector" element={<StatusSelectorExample />} />
       {/* <Route path="/components/listtable" element={<ListTableExample />} /> */}
       {/* <Route path="/components/pagination" element={<PaginationExample />} /> */}
       {/* <Route path="/components/modal" element={<ModalExample />} /> */}

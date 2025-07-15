@@ -16,10 +16,12 @@ const StyledButtonExample: React.FC = () => {
   // 폼 제출
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!formData.email || !formData.message) {
       alert('모든 필드를 입력해주세요.');
       return;
     }
+
     setSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
     alert('폼이 성공적으로 제출되었습니다!');
