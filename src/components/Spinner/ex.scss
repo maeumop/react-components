@@ -1,0 +1,164 @@
+.demo-button {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+
+  &:hover {
+    background: #5a6fd8;
+  }
+
+  // 테마별 색상
+  &.theme-default {
+    background: #6c757d;
+    &:hover {
+      background: #5a6268;
+    }
+  }
+
+  &.theme-primary {
+    background: #007bff;
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  &.theme-secondary {
+    background: #6c757d;
+    &:hover {
+      background: #5a6268;
+    }
+  }
+
+  &.theme-success {
+    background: #28a745;
+    &:hover {
+      background: #1e7e34;
+    }
+  }
+
+  &.theme-warning {
+    background: #ffc107;
+    color: #212529;
+    &:hover {
+      background: #e0a800;
+    }
+  }
+
+  &.theme-error {
+    background: #dc3545;
+    &:hover {
+      background: #c82333;
+    }
+  }
+
+  &.theme-info {
+    background: #17a2b8;
+    &:hover {
+      background: #138496;
+    }
+  }
+
+  // 고급 예제 버튼
+  &.advanced {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+
+    &:hover {
+      background: #667eea;
+      color: white;
+    }
+  }
+
+  // API 버튼
+  &.api-success {
+    background: #28a745;
+    &:hover {
+      background: #1e7e34;
+    }
+  }
+
+  &.api-error {
+    background: #dc3545;
+    &:hover {
+      background: #c82333;
+    }
+  }
+
+  &.api-warning {
+    background: #ffc107;
+    color: #212529;
+    &:hover {
+      background: #e0a800;
+    }
+  }
+
+  &.api-long {
+    background: #17a2b8;
+    &:hover {
+      background: #138496;
+    }
+  }
+}
+
+.status-indicator {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.status-light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+
+  &.status-default {
+    background-color: #e9ecef;
+  }
+
+  &.status-primary {
+    background-color: #cce7ff;
+  }
+
+  &.status-secondary {
+    background-color: #e2e3e5;
+  }
+
+  &.status-success {
+    background-color: #d4edda;
+  }
+
+  &.status-warning {
+    background-color: #fff3cd;
+  }
+
+  &.status-error {
+    background-color: #f8d7da;
+  }
+
+  &.status-info {
+    background-color: #d1ecf1;
+  }
+
+  &.status-hidden {
+    background-color: #e9ecef;
+  }
+
+  &.status-showing {
+    background-color: #d4edda;
+  }
+
+  &.status-hiding {
+    background-color: #fff3cd;
+  }
+}

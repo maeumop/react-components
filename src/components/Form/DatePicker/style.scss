@@ -134,7 +134,7 @@ $_button-colors: _.getButtonColors();
       color: _.$text-default;
 
       &.selected-error {
-        color: _.$danger;
+        color: _.$error;
       }
     }
 

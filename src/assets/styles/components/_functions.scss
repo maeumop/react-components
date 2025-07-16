@@ -38,10 +38,10 @@
       disabled: color.change($warning, $lightness: 70%),
     ),
     error: (
-      hover: color.change($danger, $lightness: 45%),
-      default: $danger,
-      text: color.change($danger, $lightness: 45%),
-      disabled: color.change($danger, $lightness: 70%),
+      hover: color.change($error, $lightness: 45%),
+      default: $error,
+      text: color.change($error, $lightness: 45%),
+      disabled: color.change($error, $lightness: 70%),
     ),
     light: (
       hover: color.change($gray-100, $lightness: -5%),

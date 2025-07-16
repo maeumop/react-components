@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import BadgeExample from './components/Badge/ex';
 import DropMenuExample from './components/DropMenu/ex';
+import MessageBoxExample from './components/MessageBox/ex';
+import SpinnerExample from './components/Spinner/ex';
 import StyledButtonExample from './components/StyledButton/ex';
 import TooltipExample from './components/Tooltip/ex';
 import ComponentsPage from './views/components';
-// import SpinnerExample from './components/Spinner/ex';
-import MessageBoxExample from './components/MessageBox/ex';
 // import ToastExample from './components/Toast/ex';
 import ListTableExample from './components/ListTable/ex';
 import PaginationExample from './components/Pagination/ex';
@@ -31,7 +31,7 @@ const App: React.FC = () => (
       <Route path="/components/badge" element={<BadgeExample />} />
       <Route path="/components/buttons" element={<StyledButtonExample />} />
       <Route path="/components/dropmenu" element={<DropMenuExample />} />
-      {/* <Route path="/components/spinner" element={<SpinnerExample />} /> */}
+      <Route path="/components/spinner" element={<SpinnerExample />} />
       <Route path="/components/messagebox" element={<MessageBoxExample />} />
       {/* <Route path="/components/toast" element={<ToastExample />} /> */}
       <Route path="/components/tabs" element={<TabsExample />} />

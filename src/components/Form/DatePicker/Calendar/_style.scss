@@ -72,7 +72,7 @@
       &:not(.header) li {
         &:first-child {
           // 일요일 컬러 표시
-          color: _.$danger;
+          color: _.$error;
         }
 
         &:last-child {

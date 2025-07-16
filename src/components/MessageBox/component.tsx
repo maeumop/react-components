@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { messageBoxTransition } from './const';
 import './style.scss';
@@ -194,7 +195,7 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     };
   }, [setEvents, enableScroll, keyupEvent]);
 
-  return (
+  return createPortal(
     <CSSTransition
       appear
       in={isShow}
@@ -258,7 +259,8 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
           </div>
         </CSSTransition>
       </div>
-    </CSSTransition>
+    </CSSTransition>,
+    document.body,
   );
 };
 

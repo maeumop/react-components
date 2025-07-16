@@ -1,7 +1,6 @@
 @charset "UTF-8";
-/* @/components/Spinner/_style.scss */
-@use '@/assets/styles/variables' as *;
-@use '@/assets/styles/components' as _;
+
+@use '../../assets/styles/variables' as *;
 
 .spinner-overlay {
   position: fixed;
@@ -16,16 +15,6 @@
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
   transition: opacity 0.3s ease-in-out;
-
-  &.spinner-overlay--fade-enter-active,
-  &.spinner-overlay--fade-leave-active {
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  &.spinner-overlay--fade-enter-from,
-  &.spinner-overlay--fade-leave-to {
-    opacity: 0;
-  }
 }
 
 .spinner-container {
@@ -33,80 +22,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
+  padding: 2rem;
   background-color: rgba(0, 0, 0, 0.7);
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-lg;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   min-width: 120px;
   min-height: 120px;
   text-align: center;
   transition: all 0.3s ease-in-out;
+}
 
-  .spinner-icon {
-    font-size: 2.5rem;
-    color: $white;
-    margin-bottom: $spacing-md;
-    animation: spin 3s linear infinite;
-    transform-origin: center;
-  }
+.spinner-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  border: 6px solid #fff;
+  border-top: 6px solid #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
 
-  .spinner-text {
-    color: $white;
-    font-size: $font-size-sm;
-    font-weight: 500;
-    margin: 0;
-    line-height: $line-height-tight;
-    max-width: 200px;
-    word-wrap: break-word;
-  }
+.spinner-text {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.3;
+  max-width: 200px;
+  word-wrap: break-word;
+}
 
-  .spinner-timeout {
-    color: $white;
-    font-size: $font-size-xs;
-    opacity: 0.7;
-    margin-top: $spacing-sm;
-  }
-
-  // 색상 테마 클래스 정의
-  &.primary,
-  &.secondary,
-  &.success,
-  &.warning,
-  &.error,
-  &.info {
-    background-color: rgba(255, 255, 255, 0.7);
-  }
-
-  &.primary .spinner-icon,
-  &.primary .spinner-text,
-  &.primary .spinner-timeout {
-    color: $primary-color;
-  }
-  &.secondary .spinner-icon,
-  &.secondary .spinner-text,
-  &.secondary .spinner-timeout {
-    color: $secondary-color;
-  }
-  &.success .spinner-icon,
-  &.success .spinner-text,
-  &.success .spinner-timeout {
-    color: $success-color;
-  }
-  &.warning .spinner-icon,
-  &.warning .spinner-text,
-  &.warning .spinner-timeout {
-    color: $warning-color;
-  }
-  &.error .spinner-icon,
-  &.error .spinner-text,
-  &.error .spinner-timeout {
-    color: $error-color;
-  }
-  &.info .spinner-icon,
-  &.info .spinner-text,
-  &.info .spinner-timeout {
-    color: $info-color;
-  }
+// 테마별 색상
+.spinner-container.primary .spinner-icon,
+.spinner-container.primary .spinner-text {
+  border-top-color: $primary;
+  color: $primary;
+}
+.spinner-container.secondary .spinner-icon,
+.spinner-container.secondary .spinner-text {
+  border-top-color: $secondary;
+  color: $secondary;
+}
+.spinner-container.success .spinner-icon,
+.spinner-container.success .spinner-text {
+  border-top-color: $success;
+  color: $success;
+}
+.spinner-container.warning .spinner-icon,
+.spinner-container.warning .spinner-text {
+  border-top-color: $warning;
+  color: $warning;
+}
+.spinner-container.error .spinner-icon,
+.spinner-container.error .spinner-text {
+  border-top-color: $error;
+  color: $error;
+}
+.spinner-container.info .spinner-icon,
+.spinner-container.info .spinner-text {
+  border-top-color: $info;
+  color: $info;
 }
 
 @keyframes spin {
@@ -118,40 +94,57 @@
   }
 }
 
-// 반응형 디자인
-@media (max-width: $breakpoint-sm) {
-  .spinner-container {
-    padding: $spacing-lg;
-    min-width: 100px;
-    min-height: 100px;
-
-    .spinner-icon {
-      font-size: 2rem;
-    }
-
-    .spinner-text {
-      font-size: $font-size-xs;
-    }
-  }
+// 트랜지션 클래스 (CSSTransition용)
+.spinner-fade-appear,
+.spinner-fade-enter {
+  opacity: 0;
+}
+.spinner-fade-appear-active,
+.spinner-fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.2s ease-in;
+}
+.spinner-fade-exit {
+  opacity: 1;
+}
+.spinner-fade-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
 }
 
-.scale-enter-from,
-.scale-leave-to {
+.spinner-scale-appear,
+.spinner-scale-enter {
   transform: scale(0.5);
   opacity: 0;
 }
-
-.scale-enter-active,
-.scale-leave-active {
+.spinner-scale-appear-active,
+.spinner-scale-enter-active {
+  transform: scale(1);
+  opacity: 1;
+  transition: all 0.2s ease-in;
+}
+.spinner-scale-exit {
+  transform: scale(1);
+  opacity: 1;
+}
+.spinner-scale-exit-active {
+  transform: scale(0.5);
+  opacity: 0;
   transition: all 0.2s ease-in;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease-in;
+// 반응형
+@media (max-width: 480px) {
+  .spinner-container {
+    padding: 1rem;
+    min-width: 100px;
+    min-height: 100px;
+  }
+  .spinner-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .spinner-text {
+    font-size: 0.9rem;
+  }
 }
