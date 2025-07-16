@@ -30,8 +30,8 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
 
   const [isShow, setIsShow] = useState(true);
   const [spinnerShow, setSpinnerShow] = useState(false);
-  const msgBoxBgRef = useRef<HTMLDivElement>(null);
-  const msgBoxRef = useRef<HTMLDivElement>(null);
+  const msgBoxBgNodeRef = useRef<HTMLDivElement>(null);
+  const msgBoxNodeRef = useRef<HTMLDivElement>(null);
   const dialogId = useRef(`messagebox-${Date.now()}`);
   const titleId = `${dialogId.current}-title`;
   const contentId = `${dialogId.current}-content`;
@@ -107,8 +107,8 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     disableScroll();
     document.addEventListener('keyup', keyupEvent);
 
-    if (msgBoxBgRef.current) {
-      msgBoxBgRef.current.focus();
+    if (msgBoxBgNodeRef.current) {
+      msgBoxBgNodeRef.current.focus();
     }
   }, [disableScroll, keyupEvent]);
 
@@ -128,8 +128,8 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
   }, [enableScroll, keyupEvent, onClose]);
 
   const handleEntered = useCallback(() => {
-    if (msgBoxRef.current) {
-      msgBoxRef.current.focus();
+    if (msgBoxNodeRef.current) {
+      msgBoxNodeRef.current.focus();
     }
   }, []);
 
@@ -196,16 +196,16 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
 
   return (
     <CSSTransition
+      appear
       in={isShow}
       timeout={200}
       classNames="msg-box-fade"
-      unmountOnExit
       onExited={handleExited}
       onEntered={handleEntered}
-      nodeRef={msgBoxBgRef}
+      nodeRef={msgBoxBgNodeRef}
     >
       <div
-        ref={msgBoxBgRef}
+        ref={msgBoxBgNodeRef}
         className="msg-box-bg"
         tabIndex={0}
         role="dialog"
@@ -213,8 +213,14 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
         aria-describedby={contentId}
         aria-modal="true"
       >
-        <CSSTransition in={isShow} appear timeout={300} classNames={transition} nodeRef={msgBoxRef}>
-          <div className="msg-box" style={{ width }} id={dialogId.current} ref={msgBoxRef}>
+        <CSSTransition
+          appear
+          in={isShow}
+          timeout={200}
+          classNames={transition}
+          nodeRef={msgBoxNodeRef}
+        >
+          <div className="msg-box" style={{ width }} id={dialogId.current} ref={msgBoxNodeRef}>
             {title && (
               <h5 className="title" id={titleId}>
                 {title}

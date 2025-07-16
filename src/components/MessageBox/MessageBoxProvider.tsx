@@ -87,11 +87,11 @@ export const MessageBoxProvider: React.FC<React.PropsWithChildren<MessageBoxProv
  * - Provider 하위에서 alert/confirm/destroy 사용 가능
  */
 export const useMessageBox = (): MessageBoxContextType => {
-  const ctx = useContext(MessageBoxContext);
+  const context = useContext(MessageBoxContext);
 
-  if (!ctx) {
+  if (!context) {
     throw new Error('useMessageBox는 반드시 <MessageBoxProvider> 하위에서 사용해야 합니다.');
   }
 
-  return ctx;
+  return context;
 };
