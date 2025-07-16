@@ -1,11 +1,18 @@
-import type { ComponentPublicInstance } from 'vue';
+import type { ReactNode } from 'react';
+import {
+  listTableCellAlign,
+  listTableFooterItemTag,
+  listTableListCheckIconKeys,
+  listTableListCheckType,
+} from './const';
 
-export type ListTableCellAlign = 'left' | 'center' | 'right';
-export type ListTableFooterItemTag = 'td' | 'th';
-
-export type ListTableListCheckType = 'checkbox' | 'radio';
-
-export type ListTableListCheckIconKeys = 'disabled' | 'checked' | 'blank';
+export type ListTableCellAlign = (typeof listTableCellAlign)[keyof typeof listTableCellAlign];
+export type ListTableFooterItemTag =
+  (typeof listTableFooterItemTag)[keyof typeof listTableFooterItemTag];
+export type ListTableListCheckType =
+  (typeof listTableListCheckType)[keyof typeof listTableListCheckType];
+export type ListTableListCheckIconKeys =
+  (typeof listTableListCheckIconKeys)[keyof typeof listTableListCheckIconKeys];
 export type ListTableListCheckIconType = { [K in ListTableListCheckIconKeys]: string };
 
 // 목록 최상단 라벨링 Array:[{text: string, width: string, colspan: number, align: 'left' | 'center' | 'right'}] *
@@ -21,11 +28,9 @@ export interface ListTableHeader {
 }
 
 /** 테이블 데이터 아이템 기본 인터페이스 */
-export interface ListTableItem {
+export interface ListTableItem extends Record<string, unknown> {
   /** 고유 식별자 */
   id: string | number;
-  /** 추가 데이터 */
-  [key: string]: unknown;
 }
 
 export interface ListTableFooter {
@@ -61,6 +66,10 @@ export interface ListTableProps<T extends ListTableItem = ListTableItem> {
   checkMode?: ListTableListCheckType;
   /** 비활성화 필터 함수 */
   disableFilter?: (item: T, index: number) => boolean;
+  onCheckedAll?: (checked: boolean) => void;
+  onChecked?: (checked: boolean, index: number, items: T[]) => void;
+  onObserve?: () => void;
+  children?: (slot: { props: T; index: number; disabled: boolean }) => ReactNode;
 }
 
 /** 아이템 슬롯 Props */
@@ -73,40 +82,25 @@ export interface ListTableItemSlot<T extends ListTableItem = ListTableItem> {
   disabled: boolean;
 }
 
-/** 컴포넌트 Expose 메서드 */
+/** 컴포넌트 Expose 메서드 (React에서는 ref로 대체) */
 export interface ListTableExpose {
-  /** 스크롤 감지 시작 */
   observerStart: () => void;
-  /** 스크롤 감지 중지 */
   observerStop: () => void;
-  /** 전체 체크 토글 */
   checkedToggle: (bool?: boolean) => void;
 }
 
-/** Template Ref 타입 */
-export type ListTableModel<T extends ListTableItem = ListTableItem> = ComponentPublicInstance<
-  ListTableProps<T>
-> &
-  ListTableExpose;
-
-/** 컴포넌트 Events */
+/** 컴포넌트 이벤트 타입 (React에서는 콜백 props로 대체) */
 export interface ListTableEmits<T extends ListTableItem = ListTableItem> {
-  /** 전체 체크 이벤트 */
-  (event: 'checkedAll', value: boolean): void;
-  /** 개별 체크 이벤트 */
-  (event: 'checked', value: boolean, index: number, items: T[]): void;
-  /** 스크롤 감지 이벤트 */
-  (event: 'observe'): void;
+  onCheckedAll?: (checked: boolean) => void;
+  onChecked?: (checked: boolean, index: number, items: T[]) => void;
+  onObserve?: () => void;
 }
 
-/** 체크박스 Props */
+/** 체크박스/라디오 Props */
 export interface ListTableListCheckProps {
-  /** 체크 상태 */
   modelValue?: boolean;
-  /** 값 */
   value?: string;
-  /** 비활성화 상태 */
   disabled?: boolean;
-  /** 체크 타입 */
   type?: ListTableListCheckType;
+  onChange?: (checked: boolean) => void;
 }

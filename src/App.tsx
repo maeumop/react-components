@@ -8,10 +8,10 @@ import ComponentsPage from './views/components';
 // import SpinnerExample from './components/Spinner/ex';
 import MessageBoxExample from './components/MessageBox/ex';
 // import ToastExample from './components/Toast/ex';
+import ListTableExample from './components/ListTable/ex';
+import PaginationExample from './components/Pagination/ex';
 import StatusSelectorExample from './components/StatusSelector/ex';
 import TabsExample from './components/Tabs/ex';
-// import ListTableExample from './components/ListTable/ex';
-import PaginationExample from './components/Pagination/ex';
 // import ModalExample from './components/Modal/ex';
 // import CheckButtonExample from './components/Form/CheckButton/ex';
 // import SwitchButtonExample from './components/Form/SwitchButton/ex';
@@ -36,7 +36,7 @@ const App: React.FC = () => (
       {/* <Route path="/components/toast" element={<ToastExample />} /> */}
       <Route path="/components/tabs" element={<TabsExample />} />
       <Route path="/components/statusselector" element={<StatusSelectorExample />} />
-      {/* <Route path="/components/listtable" element={<ListTableExample />} /> */}
+      <Route path="/components/listtable" element={<ListTableExample />} />
       <Route path="/components/pagination" element={<PaginationExample />} />
       {/* <Route path="/components/modal" element={<ModalExample />} /> */}
       {/* <Route path="/components/checkbutton" element={<CheckButtonExample />} /> */}

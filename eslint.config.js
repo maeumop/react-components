@@ -34,6 +34,8 @@ export default [
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'brace-style': ['error', '1tbs', { allowSingleLine: false }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
 ];
