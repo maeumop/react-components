@@ -3,53 +3,112 @@
 
 @use 'sass:meta';
 
-// 트랜지션 애니메이션
-.modal-fade-enter-from,
-.modal-fade-leave-to {
+// 트랜지션: react-transition-group classNames 기준
+
+// Fade
+.modal-fade-enter,
+.modal-fade-appear {
   opacity: 0;
 }
 .modal-fade-enter-active,
-.modal-fade-leave-active {
+.modal-fade-appear-active {
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-fade-exit {
+  opacity: 1;
+}
+.modal-fade-exit-active {
+  opacity: 0;
   transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.modal-scale-enter-from,
-.modal-scale-leave-to {
+// Scale
+.modal-scale-enter,
+.modal-scale-appear {
   opacity: 0;
   transform: scale(0.95) translateY(-10px);
 }
 .modal-scale-enter-active,
-.modal-scale-leave-active {
+.modal-scale-appear-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.modal-slide-down-enter-from,
-.modal-slide-down-leave-to {
+.modal-scale-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.modal-scale-exit-active {
   opacity: 0;
-  transform: translateY(-20px) scale(0.98);
-}
-.modal-slide-down-enter-active,
-.modal-slide-down-leave-active {
+  transform: scale(0.95) translateY(-10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@each $item in (left, right, bottom) {
-  .modal-slide-in-#{$item}-enter-from,
-  .modal-slide-in-#{$item}-leave-to {
-    opacity: 0;
+// Slide in right
+.modal-slide-in-right-enter,
+.modal-slide-in-right-appear {
+  opacity: 0;
+  transform: translateX(100%) scale(0.98);
+}
+.modal-slide-in-right-enter-active,
+.modal-slide-in-right-appear-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-slide-in-right-exit {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+.modal-slide-in-right-exit-active {
+  opacity: 0;
+  transform: translateX(100%) scale(0.98);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    @if $item == left {
-      transform: translateX(-100%) scale(0.98);
-    } @else if $item == right {
-      transform: translateX(100%) scale(0.98);
-    } @else if $item == 'bottom' {
-      transform: translateY(100%) scale(0.98);
-    }
-  }
-  .modal-slide-in-#{$item}-enter-active,
-  .modal-slide-in-#{$item}-leave-active {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+// Slide in left
+.modal-slide-in-left-enter,
+.modal-slide-in-left-appear {
+  opacity: 0;
+  transform: translateX(-100%) scale(0.98);
+}
+.modal-slide-in-left-enter-active,
+.modal-slide-in-left-appear-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-slide-in-left-exit {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+.modal-slide-in-left-exit-active {
+  opacity: 0;
+  transform: translateX(-100%) scale(0.98);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Slide in bottom
+.modal-slide-in-bottom-enter,
+.modal-slide-in-bottom-appear {
+  opacity: 0;
+  transform: translateY(100%) scale(0.98);
+}
+.modal-slide-in-bottom-enter-active,
+.modal-slide-in-bottom-appear-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-slide-in-bottom-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.modal-slide-in-bottom-exit-active {
+  opacity: 0;
+  transform: translateY(100%) scale(0.98);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-bg {
@@ -146,6 +205,14 @@
       box-shadow:
         -8px 0 32px -12px rgba(0, 0, 0, 0.25),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+
+      .modal-header {
+        border-radius: 1rem 0 0 0 !important;
+      }
+
+      .modal-action {
+        border-radius: 0 0 0 1rem !important;
+      }
     }
 
     &.left {
@@ -154,6 +221,14 @@
       box-shadow:
         8px 0 32px -12px rgba(0, 0, 0, 0.25),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+
+      .modal-header {
+        border-radius: 0 1rem 0 0 !important;
+      }
+
+      .modal-action {
+        border-radius: 0 0 1rem 0 !important;
+      }
     }
 
     &.bottom {
@@ -176,9 +251,8 @@
       border-radius: 1rem 1rem 0 0;
       border-bottom: 1px solid rgba(226, 232, 240, 0.8);
       padding: 0 1.7rem;
-      position: relative;
       border-bottom: 1px solid #e2e8f0;
-      height: 5.5rem;
+      height: 4.5rem;
       background: #eef5ff;
 
       .title-text {
@@ -204,20 +278,13 @@
       .close {
         color: #64748b;
         cursor: pointer;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        background: transparent;
         border: none;
-        position: relative;
-        overflow: hidden;
+        font-size: 1.5rem;
+        outline: none;
 
         &:hover {
           color: #ef4444;
-          transform: scale(1.05);
-
-          &::before {
-            opacity: 1;
-          }
+          transform: scale(1.08);
         }
 
         &:focus {
@@ -227,6 +294,12 @@
 
         &:active {
           transform: scale(0.95);
+        }
+
+        svg {
+          width: 1.5em;
+          height: 1.5em;
+          display: block;
         }
       }
     }
@@ -251,12 +324,10 @@
       align-items: center;
       justify-content: flex-end;
       gap: 1rem;
-      height: 5.5rem;
+      height: 4.5rem;
       padding: 0 1rem;
       border-radius: 0 0 1rem 1rem;
       border-top: 1px solid rgba(226, 232, 240, 0.8);
-      position: relative;
-      border-top: 1px solid #e2e8f0;
       background: #eef5ff;
     }
   }

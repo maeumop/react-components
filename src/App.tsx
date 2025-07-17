@@ -4,6 +4,7 @@ import BadgeExample from './components/Badge/ex';
 import DropMenuExample from './components/DropMenu/ex';
 import ListTableExample from './components/ListTable/ex';
 import MessageBoxExample from './components/MessageBox/ex';
+import ModalExample from './components/Modal/ex';
 import PaginationExample from './components/Pagination/ex';
 import SpinnerExample from './components/Spinner/ex';
 import StatusSelectorExample from './components/StatusSelector/ex';
@@ -12,7 +13,6 @@ import TabsExample from './components/Tabs/ex';
 import ToastExample from './components/Toast/ex';
 import TooltipExample from './components/Tooltip/ex';
 import ComponentsPage from './views/components';
-// import ModalExample from './components/Modal/ex';
 // import CheckButtonExample from './components/Form/CheckButton/ex';
 // import SwitchButtonExample from './components/Form/SwitchButton/ex';
 // import TextFieldExample from './components/Form/TextField/ex';
@@ -38,7 +38,7 @@ const App: React.FC = () => (
       <Route path="/components/statusselector" element={<StatusSelectorExample />} />
       <Route path="/components/listtable" element={<ListTableExample />} />
       <Route path="/components/pagination" element={<PaginationExample />} />
-      {/* <Route path="/components/modal" element={<ModalExample />} /> */}
+      <Route path="/components/modal" element={<ModalExample />} />
       {/* <Route path="/components/checkbutton" element={<CheckButtonExample />} /> */}
       {/* <Route path="/components/switchbutton" element={<SwitchButtonExample />} /> */}
       {/* <Route path="/components/textfield" element={<TextFieldExample />} /> */}
