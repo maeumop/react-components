@@ -1,150 +1,245 @@
 @charset "UTF-8";
-/* @/components/Toast/_style.scss */
-@use 'sass:map';
-@use 'sass:meta';
-@use '@/assets/styles/components' as _;
 
-.toast-bg {
+@use '@/assets/styles/components/variables' as *;
+
+.toast-portal {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: 10010;
-  background-color: transparent;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
+  z-index: 9999;
   pointer-events: none;
-  max-width: 400px;
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  .toast-body {
-    margin: 0;
-    height: auto;
-    min-height: 3.5rem;
-    padding: 0.875rem 1rem;
-    min-width: 280px;
-    max-width: 100%;
-    border-radius: 0.75rem;
-    box-sizing: border-box;
+  .toast {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    pointer-events: initial;
+    justify-content: space-between;
+    min-width: 23rem;
+    max-width: 90vw;
+    padding: 1rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    font-size: 1rem;
+    color: #222;
+    pointer-events: auto;
+    position: relative;
+    color: #fff;
+  }
+
+  .toast-icon {
+    font-size: 1.5rem;
+    margin-right: 0.3rem;
+    color: #fff;
+  }
+
+  .toast-message {
+    flex: 1;
+  }
+
+  .toast-close {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-left: 1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    outline: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
-    // 접근성을 위한 포커스 스타일
-    &:focus {
-      outline: 2px solid #3b82f6;
-      outline-offset: 2px;
-      box-shadow:
-        0 0 0 4px rgba(59, 130, 246, 0.1),
-        0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    // 호버 효과
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    // 클릭 시 제거 애니메이션
-    &.toast-leaving {
-      opacity: 0;
-      transform: translateX(100%) scale(0.9);
-      pointer-events: none;
-    }
-
-    @if meta.mixin-exists('mx-toastColorStyle', _) {
-      @include _.mx-toastColorStyle using ($color-map) {
-        border-left: 0.25rem solid map.get($color-map, border);
-        background-color: map.get($color-map, default);
-        color: #fff;
-      }
-    }
-
-    .icon {
-      display: block;
-      margin-right: 0.75rem;
-      flex-shrink: 0;
-      font-size: 1.25rem;
-      opacity: 0.9;
-      color: #ffffff;
-    }
-
-    .message {
-      font-size: 0.875rem;
-      font-weight: 500;
-      line-height: 1.4;
-      word-break: break-word;
-      flex: 1;
-      margin: 0;
-      color: #ffffff;
-    }
   }
 
-  .toast-view-enter-from {
-    opacity: 0;
-    transform: translateX(100%) scale(0.9);
+  // 테마별 색상
+  .toast-success {
+    border-left: 0.25rem solid darken($success, 10%);
+    background-color: $success;
+  }
+  .toast-error {
+    border-left: 0.25rem solid darken($error, 10%);
+    background-color: $error;
+  }
+  .toast-warning {
+    border-left: 0.25rem solid darken($warning, 10%);
+    background-color: $warning;
+  }
+  .toast-info {
+    border-left: 0.25rem solid darken($info, 10%);
+    background-color: $info;
+  }
+  .toast-primary {
+    border-left: 0.25rem solid darken($primary, 10%);
+    background-color: $primary;
+  }
+  .toast-secondary {
+    border-left: 0.25rem solid darken($secondary, 10%);
+    background-color: $secondary;
   }
 
-  .toast-view-leave-to {
-    opacity: 0;
-    transform: translateX(100%) scale(0.9);
+  // 위치별
+  .toast-top {
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
   }
-
-  .toast-view-enter-active,
-  .toast-view-leave-active {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  .toast-bottom {
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
   }
-
-  .toast-view-move {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  .toast-top-right {
+    top: 2rem;
+    right: 2rem;
+    position: fixed;
   }
-
-  // 반응형 디자인
-  @media (max-width: 768px) {
-    bottom: 0.5rem;
-    right: 0.5rem;
-    left: 0.5rem;
-    max-width: none;
-
-    .toast-body {
-      min-width: auto;
-      width: 100%;
-      padding: 0.75rem 0.875rem;
-      min-height: 3rem;
-
-      .icon {
-        font-size: 1.125rem;
-        margin-right: 0.625rem;
-      }
-
-      .message {
-        font-size: 0.8125rem;
-      }
-    }
+  .toast-top-left {
+    top: 2rem;
+    left: 2rem;
+    position: fixed;
   }
-
-  @media (max-width: 480px) {
-    .toast-body {
-      padding: 0.625rem 0.75rem;
-      min-height: 2.75rem;
-      border-radius: 0.5rem;
-
-      .icon {
-        font-size: 1rem;
-        margin-right: 0.5rem;
-      }
-
-      .message {
-        font-size: 0.75rem;
-      }
-    }
+  .toast-bottom-right {
+    bottom: 2rem;
+    right: 2rem;
+    position: fixed;
   }
+  .toast-bottom-left {
+    bottom: 2rem;
+    left: 2rem;
+    position: fixed;
+  }
+}
+
+// position별 포탈 스타일 개선
+.toast-portal.toast-top {
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+.toast-portal.toast-bottom {
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+.toast-portal.toast-top-right {
+  top: 2rem;
+  right: 2rem;
+  align-items: flex-end;
+}
+.toast-portal.toast-top-left {
+  top: 2rem;
+  left: 2rem;
+  align-items: flex-start;
+}
+.toast-portal.toast-bottom-right {
+  bottom: 2rem;
+  right: 2rem;
+  align-items: flex-end;
+}
+.toast-portal.toast-bottom-left {
+  bottom: 2rem;
+  left: 2rem;
+  align-items: flex-start;
+}
+
+// 트랜지션 클래스 (CSSTransition용)
+// 기본(상중, 하중) - 위/아래 슬라이드
+.toast-fade-top-appear,
+.toast-fade-top-enter {
+  opacity: 0;
+  transform: translateY(-50%);
+}
+.toast-fade-top-appear-active,
+.toast-fade-top-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+.toast-fade-top-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-fade-top-exit-active {
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.toast-fade-bottom-appear,
+.toast-fade-bottom-enter {
+  opacity: 0;
+  transform: translateY(50%);
+}
+.toast-fade-bottom-appear-active,
+.toast-fade-bottom-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+.toast-fade-bottom-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-fade-bottom-exit-active {
+  opacity: 0;
+  transform: translateY(50%);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+// 좌상, 좌하 - 왼쪽에서 오른쪽
+.toast-fade-left-appear,
+.toast-fade-left-enter {
+  opacity: 0;
+  transform: translateX(-50%);
+}
+.toast-fade-left-appear-active,
+.toast-fade-left-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+.toast-fade-left-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.toast-fade-left-exit-active {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+// 우상, 우하 - 오른쪽에서 왼쪽
+.toast-fade-right-appear,
+.toast-fade-right-enter {
+  opacity: 0;
+  transform: translateX(50%);
+}
+.toast-fade-right-appear-active,
+.toast-fade-right-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+.toast-fade-right-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.toast-fade-right-exit-active {
+  opacity: 0;
+  transform: translateX(50%);
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 }

@@ -187,122 +187,122 @@
 }
 
 .tooltip-color-primary {
-  background-color: rgba($primary-color, 0.95);
+  background-color: rgba($primary, 0.95);
   color: white;
-  border: 1px solid rgba($primary-color, 0.3);
+  border: 1px solid rgba($primary, 0.3);
 
   // primary 테마 화살표 색상
   &.top::before {
-    border-top-color: rgba($primary-color, 0.95);
+    border-top-color: rgba($primary, 0.95);
   }
   &.bottom::before {
-    border-bottom-color: rgba($primary-color, 0.95);
+    border-bottom-color: rgba($primary, 0.95);
   }
   &.left::before {
-    border-left-color: rgba($primary-color, 0.95);
+    border-left-color: rgba($primary, 0.95);
   }
   &.right::before {
-    border-right-color: rgba($primary-color, 0.95);
+    border-right-color: rgba($primary, 0.95);
   }
 }
 
 .tooltip-color-secondary {
-  background-color: rgba($secondary-color, 0.95);
+  background-color: rgba($secondary, 0.95);
   color: white;
-  border: 1px solid rgba($secondary-color, 0.3);
+  border: 1px solid rgba($secondary, 0.3);
 
   // secondary 테마 화살표 색상
   &.top::before {
-    border-top-color: rgba($secondary-color, 0.95);
+    border-top-color: rgba($secondary, 0.95);
   }
   &.bottom::before {
-    border-bottom-color: rgba($secondary-color, 0.95);
+    border-bottom-color: rgba($secondary, 0.95);
   }
   &.left::before {
-    border-left-color: rgba($secondary-color, 0.95);
+    border-left-color: rgba($secondary, 0.95);
   }
   &.right::before {
-    border-right-color: rgba($secondary-color, 0.95);
+    border-right-color: rgba($secondary, 0.95);
   }
 }
 
 .tooltip-color-success {
-  background-color: rgba($success-color, 0.95);
+  background-color: rgba($success, 0.95);
   color: white;
-  border: 1px solid rgba($success-color, 0.3);
+  border: 1px solid rgba($success, 0.3);
 
   // success 테마 화살표 색상
   &.top::before {
-    border-top-color: rgba($success-color, 0.95);
+    border-top-color: rgba($success, 0.95);
   }
   &.bottom::before {
-    border-bottom-color: rgba($success-color, 0.95);
+    border-bottom-color: rgba($success, 0.95);
   }
   &.left::before {
-    border-left-color: rgba($success-color, 0.95);
+    border-left-color: rgba($success, 0.95);
   }
   &.right::before {
-    border-right-color: rgba($success-color, 0.95);
+    border-right-color: rgba($success, 0.95);
   }
 }
 
 .tooltip-color-warning {
-  background-color: rgba($warning-color, 0.95);
+  background-color: rgba($warning, 0.95);
   color: white;
-  border: 1px solid rgba($warning-color, 0.3);
+  border: 1px solid rgba($warning, 0.3);
 
   // warning 테마 화살표 색상
   &.top::before {
-    border-top-color: rgba($warning-color, 0.95);
+    border-top-color: rgba($warning, 0.95);
   }
   &.bottom::before {
-    border-bottom-color: rgba($warning-color, 0.95);
+    border-bottom-color: rgba($warning, 0.95);
   }
   &.left::before {
-    border-left-color: rgba($warning-color, 0.95);
+    border-left-color: rgba($warning, 0.95);
   }
   &.right::before {
-    border-right-color: rgba($warning-color, 0.95);
+    border-right-color: rgba($warning, 0.95);
   }
 }
 
 .tooltip-color-error {
-  background-color: rgba($error-color, 0.95);
+  background-color: rgba($error, 0.95);
   color: white;
-  border: 1px solid rgba($error-color, 0.3);
+  border: 1px solid rgba($error, 0.3);
 
   // error 테마 화살표 색상
   &.top::before {
-    border-top-color: rgba($error-color, 0.95);
+    border-top-color: rgba($error, 0.95);
   }
   &.bottom::before {
-    border-bottom-color: rgba($error-color, 0.95);
+    border-bottom-color: rgba($error, 0.95);
   }
   &.left::before {
-    border-left-color: rgba($error-color, 0.95);
+    border-left-color: rgba($error, 0.95);
   }
   &.right::before {
-    border-right-color: rgba($error-color, 0.95);
+    border-right-color: rgba($error, 0.95);
   }
 }
 
 .tooltip-color-info {
-  background-color: rgba($info-color, 0.95);
+  background-color: rgba($info, 0.95);
   color: white;
-  border: 1px solid rgba($info-color, 0.3);
+  border: 1px solid rgba($info, 0.3);
 
   // info 테마 화살표 색상
   &.top::before {
-    border-top-color: rgba($info-color, 0.95);
+    border-top-color: rgba($info, 0.95);
   }
   &.bottom::before {
-    border-bottom-color: rgba($info-color, 0.95);
+    border-bottom-color: rgba($info, 0.95);
   }
   &.left::before {
-    border-left-color: rgba($info-color, 0.95);
+    border-left-color: rgba($info, 0.95);
   }
   &.right::before {
-    border-right-color: rgba($info-color, 0.95);
+    border-right-color: rgba($info, 0.95);
   }
 }
 

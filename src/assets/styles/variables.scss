@@ -1,10 +1,10 @@
 // 색상 변수
-$primary-color: #007bff;
-$secondary-color: #6c757d;
-$success-color: #28a745;
-$warning-color: #ffc107;
-$error-color: #dc3545;
-$info-color: #17a2b8;
+$primary: #007bff;
+$secondary: #6c757d;
+$success: #28a745;
+$warning: #ffc107;
+$error: #dc3545;
+$info: #17a2b8;
 
 // 중성 색상
 $white: #ffffff;
@@ -19,15 +19,6 @@ $gray-700: #374151;
 $gray-800: #1f2937;
 $gray-900: #111827;
 $black: #000000;
-
-// 컴포넌트 전용 색상 (기존 _init.scss에서 통합)
-$primary: $primary-color;
-$secondary: $secondary-color;
-$accent: $info-color;
-$info: $info-color;
-$success: $success-color;
-$warning: $warning-color;
-$error: $error-color;
 
 // 텍스트 색상
 $text-default: $gray-900;

@@ -9,12 +9,12 @@
 // 색상 팔레트
 //================================================================================
 $component-colors: (
-  primary: $primary-color,
-  secondary: $secondary-color,
-  success: $success-color,
-  warning: $warning-color,
-  danger: $error-color,
-  info: $info-color,
+  primary: $primary,
+  secondary: $secondary,
+  success: $success,
+  warning: $warning,
+  danger: $error,
+  info: $info,
   light: $gray-100,
   dark: $gray-900,
 );
@@ -462,7 +462,7 @@ $spacings: (
 
 .my-component {
   @include color-variant('primary', 'background-color');
-  @include hover-effect($primary-color);
+  @include hover-effect($primary);
   @include shadow('md');
   @include transition('all', 0.3s ease);
   @include flex-center;

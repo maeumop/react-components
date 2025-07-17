@@ -10,40 +10,40 @@
 //================================================================================
 $button-colors: (
   primary: (
-    default: $primary-color,
-    hover: color.adjust($primary-color, $lightness: -10%),
-    disabled: color.adjust($primary-color, $lightness: 20%),
-    text: $primary-color,
+    default: $primary,
+    hover: color.adjust($primary, $lightness: -10%),
+    disabled: color.adjust($primary, $lightness: 20%),
+    text: $primary,
   ),
   secondary: (
-    default: $secondary-color,
-    hover: color.adjust($secondary-color, $lightness: -10%),
-    disabled: color.adjust($secondary-color, $lightness: 20%),
-    text: $secondary-color,
+    default: $secondary,
+    hover: color.adjust($secondary, $lightness: -10%),
+    disabled: color.adjust($secondary, $lightness: 20%),
+    text: $secondary,
   ),
   success: (
-    default: $success-color,
-    hover: color.adjust($success-color, $lightness: -10%),
-    disabled: color.adjust($success-color, $lightness: 20%),
-    text: $success-color,
+    default: $success,
+    hover: color.adjust($success, $lightness: -10%),
+    disabled: color.adjust($success, $lightness: 20%),
+    text: $success,
   ),
   warning: (
-    default: $warning-color,
-    hover: color.adjust($warning-color, $lightness: -10%),
-    disabled: color.adjust($warning-color, $lightness: 20%),
-    text: $warning-color,
+    default: $warning,
+    hover: color.adjust($warning, $lightness: -10%),
+    disabled: color.adjust($warning, $lightness: 20%),
+    text: $warning,
   ),
   error: (
-    default: $error-color,
-    hover: color.adjust($error-color, $lightness: -10%),
-    disabled: color.adjust($error-color, $lightness: 20%),
-    text: $error-color,
+    default: $error,
+    hover: color.adjust($error, $lightness: -10%),
+    disabled: color.adjust($error, $lightness: 20%),
+    text: $error,
   ),
   info: (
-    default: $info-color,
-    hover: color.adjust($info-color, $lightness: -10%),
-    disabled: color.adjust($info-color, $lightness: 20%),
-    text: $info-color,
+    default: $info,
+    hover: color.adjust($info, $lightness: -10%),
+    disabled: color.adjust($info, $lightness: 20%),
+    text: $info,
   ),
   light: (
     default: $gray-100,
@@ -239,14 +239,14 @@ $button-sizes: (
   &.text {
     background-color: transparent;
     border: 1px solid transparent;
-    color: $primary-color;
+    color: $primary;
 
     &:not(.disabled):hover {
-      background-color: color.adjust($primary-color, $alpha: -0.9);
+      background-color: color.adjust($primary, $alpha: -0.9);
     }
 
     &:not(.disabled):focus {
-      outline: 2px solid $primary-color;
+      outline: 2px solid $primary;
       outline-offset: 2px;
     }
 
@@ -282,7 +282,7 @@ $button-sizes: (
     }
 
     &:not(.disabled):focus {
-      outline: 2px solid $primary-color;
+      outline: 2px solid $primary;
       outline-offset: 2px;
     }
 

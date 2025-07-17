@@ -2,16 +2,16 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import BadgeExample from './components/Badge/ex';
 import DropMenuExample from './components/DropMenu/ex';
+import ListTableExample from './components/ListTable/ex';
 import MessageBoxExample from './components/MessageBox/ex';
+import PaginationExample from './components/Pagination/ex';
 import SpinnerExample from './components/Spinner/ex';
+import StatusSelectorExample from './components/StatusSelector/ex';
 import StyledButtonExample from './components/StyledButton/ex';
+import TabsExample from './components/Tabs/ex';
+import ToastExample from './components/Toast/ex';
 import TooltipExample from './components/Tooltip/ex';
 import ComponentsPage from './views/components';
-// import ToastExample from './components/Toast/ex';
-import ListTableExample from './components/ListTable/ex';
-import PaginationExample from './components/Pagination/ex';
-import StatusSelectorExample from './components/StatusSelector/ex';
-import TabsExample from './components/Tabs/ex';
 // import ModalExample from './components/Modal/ex';
 // import CheckButtonExample from './components/Form/CheckButton/ex';
 // import SwitchButtonExample from './components/Form/SwitchButton/ex';
@@ -33,7 +33,7 @@ const App: React.FC = () => (
       <Route path="/components/dropmenu" element={<DropMenuExample />} />
       <Route path="/components/spinner" element={<SpinnerExample />} />
       <Route path="/components/messagebox" element={<MessageBoxExample />} />
-      {/* <Route path="/components/toast" element={<ToastExample />} /> */}
+      <Route path="/components/toast" element={<ToastExample />} />
       <Route path="/components/tabs" element={<TabsExample />} />
       <Route path="/components/statusselector" element={<StatusSelectorExample />} />
       <Route path="/components/listtable" element={<ListTableExample />} />

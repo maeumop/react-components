@@ -25,12 +25,12 @@ body {
 
 // 링크 스타일
 a {
-  color: $primary-color;
+  color: $primary;
   text-decoration: none;
   transition: color $transition-fast;
 
   &:hover {
-    color: color.adjust($primary-color, $lightness: -10%);
+    color: color.adjust($primary, $lightness: -10%);
   }
 }
 
@@ -43,7 +43,7 @@ button {
   padding: 0;
 
   &:focus {
-    outline: 2px solid $primary-color;
+    outline: 2px solid $primary;
     outline-offset: 2px;
   }
 }
@@ -56,7 +56,7 @@ select {
   font-size: inherit;
 
   &:focus {
-    outline: 2px solid $primary-color;
+    outline: 2px solid $primary;
     outline-offset: 2px;
   }
 }

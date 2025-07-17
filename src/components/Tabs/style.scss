@@ -48,17 +48,17 @@
 
         &:hover:not(.disabled) {
           background: var(--tab-hover-bg, vars.$gray-100);
-          color: var(--tab-hover-color, vars.$primary-color);
+          color: var(--tab-hover-color, vars.$primary);
         }
 
         &.active {
-          color: var(--tab-active-color, vars.$primary-color);
+          color: var(--tab-active-color, vars.$primary);
           font-weight: 700;
           background: var(--tab-active-bg, vars.$white);
           z-index: 2;
 
           &::after {
-            background-color: var(--tab-active-underline, vars.$primary-color);
+            background-color: var(--tab-active-underline, vars.$primary);
           }
         }
 
@@ -76,7 +76,7 @@
           margin-right: 0.5rem;
 
           &.active {
-            background: var(--tab-active-bg, vars.$primary-color);
+            background: var(--tab-active-bg, vars.$primary);
             color: var(--tab-active-color, vars.$white);
 
             &::after {
@@ -92,10 +92,10 @@
 
           &.active {
             background: none;
-            color: var(--tab-active-color, vars.$primary-color);
+            color: var(--tab-active-color, vars.$primary);
 
             &::after {
-              background-color: var(--tab-active-underline, vars.$primary-color);
+              background-color: var(--tab-active-underline, vars.$primary);
             }
           }
         }
