@@ -305,4 +305,4 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>(
 
 CheckButton.displayName = 'CheckButton';
 
-export default CheckButton;
+export default React.memo(CheckButton);

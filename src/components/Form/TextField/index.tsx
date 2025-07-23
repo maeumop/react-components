@@ -355,4 +355,4 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
 
 TextField.displayName = 'TextField';
 
-export default TextField;
+export default React.memo(TextField);
