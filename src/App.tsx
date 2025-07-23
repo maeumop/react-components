@@ -15,7 +15,7 @@ import ToastExample from './components/Toast/ex';
 import TooltipExample from './components/Tooltip/ex';
 import ComponentsPage from './views/components';
 // import SwitchButtonExample from './components/Form/SwitchButton/ex';
-// import TextFieldExample from './components/Form/TextField/ex';
+import TextFieldExample from './components/Form/TextField/ex';
 // import NumberFormatExample from './components/Form/NumberFormat/ex';
 // import SelectBoxExample from './components/Form/SelectBox/ex';
 // import DatePickerExample from './components/Form/DatePicker/ex';
@@ -38,6 +38,7 @@ const routes = [
   { path: '/components/pagination', element: <PaginationExample /> },
   { path: '/components/modal', element: <ModalExample /> },
   { path: '/components/checkbutton', element: <CheckButtonExample /> },
+  { path: '/components/textfield', element: <TextFieldExample /> },
 ];
 
 function AnimatedRoutes() {
@@ -48,13 +49,6 @@ function AnimatedRoutes() {
       {routes.map(route => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
-      {/* <Route path="/components/switchbutton" element={<SwitchButtonExample />} /> */}
-      {/* <Route path="/components/textfield" element={<TextFieldExample />} /> */}
-      {/* <Route path="/components/numberformat" element={<NumberFormatExample />} /> */}
-      {/* <Route path="/components/selectbox" element={<SelectBoxExample />} /> */}
-      {/* <Route path="/components/datepicker" element={<DatePickerExample />} /> */}
-      {/* <Route path="/components/validatewrap" element={<ValidateWrapExample />} /> */}
-      {/* <Route path="/components/validateform" element={<ValidateFormExample />} /> */}
     </Routes>
   );
 }
