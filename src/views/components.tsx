@@ -180,7 +180,6 @@ const ComponentsPage: React.FC = () => {
                     <h3>{component.name}</h3>
                     <p>{component.description}</p>
                   </div>
-                  {/* <StyledButton color={component.color} href={component.path} small outline className={styles['navigate-btn']}>보기</StyledButton> */}
                 </div>
               ))}
             </div>
@@ -203,7 +202,6 @@ const ComponentsPage: React.FC = () => {
                     <h3>{component.name}</h3>
                     <p>{component.description}</p>
                   </div>
-                  {/* <StyledButton color={component.color} href={component.path} small outline className={styles['navigate-btn']}>보기</StyledButton> */}
                 </div>
               ))}
             </div>
@@ -214,4 +212,4 @@ const ComponentsPage: React.FC = () => {
   );
 };
 
-export default ComponentsPage;
+export default React.memo(ComponentsPage);

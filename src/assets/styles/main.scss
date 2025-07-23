@@ -75,3 +75,28 @@ select {
     padding: 0 $spacing-xl;
   }
 }
+
+// 라우트 전환 슬라이드 트랜지션
+// 라우트 전환 슬라이드(in)/페이드(out) 트랜지션
+.page-slide-enter,
+.page-slide-appear {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.page-slide-enter-active,
+.page-slide-appear-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page-slide-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.page-slide-exit-active {
+  opacity: 0;
+  transform: translateX(0); // 슬라이드 없이 opacity만
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

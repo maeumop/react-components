@@ -14,8 +14,8 @@ export interface CheckButtonProps {
   items: CheckButtonItem[];
   /** 폼 필드 이름 */
   name: string;
-  /** 선택된 값 (v-model) */
-  modelValue?: string | string[];
+  /** 선택된 값 */
+  value?: string | string[];
   /** 체크박스 또는 라디오 버튼 타입 */
   type?: CheckButtonType;
   /** 최대 체크 가능한 수량 (체크박스만 해당) */
@@ -40,6 +40,9 @@ export interface CheckButtonProps {
   lineLimit?: number;
   /** 전체 선택 버튼 추가 여부 */
   all?: boolean;
+  onChange?: (value: string | string[]) => void;
+  onIndexChange?: (index: number) => void;
+  onAfterChange?: () => void;
 }
 
 export interface CheckButtonModel {

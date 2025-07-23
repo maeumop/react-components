@@ -1,0 +1,26 @@
+.result {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.4rem;
+  font-family: 'Courier New', monospace;
+  font-size: 1.4rem;
+  color: #495057;
+  border-left: 4px solid #667eea;
+}
+
+.validate-btn {
+  margin-top: 1rem;
+  padding: 0.8rem 1.6rem;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #5a6fd8;
+  }
+}
