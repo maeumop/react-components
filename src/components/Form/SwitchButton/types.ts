@@ -3,7 +3,8 @@ import type { switchButtonColor } from './const';
 export type SwitchButtonColor = (typeof switchButtonColor)[keyof typeof switchButtonColor];
 
 export interface SwitchButtonProps {
-  modelValue: string | boolean;
+  value: string | boolean;
+  onChange?: (value: string | boolean) => void;
   label?: string[]; // [0 => false label, 1 => true label]
   trueValue?: string | boolean;
   falseValue?: string | boolean;
@@ -14,13 +15,8 @@ export interface SwitchButtonProps {
   validate?: string | ((value: unknown) => boolean | string);
 }
 
-export interface SwitchButtonEmits {
-  (event: 'update:modelValue', value: string | boolean): void;
-  (event: 'update:after'): void;
-}
-
 export interface SwitchButtonModel {
-  check(silence?: boolean): void;
-  resetForm(): void;
-  resetValidate(): void;
+  check: (silence?: boolean) => boolean;
+  resetForm: () => void;
+  resetValidate: () => void;
 }

@@ -11,6 +11,10 @@
   position: relative;
   vertical-align: middle;
 
+  & > span {
+    box-sizing: initial;
+  }
+
   @include _.buttonColorStyle using ($color-map) {
     .switch input[type='checkbox']:checked {
       & + span {
@@ -36,6 +40,8 @@
 
     &.checkbox {
       svg {
+        width: 1.6rem;
+        height: 1.6rem;
         margin-right: 0.3rem;
         color: _.$gray-400;
       }
@@ -62,16 +68,16 @@
         height: 1.6rem;
         background: _.$gray-400;
         border-radius: 0.8rem;
-        margin-right: 0.5rem;
+        margin-right: 0.4rem;
 
         i {
           display: inline-block;
           width: 1.2rem;
           height: 1.2rem;
-          margin: 0 0.2rem;
           background: white;
-          border-radius: 50%;
+          border-radius: 0.6rem;
           transition: all 0.2s;
+          margin: 0 0.2rem;
         }
       }
 
@@ -84,7 +90,7 @@
       }
 
       &:checked + span > i {
-        transform: translateX(3rem - 0.9rem - 0.6rem);
+        transform: translateX(1.4rem);
       }
     }
 
