@@ -41,11 +41,6 @@ button {
   border: none;
   background: none;
   padding: 0;
-
-  &:focus {
-    outline: 2px solid $primary;
-    outline-offset: 2px;
-  }
 }
 
 // 입력 필드 기본 스타일
@@ -54,11 +49,6 @@ textarea,
 select {
   font-family: inherit;
   font-size: inherit;
-
-  &:focus {
-    outline: 2px solid $primary;
-    outline-offset: 2px;
-  }
 }
 
 // 컨테이너 클래스

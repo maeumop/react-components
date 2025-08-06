@@ -1,9 +1,14 @@
-import type { OptionItem, RuleFunc } from '../../types';
+import type { RuleFunc } from '../../types';
+
+export interface OptionItem {
+  text: string;
+  value: string;
+}
 
 export type SelectBoxItem = OptionItem;
 
 export interface SelectBoxProps {
-  modelValue: string | string[];
+  value: string | string[];
   options: SelectBoxItem[];
   label?: string;
   inLabel?: boolean;
@@ -25,14 +30,11 @@ export interface SelectBoxProps {
   blurValidate?: boolean;
   clearable?: boolean;
   isLoading?: boolean;
-}
-
-export interface SelectBoxEmits {
-  (event: 'update:modelValue', value: string | string[]): void;
-  (event: 'update:selectedIndex', index: number): void;
-  (event: 'blur', value: string | string[]): void;
-  (event: 'focus', event: FocusEvent): void;
-  (event: 'change', value: string | string[]): void;
+  // onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  // onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onChange?: (value: string | string[]) => void;
+  onChangeIndex?: (index: number) => void;
+  onAfterChange?: (value: string | string[]) => void;
 }
 
 export interface SelectBoxModel {

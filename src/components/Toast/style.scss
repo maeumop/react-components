@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @use '@/assets/styles/components/variables' as *;
+@use 'sass:color';
 
 .toast-portal {
   position: fixed;
@@ -47,27 +48,27 @@
 
   // 테마별 색상
   .toast-success {
-    border-left: 0.25rem solid darken($success, 10%);
+    border-left: 0.25rem solid color.adjust($success, $lightness: -10%);
     background-color: $success;
   }
   .toast-error {
-    border-left: 0.25rem solid darken($error, 10%);
+    border-left: 0.25rem solid color.adjust($error, $lightness: -10%);
     background-color: $error;
   }
   .toast-warning {
-    border-left: 0.25rem solid darken($warning, 10%);
+    border-left: 0.25rem solid color.adjust($warning, $lightness: -10%);
     background-color: $warning;
   }
   .toast-info {
-    border-left: 0.25rem solid darken($info, 10%);
+    border-left: 0.25rem solid color.adjust($info, $lightness: -10%);
     background-color: $info;
   }
   .toast-primary {
-    border-left: 0.25rem solid darken($primary, 10%);
+    border-left: 0.25rem solid color.adjust($primary, $lightness: -10%);
     background-color: $primary;
   }
   .toast-secondary {
-    border-left: 0.25rem solid darken($secondary, 10%);
+    border-left: 0.25rem solid color.adjust($secondary, $lightness: -10%);
     background-color: $secondary;
   }
 

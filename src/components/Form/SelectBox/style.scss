@@ -160,9 +160,10 @@
           height: 2.75rem;
           color: #333;
           border: 0;
-          width: calc(100% - 3rem);
-          outline: none;
+          outline: none !important;
+          box-shadow: none !important;
           font-size: form-common.$form-input-font-size;
+          flex: 1;
 
           &::placeholder {
             color: #6c757d;
@@ -203,6 +204,12 @@
       max-height: 15rem;
       overflow-y: auto;
 
+      .empty-option-item {
+        padding: 1rem;
+        text-align: center;
+        color: #6c757d;
+      }
+
       .option-item {
         padding: 0.75rem;
         transition: background-color 0.15s ease-in-out;
@@ -241,17 +248,17 @@
           }
 
           &.checked {
-            color: #667eea;
+            color: _.$primary;
           }
         }
 
         &.key-selected {
-          color: #667eea;
-          background-color: rgba(102, 126, 234, 0.1);
+          color: _.$primary;
+          background-color: rgba(_.$primary, 0.1);
         }
 
         &.selected {
-          color: #667eea;
+          color: _.$primary;
           font-weight: 500;
         }
       }
@@ -266,23 +273,42 @@
     }
   }
 
-  .options-view-enter-from,
-  .options-view-leave-to {
+  // React CSSTransition 클래스들
+  .options-view-enter {
     opacity: 0;
     transform: translateY(-0.5rem);
   }
-  .options-view-enter-active,
-  .options-view-leave-active {
+  .options-view-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s ease;
+  }
+  .options-view-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .options-view-exit-active {
+    opacity: 0;
+    transform: translateY(-0.5rem);
     transition: all 0.2s ease;
   }
 
-  .options-view-bottom-enter-from,
-  .options-view-bottom-leave-to {
+  .options-view-bottom-enter {
     opacity: 0;
     transform: translateY(0.5rem);
   }
-  .options-view-bottom-enter-active,
-  .options-view-bottom-leave-active {
+  .options-view-bottom-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s ease;
+  }
+  .options-view-bottom-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .options-view-bottom-exit-active {
+    opacity: 0;
+    transform: translateY(0.5rem);
     transition: all 0.2s ease;
   }
 }
@@ -307,6 +333,26 @@
   75% {
     transform: translateX(0.25rem);
   }
+}
+
+// 에러 메시지 트랜지션 (React CSSTransition용)
+.error-message-enter {
+  opacity: 0;
+  transform: translateY(-0.5rem);
+}
+.error-message-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-in-out;
+}
+.error-message-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.error-message-exit-active {
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition: all 0.3s ease-in-out;
 }
 
 .feedback.error {
