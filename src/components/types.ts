@@ -1,12 +1,3 @@
-export interface RuleFunc {
-  (v: string | string[] | number | number[]): string | boolean;
-}
-
-// validate rule type
-export interface Rules {
-  [index: string]: RuleFunc[];
-}
-
 // selectbox, checkbox 사용 옵션
 export interface OptionItem {
   text: string;

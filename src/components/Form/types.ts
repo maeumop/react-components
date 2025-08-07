@@ -1,16 +1,26 @@
-import { ComponentInternalInstance, VNode } from 'vue';
-
-// VNode 타입을 확장하여 name 프로퍼티 포함
-export interface VNodeWithName extends VNode {
-  type: ComponentWithName | string;
+export interface RuleFunc {
+  (v: string | string[] | number | number[]): string | boolean;
 }
 
-export interface ComponentWithName {
-  name?: string;
-  [key: string]: unknown;
+// validate rule type
+export interface Rules {
+  [index: string]: RuleFunc[];
 }
 
-// getCurrentInstance의 반환 타입을 확장
-export interface ExtendedComponentInstance extends ComponentInternalInstance {
-  vnode: VNodeWithName;
+export interface UseValidationProps<T = unknown> {
+  validate: RuleFunc[];
+  errorMessage?: string;
+  disabled?: boolean;
+  value?: T;
+  onValidationChange?: (isValid: boolean, message: string) => void;
+}
+
+export interface UseValidationReturn<T = unknown> {
+  message: string;
+  errorTransition: boolean;
+  check: (value: T, silence?: boolean) => boolean;
+  resetValidate: () => void;
+  setMessage: (message: string) => void;
+  setErrorTransition: (errorTransition: boolean) => void;
+  validateValue: (value: T) => Promise<boolean>;
 }
