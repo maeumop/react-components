@@ -1,4 +1,4 @@
-import type { RuleFunc } from '../../types';
+import type { RuleFunc } from '../types';
 
 export interface NumberFormatProps {
   value: number | string;
@@ -17,6 +17,7 @@ export interface NumberFormatProps {
   readonly?: boolean;
   required?: boolean;
   hideMessage?: boolean;
+  className?: string;
 }
 
 export interface NumberFormatModel {

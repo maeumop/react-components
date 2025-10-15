@@ -54,6 +54,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
       readonly = false,
       required = false,
       hideMessage = false,
+      className,
     },
     ref,
   ) => {
@@ -65,8 +66,10 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
 
     // wrapper 스타일
     const wrapperClass = useMemo(() => {
-      return ['input-wrap', label ? 'with-label' : '', block ? 'block' : ''].join(' ').trim();
-    }, [label, block]);
+      return ['input-wrap', label ? 'with-label' : '', block ? 'block' : '', className]
+        .join(' ')
+        .trim();
+    }, [label, block, className]);
 
     // input 스타일
     const inputClass = useMemo(() => {
