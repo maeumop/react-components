@@ -1,4 +1,4 @@
-import type { RuleFunc } from '../../types';
+import type { RuleFunc } from '../types';
 import { textFieldType } from './const';
 
 export type TextFieldType = (typeof textFieldType)[keyof typeof textFieldType];
@@ -30,6 +30,7 @@ export interface TextFieldProps {
   clearable?: boolean;
   autofocus?: boolean;
   errorMessage?: string;
+  className?: string;
 }
 
 export interface TextFieldModel {

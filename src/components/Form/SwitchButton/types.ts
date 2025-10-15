@@ -5,7 +5,7 @@ export type SwitchButtonColor = (typeof switchButtonColor)[keyof typeof switchBu
 export interface SwitchButtonProps {
   value: string | boolean;
   onChange?: (value: string | boolean) => void;
-  label?: string[]; // [0 => false label, 1 => true label]
+  label?: string | string[]; // [0 => false label, 1 => true label]
   trueValue?: string | boolean;
   falseValue?: string | boolean;
   readonly?: boolean;

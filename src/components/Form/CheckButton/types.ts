@@ -1,4 +1,5 @@
-import type { OptionItem, RuleFunc } from '../../types';
+import type { RuleFunc } from '../types';
+import type { OptionItem } from '../../types';
 import type { checkButtonColor, checkButtonIcons, checkButtonType } from './const';
 
 export type CheckButtonColor = (typeof checkButtonColor)[keyof typeof checkButtonColor];
@@ -40,6 +41,7 @@ export interface CheckButtonProps {
   lineLimit?: number;
   /** 전체 선택 버튼 추가 여부 */
   all?: boolean;
+  className?: string;
   onChange?: (value: string | string[]) => void;
   onIndexChange?: (index: number) => void;
   onAfterChange?: () => void;

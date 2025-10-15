@@ -64,6 +64,7 @@ const SelectBox = React.memo(
       blurValidate = true,
       clearable = false,
       isLoading = false,
+      className,
       onChange,
       onChangeIndex,
       onAfterChange,
@@ -181,8 +182,8 @@ const SelectBox = React.memo(
 
     // 컨테이너 클래스명 메모이제이션
     const containerClassName = useMemo<string>(
-      () => ['select-box', block ? 'block' : ''].join(' ').trim(),
-      [block],
+      () => ['select-box', block ? 'block' : '', className].join(' ').trim(),
+      [block, className],
     );
 
     // 피드백 상태 클래스

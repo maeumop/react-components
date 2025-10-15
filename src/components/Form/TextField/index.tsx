@@ -41,6 +41,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
       errorMessage = '',
       onChange,
       onBlur,
+      className,
     },
     ref,
   ) => {
@@ -71,13 +72,14 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
       }
 
       classNames = [
+        className,
         message ? 'error' : '',
         icon && iconLeft ? 'left-space' : '',
         icon && !iconLeft ? 'right-space' : '',
       ].join(' ');
 
       return classNames.trim();
-    }, [message, icon, iconLeft]);
+    }, [message, icon, iconLeft, className]);
 
     // 클리어 버튼 노출 여부
     const clearButtonShow = useMemo(() => {
@@ -281,7 +283,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
         {multiline ? (
           <textarea
             ref={textareaRef}
-            className={message ? 'error' : ''}
+            className={`${className} ${message ? 'error' : ''}`}
             style={height ? { height } : undefined}
             rows={rows}
             placeholder={placeholder}

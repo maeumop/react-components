@@ -30,6 +30,7 @@ export interface SelectBoxProps {
   blurValidate?: boolean;
   clearable?: boolean;
   isLoading?: boolean;
+  className?: string;
   // onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   // onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onChange?: (value: string | string[]) => void;

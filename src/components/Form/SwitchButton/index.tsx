@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/react';
 import React, {
   forwardRef,
   useCallback,
@@ -8,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Icon } from '@iconify/react';
 import { switchButtonColor } from './const';
 import './style.scss';
 import type { SwitchButtonModel, SwitchButtonProps } from './types';
@@ -17,7 +17,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     {
       value = false,
       onChange,
-      label = ['미설정', '설정'],
+      label = null,
       trueValue = true,
       falseValue = false,
       readonly = false,
@@ -33,6 +33,10 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     const [errorTransition, setErrorTransition] = useState(false);
     const inputId = useMemo(() => `switch-btn-${Math.random().toString(36).slice(2, 10)}`, []);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const labelText = useMemo(() => {
+      return Array.isArray(label) ? (value === trueValue ? label[1] : label[0]) : label;
+    }, [label, value, trueValue]);
 
     // 값 변경 핸들러
     const handleChange = useCallback(
@@ -68,7 +72,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
               valid = false;
 
               if (!silence) {
-                setMessage(`${label[1]}을(를) 선택해주세요.`);
+                setMessage(`${labelText}을(를) 선택해주세요.`);
                 setErrorTransition(true);
               }
             }
@@ -77,7 +81,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
 
             if (!silence) {
               setMessage(
-                typeof validate === 'string' ? validate : `${label[1]}을(를) 선택해주세요.`,
+                typeof validate === 'string' ? validate : `${labelText}을(를) 선택해주세요.`,
               );
               setErrorTransition(true);
             }
@@ -94,7 +98,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
 
         return true;
       },
-      [validate, value, label, trueValue],
+      [validate, value, labelText, trueValue],
     );
 
     // 폼 초기화
@@ -177,7 +181,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
           )}
           {/* 라벨 트랜지션 */}
           <div className="label-text" aria-live="polite">
-            {value === trueValue ? label[1] : label[0]}
+            {labelText}
           </div>
         </label>
         {/* 에러 메시지 트랜지션 */}

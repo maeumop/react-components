@@ -42,6 +42,7 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>(
       onChange,
       onIndexChange,
       onAfterChange,
+      className,
     },
     ref,
   ) => {
@@ -69,7 +70,7 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>(
 
     const checkButtonStyleClass = useMemo(() => {
       if (button) {
-        return `check-button-group ${color}${disabled ? ' disabled' : ''}`;
+        return `check-button-group ${color}${disabled ? ' disabled' : ''} ${className}`;
       }
 
       return `origin-check-button${block ? ' block' : ''}`;
