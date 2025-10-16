@@ -4,7 +4,7 @@ import './style.scss';
 import type { TabsProps } from './types';
 
 // Tabs 컴포넌트
-const Tabs: React.FC<TabsProps> = ({
+const Tabs = ({
   tabItems,
   activeTab = 0,
   disabled = [],
@@ -12,7 +12,7 @@ const Tabs: React.FC<TabsProps> = ({
   transition = 'slide',
   children,
   ...rest
-}) => {
+}: TabsProps) => {
   // 내부 상태 관리
   const [active, setActive] = useState<number>(activeTab);
   const [currentTransition, setCurrentTransition] = useState<string>('tab-slide-left');
@@ -114,5 +114,7 @@ const Tabs: React.FC<TabsProps> = ({
     </div>
   );
 };
+
+Tabs.displayName = 'Tabs';
 
 export default React.memo(Tabs);

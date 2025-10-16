@@ -28,7 +28,3 @@ export interface ToastItem {
 export interface ToastContextType {
   toast: (message: string, options?: ToastOptions) => void;
 }
-
-export interface ToastProviderProps {
-  children: React.ReactNode;
-}

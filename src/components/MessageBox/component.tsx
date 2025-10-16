@@ -7,9 +7,7 @@ import './style.scss';
 import type { MessageBoxOptions } from './types';
 
 /**
- * MessageBox 컴포넌트 (React)
- * - 트랜지션: react-transition-group의 CSSTransition 사용
- * - 스크롤 제어, 접근성, 콜백, 아이콘 등 완전 반영
+ * MessageBox 컴포넌트
  */
 const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props => {
   const {

@@ -16,9 +16,9 @@ import TabsExample from '@/components/Tabs/ex';
 import ToastExample from '@/components/Toast/ex';
 import TooltipExample from '@/components/Tooltip/ex';
 import ComponentsPage from '@/views/components';
-// import DatePickerExample from '@/components/Form/DatePicker/ex';
-// import ValidateWrapExample from '@/components/Form/ValidateWrap/ex';
-// import ValidateFormExample from '@/components/Form/ValidateForm/ex';
+import DatePickerExample from '@/components/Form/DatePicker/ex';
+import ValidateWrapExample from '@/components/Form/ValidateWrap/ex';
+import ValidateFormExample from '@/components/Form/ValidateForm/ex';
 
 export const routes = [
   { path: '/', element: <ComponentsPage /> },
@@ -39,4 +39,7 @@ export const routes = [
   { path: '/components/numberformat', element: <NumberFormatExample /> },
   { path: '/components/switchbutton', element: <SwitchButtonExample /> },
   { path: '/components/selectbox', element: <SelectBoxExample /> },
+  { path: '/components/datepicker', element: <DatePickerExample /> },
+  { path: '/components/validatewrap', element: <ValidateWrapExample /> },
+  { path: '/components/validateform', element: <ValidateFormExample /> },
 ];

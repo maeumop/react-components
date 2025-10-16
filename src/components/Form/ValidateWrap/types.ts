@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { RuleFunc } from '../../types';
 
 export interface ValidateWrapProps {
@@ -7,14 +8,12 @@ export interface ValidateWrapProps {
   label?: string;
   required?: boolean;
   disabled?: boolean;
+  children: (props: { onBlur: () => void }) => ReactNode;
+  addOn?: ReactNode;
 }
 
-export interface ValidateWrapModel {
+export interface ValidateWrapRef {
   check(silence?: boolean): boolean;
   resetForm(): void;
   resetValidate(): void;
-}
-
-export interface ValidateWrapEmits {
-  (event: 'update:checkValue'): void;
 }

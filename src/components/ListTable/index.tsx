@@ -13,12 +13,12 @@ import { listTableDefaultOptions } from './const';
 import ListTableCheck from './listCheck';
 import './style.scss';
 import TableSpinner from './tableSpinner';
-import type { ListTableExpose, ListTableItem, ListTableProps } from './types';
+import type { ListTableExpose, ListTableProps } from './types';
 
 /**
  * ListTable 컴포넌트 (메인 테이블)
  */
-const ListTableInner = <T extends ListTableItem = ListTableItem>(
+const ListTableBase = <T extends Record<string, unknown>>(
   {
     items = [],
     header = [],
@@ -205,7 +205,7 @@ const ListTableInner = <T extends ListTableItem = ListTableItem>(
             dataList.map((item, idx) => {
               const disabled = disableFilter ? disableFilter(item, idx) : false;
               return (
-                <tr key={item.id} className={disabled ? 'disabled' : ''}>
+                <tr key={item.toString()} className={disabled ? 'disabled' : ''}>
                   {isCheckMode && (
                     <td>
                       <ListTableCheck
@@ -251,13 +251,11 @@ const ListTableInner = <T extends ListTableItem = ListTableItem>(
   );
 };
 
-const ListTable = React.memo(forwardRef(ListTableInner)) as <
-  T extends ListTableItem = ListTableItem,
->(
-  props: ListTableProps<T> & { ref?: ForwardedRef<ListTableExpose> },
-) => JSX.Element;
+const ListTableRef = forwardRef<ListTableExpose, ListTableProps>(ListTableBase);
 
 // displayName을 ListTable에 명시적으로 할당
-Object.assign(ListTable, { displayName: 'ListTable' });
+ListTableRef.displayName = 'ListTable';
 
-export default ListTable;
+export default React.memo(ListTableRef) as <T = Record<string, unknown>>(
+  props: ListTableProps<T>,
+) => JSX.Element;

@@ -1,8 +1,8 @@
 import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useEffect, useRef, useState } from 'react';
-import './ex.scss';
 import CheckButton from './index';
 import type { CheckButtonItem, CheckButtonModel } from './types';
+import './ex.scss';
 
 const hobbyItems: CheckButtonItem[] = [
   { text: '독서', value: 'reading' },

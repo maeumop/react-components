@@ -3,10 +3,11 @@ import React, { useCallback, useState } from 'react';
 import FloatingBackButton from '../../views/FloatingBackButton';
 import './ex.scss';
 import ListTable from './index';
-import type { ListTableHeader, ListTableItem } from './types';
+import type { ListTableHeader } from './types';
 
 // 사용자 데이터 타입
-interface User extends ListTableItem {
+interface User {
+  id: number;
   name: string;
   email: string;
   role: string;

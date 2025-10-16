@@ -9,8 +9,9 @@ import React, {
   useState,
 } from 'react';
 import { textFieldType } from './const';
-import './style.scss';
 import type { TextFieldModel, TextFieldProps } from './types';
+import './style.scss';
+import FloatingBackButton from '@/views/FloatingBackButton';
 
 const TextField = forwardRef<TextFieldModel, TextFieldProps>(
   (
@@ -350,6 +351,8 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
             {message}
           </div>
         )}
+
+        <FloatingBackButton />
       </div>
     );
   },

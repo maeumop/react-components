@@ -1,155 +1,150 @@
-import { reactive, ref } from 'vue';
-import type { DatePickerStore, DateStateType, DropdownStateType, SelectedDateType } from './types';
+import { create } from 'zustand';
+import type { DatePickerStore, DropdownStateType } from './types';
 
 /**
- * 기간 선택 달력에서 사용되는 참조용
+ * 기간 선택 달력에서 사용되는 Zustand store
  */
-export const useDatePickerStore = (): DatePickerStore => {
+export const useDatePickerStore = create<DatePickerStore>((set, get) => {
   const date: Date = new Date();
 
-  const startDate = ref<string>('');
-  const endDate = ref<string>('');
-  const curYear = ref<number>(date.getFullYear());
-  const curMonth = ref<number>(date.getMonth());
-  const curDay = ref<number>(date.getDate());
-
-  const dateState = reactive<DateStateType>({
-    start: {
-      year: date.getFullYear(),
-      month: date.getMonth(),
-    },
-    end: {
-      year: date.getFullYear(),
-      month: date.getMonth(),
-    },
-  });
-
-  const beforeState = reactive<DateStateType>({
-    start: {
-      year: date.getFullYear(),
-      month: date.getMonth(),
-    },
-    end: {
-      year: date.getFullYear(),
-      month: date.getMonth(),
-    },
-  });
-
-  const selectedDate = reactive<SelectedDateType>({
-    start: '',
-    end: '',
-  });
-
-  const dropdownState = reactive<DropdownStateType>({
-    startYear: false,
-    startMonth: false,
-    endYear: false,
-    endMonth: false,
-  });
-
-  /**
-   * startDate update
-   * @param v
-   */
-  const setStartDate = (v: string): void => {
-    startDate.value = v;
-  };
-
-  const setEndDate = (v: string): void => {
-    endDate.value = v;
-  };
-
-  /**
-   * dateState update
-   * @param main start | end
-   * @param sub year | month
-   * @param v
-   */
-  const setDateState = (main: string, sub: string, v: number): void => {
-    beforeState[main][sub] = dateState[main][sub];
-    dateState[main][sub] = v;
-  };
-
-  /**
-   * selectedDate update
-   * @param flag start | end
-   * @param v
-   */
-  const setSelected = (flag: string, v: string): void => {
-    selectedDate[flag] = v;
-  };
-
-  /**
-   * 드롭다운 상태 업데이트
-   * @param flag start | end
-   * @param type year | month
-   * @param isOpen 열림/닫힘 상태
-   */
-  const setDropdownState = (
-    flag: 'start' | 'end',
-    type: 'year' | 'month',
-    isOpen: boolean,
-  ): void => {
-    const key = `${flag}${type.charAt(0).toUpperCase() + type.slice(1)}` as keyof DropdownStateType;
-
-    // 다른 드롭다운이 열려있으면 닫기
-    if (isOpen) {
-      dropdownState.startYear = false;
-      dropdownState.startMonth = false;
-      dropdownState.endYear = false;
-      dropdownState.endMonth = false;
-      dropdownState[key] = true;
-    } else {
-      dropdownState[key] = false;
-    }
-  };
-
-  /**
-   * 모든 드롭다운 닫기
-   */
-  const closeAllDropdowns = (): void => {
-    dropdownState.startYear = false;
-    dropdownState.startMonth = false;
-    dropdownState.endYear = false;
-    dropdownState.endMonth = false;
-  };
-
-  /**
-   * 각종 변수 초기화
-   */
-  const init = (): void => {
-    const dt: Date = new Date();
-
-    curYear.value = dt.getFullYear();
-    curMonth.value = dt.getMonth() + 1;
-    curDay.value = dt.getDate();
-
-    setDateState('start', 'year', dt.getFullYear());
-    setDateState('start', 'month', dt.getMonth() + 1);
-    setDateState('end', 'year', dt.getFullYear());
-    setDateState('end', 'month', dt.getMonth() + 1);
-
-    setStartDate('');
-    setEndDate('');
-    closeAllDropdowns();
-  };
-
   return {
-    startDate,
-    endDate,
-    curYear,
-    curMonth,
-    curDay,
-    dateState,
-    beforeState,
-    selectedDate,
-    dropdownState,
-    setStartDate,
-    setEndDate,
-    setDateState,
-    setSelected,
-    setDropdownState,
-    closeAllDropdowns,
-    init,
+    // State
+    startDate: '',
+    endDate: '',
+    curYear: date.getFullYear(),
+    curMonth: date.getMonth(),
+    curDay: date.getDate(),
+    dateState: {
+      start: {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+      },
+      end: {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+      },
+    },
+    beforeState: {
+      start: {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+      },
+      end: {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+      },
+    },
+    selectedDate: {
+      start: '',
+      end: '',
+    },
+    dropdownState: {
+      startYear: false,
+      startMonth: false,
+      endYear: false,
+      endMonth: false,
+    },
+
+    // Actions
+    setStartDate: (v: string) => {
+      set({ startDate: v });
+    },
+
+    setEndDate: (v: string) => {
+      set({ endDate: v });
+    },
+
+    setDateState: (main: string, sub: string, v: number) => {
+      const { dateState, beforeState } = get();
+
+      set({
+        beforeState: {
+          ...beforeState,
+          [main]: {
+            ...beforeState[main],
+            [sub]: dateState[main][sub],
+          },
+        },
+        dateState: {
+          ...dateState,
+          [main]: {
+            ...dateState[main],
+            [sub]: v,
+          },
+        },
+      });
+    },
+
+    setSelected: (flag: string, v: string) => {
+      set({
+        selectedDate: {
+          ...get().selectedDate,
+          [flag]: v,
+        },
+      });
+    },
+
+    setDropdownState: (flag: 'start' | 'end', type: 'year' | 'month', isOpen: boolean) => {
+      const key =
+        `${flag}${type.charAt(0).toUpperCase() + type.slice(1)}` as keyof DropdownStateType;
+
+      if (isOpen) {
+        set({
+          dropdownState: {
+            startYear: false,
+            startMonth: false,
+            endYear: false,
+            endMonth: false,
+            [key]: true,
+          },
+        });
+      } else {
+        set({
+          dropdownState: {
+            ...get().dropdownState,
+            [key]: false,
+          },
+        });
+      }
+    },
+
+    closeAllDropdowns: () => {
+      set({
+        dropdownState: {
+          startYear: false,
+          startMonth: false,
+          endYear: false,
+          endMonth: false,
+        },
+      });
+    },
+
+    init: () => {
+      const dt: Date = new Date();
+
+      set({
+        curYear: dt.getFullYear(),
+        curMonth: dt.getMonth() + 1,
+        curDay: dt.getDate(),
+        dateState: {
+          start: {
+            year: dt.getFullYear(),
+            month: dt.getMonth() + 1,
+          },
+          end: {
+            year: dt.getFullYear(),
+            month: dt.getMonth() + 1,
+          },
+        },
+        startDate: '',
+        endDate: '',
+        dropdownState: {
+          startYear: false,
+          startMonth: false,
+          endYear: false,
+          endMonth: false,
+        },
+      });
+    },
   };
-};
+});

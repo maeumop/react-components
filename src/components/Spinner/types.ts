@@ -11,7 +11,3 @@ export interface SpinnerContextType {
   spinnerHide: () => void;
   isLoading: boolean;
 }
-
-export interface SpinnerProviderProps {
-  children: React.ReactNode;
-}

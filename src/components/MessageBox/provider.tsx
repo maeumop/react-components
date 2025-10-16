@@ -10,11 +10,11 @@ const MessageBoxContext = createContext<MessageBoxContextType | undefined>(undef
  * MessageBoxProvider
  * - 전역적으로 MessageBox를 사용할 수 있도록 Provider/Context/Hook 제공
  */
-export const MessageBoxProvider: React.FC<React.PropsWithChildren<MessageBoxProviderProps>> = ({
+export const MessageBoxProvider = ({
   children,
   noScrollStyleClass = 'hide-scroll',
   defaultTransition = messageBoxTransition.scale,
-}) => {
+}: React.PropsWithChildren<MessageBoxProviderProps>) => {
   // 현재 표시 중인 MessageBox 옵션
   const [box, setBox] = useState<MessageBoxOptions | null>(null);
   const boxKey = useRef(0);

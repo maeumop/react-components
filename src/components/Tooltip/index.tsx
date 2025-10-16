@@ -6,9 +6,7 @@ import { tooltipColor, tooltipPosition } from './const';
 import './style.scss';
 import type { TooltipPosition, TooltipProps } from './types';
 
-// TooltipProps는 types.ts로 분리(이미 정의됨)
-
-const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
+const Tooltip = ({
   message,
   title,
   position = tooltipPosition.bottom,
@@ -21,7 +19,7 @@ const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
   padding,
   children,
   content,
-}) => {
+}: React.PropsWithChildren<TooltipProps>) => {
   const [isShow, setIsShow] = useState(false);
   const [currentPosition, setCurrentPosition] = useState<TooltipPosition>(position);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +38,7 @@ const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
   const calculatePosition = useCallback(() => {
     const tooltip = tooltipRef.current;
     const container = containerRef.current;
+
     if (!tooltip || !container) return;
 
     // 툴팁이 아직 렌더링 중이면 재시도
@@ -73,6 +72,7 @@ const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
         top = `${containerRect.height + gap}px`;
         break;
     }
+
     tooltip.style.left = left;
     tooltip.style.top = top;
     tooltip.style.right = right;
@@ -84,19 +84,18 @@ const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
     setIsShow(true);
     setTimeout(calculatePosition, 0);
   }, [calculatePosition]);
-  const hideTooltip = useCallback(() => setIsShow(false), []);
+
+  const hideTooltip = useCallback(() => setIsShow(false), [setIsShow]);
 
   // 마우스 이벤트
   const onMouseEnter = useCallback(() => {
-    if (hovering) {
-      showTooltip();
-    }
+    if (hovering) showTooltip();
   }, [hovering, showTooltip]);
+
   const onMouseLeave = useCallback(() => {
-    if (hovering) {
-      hideTooltip();
-    }
+    if (hovering) hideTooltip();
   }, [hovering, hideTooltip]);
+
   const onClick = useCallback(() => {
     if (!hovering) {
       setIsShow(prev => !prev);
@@ -107,22 +106,26 @@ const Tooltip: React.FC<React.PropsWithChildren<TooltipProps>> = ({
   // 외부 클릭 감지
   useEffect(() => {
     if (!isShow || hovering) return;
+
     const handleClick = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         hideTooltip();
       }
     };
+
     document.addEventListener('click', handleClick);
+
     return () => document.removeEventListener('click', handleClick);
   }, [isShow, hovering, hideTooltip]);
 
   // 리사이즈 감지
   useEffect(() => {
-    if (!isShow) {
-      return;
-    }
+    if (!isShow) return;
+
     const handleResize = () => setTimeout(calculatePosition, 0);
+
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, [isShow, calculatePosition]);
 

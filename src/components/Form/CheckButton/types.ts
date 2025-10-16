@@ -16,7 +16,7 @@ export interface CheckButtonProps {
   /** 폼 필드 이름 */
   name: string;
   /** 선택된 값 */
-  value?: string | string[];
+  value: string | string[];
   /** 체크박스 또는 라디오 버튼 타입 */
   type?: CheckButtonType;
   /** 최대 체크 가능한 수량 (체크박스만 해당) */
@@ -42,7 +42,7 @@ export interface CheckButtonProps {
   /** 전체 선택 버튼 추가 여부 */
   all?: boolean;
   className?: string;
-  onChange?: (value: string | string[]) => void;
+  onChange: (value: string | string[]) => void;
   onIndexChange?: (index: number) => void;
   onAfterChange?: () => void;
 }
@@ -63,4 +63,19 @@ export interface CheckButtonEmits {
   (event: 'update:modelValue', value: string | string[]): void;
   /** 클릭된 인덱스 변경 이벤트 */
   (event: 'update:clickIndex', value: number): void;
+}
+
+export interface CheckBoxProps {
+  text: string;
+  value: string;
+  index: number;
+  lineLimit?: number;
+  name: string;
+  disabled: boolean;
+  type: CheckButtonType;
+  color: CheckButtonColor;
+  parentValue: string | string[];
+  checkButtonStyleClass: string;
+  isItemSelected: (value: string) => boolean;
+  handleItemChange: (index: number, value: string) => void;
 }

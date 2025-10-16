@@ -4,7 +4,7 @@ import type { MouseEventHandler, ReactNode } from 'react';
 export interface StyledButtonProps {
   href?: string;
   target?: string;
-  style?: string;
+  btnStyle?: string;
   color?: string;
   block?: boolean;
   onlyIcon?: boolean;
@@ -22,7 +22,6 @@ export interface StyledButtonProps {
   children?: ReactNode;
   className?: string;
   onClick?: MouseEventHandler<HTMLElement>;
-  type?: string;
 }
 
 export interface StyledButtonOptions {

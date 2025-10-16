@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react';
 import React, { useMemo } from 'react';
-import './style.scss';
 import type { BadgeProps } from './types';
+import './style.scss';
 
 // Badge 컴포넌트
-const Badge: React.FC<React.PropsWithChildren<BadgeProps>> = ({
+const Badge = ({
   color = 'primary',
   position = 'right',
   size = 'default',
@@ -14,7 +14,7 @@ const Badge: React.FC<React.PropsWithChildren<BadgeProps>> = ({
   badgeClass = '',
   children,
   style,
-}) => {
+}: React.PropsWithChildren<BadgeProps>) => {
   // 뱃지 스타일 클래스 생성
   const badgeStyle = useMemo(() => {
     const classes = ['badge'];

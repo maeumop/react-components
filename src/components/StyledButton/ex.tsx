@@ -119,13 +119,13 @@ const StyledButtonExample: React.FC = () => {
                 <span className="example-label">Filled (기본)</span>
               </div>
               <div className="example-item">
-                <StyledButton style="text" color="primary">
+                <StyledButton btnStyle="text" color="primary">
                   Text
                 </StyledButton>
                 <span className="example-label">Text</span>
               </div>
               <div className="example-item">
-                <StyledButton style="outline" color="primary">
+                <StyledButton btnStyle="outline" color="primary">
                   Outline
                 </StyledButton>
                 <span className="example-label">Outline</span>

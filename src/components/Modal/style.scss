@@ -13,14 +13,14 @@
 .modal-fade-enter-active,
 .modal-fade-appear-active {
   opacity: 1;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-fade-exit {
   opacity: 1;
 }
 .modal-fade-exit-active {
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 // Scale
@@ -33,7 +33,7 @@
 .modal-scale-appear-active {
   opacity: 1;
   transform: scale(1) translateY(0);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-scale-exit {
   opacity: 1;
@@ -42,7 +42,7 @@
 .modal-scale-exit-active {
   opacity: 0;
   transform: scale(0.95) translateY(-10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 // Slide in right
@@ -55,7 +55,7 @@
 .modal-slide-in-right-appear-active {
   opacity: 1;
   transform: translateX(0) scale(1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-slide-in-right-exit {
   opacity: 1;
@@ -64,7 +64,7 @@
 .modal-slide-in-right-exit-active {
   opacity: 0;
   transform: translateX(100%) scale(0.98);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 // Slide in left
@@ -77,7 +77,7 @@
 .modal-slide-in-left-appear-active {
   opacity: 1;
   transform: translateX(0) scale(1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-slide-in-left-exit {
   opacity: 1;
@@ -86,7 +86,7 @@
 .modal-slide-in-left-exit-active {
   opacity: 0;
   transform: translateX(-100%) scale(0.98);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 // Slide in bottom
@@ -99,7 +99,7 @@
 .modal-slide-in-bottom-appear-active {
   opacity: 1;
   transform: translateY(0) scale(1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .modal-slide-in-bottom-exit {
   opacity: 1;
@@ -108,7 +108,7 @@
 .modal-slide-in-bottom-exit-active {
   opacity: 0;
   transform: translateY(100%) scale(0.98);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-bg {
@@ -156,7 +156,7 @@
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 
       &.big {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
         transform: scale(1.02);
       }
     }

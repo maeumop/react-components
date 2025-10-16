@@ -6,7 +6,7 @@ import './style.scss';
 import type { DropMenuItem, DropMenuProps } from './types';
 
 // DropMenu 컴포넌트
-const DropMenu: React.FC<React.PropsWithChildren<DropMenuProps>> = ({
+const DropMenu = ({
   items,
   position = dropMenuPosition.bottom,
   transition = dropMenuTransition.slide,
@@ -16,7 +16,7 @@ const DropMenu: React.FC<React.PropsWithChildren<DropMenuProps>> = ({
   disableAutoClose = false,
   children,
   ...rest
-}) => {
+}: React.PropsWithChildren<DropMenuProps>) => {
   // 내부 상태
   const [isOpen, setIsOpen] = useState(false);
   const [layerStyle, setLayerStyle] = useState<React.CSSProperties>({});
@@ -252,7 +252,7 @@ const DropMenu: React.FC<React.PropsWithChildren<DropMenuProps>> = ({
       {/* 드롭다운 메뉴 트랜지션 */}
       <CSSTransition
         in={isOpen}
-        timeout={300}
+        timeout={200}
         classNames={transitionName}
         unmountOnExit
         nodeRef={ulTransitionRef}

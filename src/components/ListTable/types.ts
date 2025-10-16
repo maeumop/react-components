@@ -27,12 +27,6 @@ export interface ListTableHeader {
   colspan?: number;
 }
 
-/** 테이블 데이터 아이템 기본 인터페이스 */
-export interface ListTableItem extends Record<string, unknown> {
-  /** 고유 식별자 */
-  id: string | number;
-}
-
 export interface ListTableFooter {
   /** 컬럼 병합 */
   colspan?: number;
@@ -45,7 +39,7 @@ export interface ListTableFooter {
 }
 
 /** ListTable Props */
-export interface ListTableProps<T extends ListTableItem = ListTableItem> {
+export interface ListTableProps<T = Record<string, unknown>> {
   /** 테이블 헤더 */
   header?: ListTableHeader[];
   /** 테이블 푸터 */
@@ -73,7 +67,7 @@ export interface ListTableProps<T extends ListTableItem = ListTableItem> {
 }
 
 /** 아이템 슬롯 Props */
-export interface ListTableItemSlot<T extends ListTableItem = ListTableItem> {
+export interface ListTableItemSlot<T = Record<string, unknown>> {
   /** 아이템 데이터 */
   props: T;
   /** 아이템 인덱스 */
@@ -90,7 +84,7 @@ export interface ListTableExpose {
 }
 
 /** 컴포넌트 이벤트 타입 (React에서는 콜백 props로 대체) */
-export interface ListTableEmits<T extends ListTableItem = ListTableItem> {
+export interface ListTableEmits<T = Record<string, unknown>> {
   onCheckedAll?: (checked: boolean) => void;
   onChecked?: (checked: boolean, index: number, items: T[]) => void;
   onObserve?: () => void;

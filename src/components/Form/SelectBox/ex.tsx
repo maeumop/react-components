@@ -379,6 +379,7 @@ const SelectBoxExample: React.FC = () => {
           <StateExample basicSelect={basicSelect} setBasicSelect={setBasicSelect} />
         </div>
       </main>
+
       <FloatingBackButton />
     </div>
   );

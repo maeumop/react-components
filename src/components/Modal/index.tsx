@@ -6,7 +6,7 @@ import { modalTransition } from './const';
 import './style.scss';
 import type { ModalProps } from './types';
 
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   open,
   onClose,
   title,
@@ -19,19 +19,22 @@ const Modal: React.FC<ModalProps> = ({
   children,
   body,
   action,
-}) => {
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
 
   // ESC 키 닫기
   useEffect(() => {
     if (!open) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && escClose) {
         onClose();
       }
     };
+
     document.addEventListener('keydown', handleKeyDown);
+
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, escClose, onClose]);
 
@@ -74,7 +77,7 @@ const Modal: React.FC<ModalProps> = ({
     <CSSTransition
       appear
       in={open}
-      timeout={300}
+      timeout={200}
       classNames="modal-fade"
       unmountOnExit
       nodeRef={modalRef}
@@ -90,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({
         <CSSTransition
           appear
           in={open}
-          timeout={300}
+          timeout={200}
           classNames={transitionName}
           unmountOnExit
           nodeRef={boxRef}
@@ -126,4 +129,4 @@ const Modal: React.FC<ModalProps> = ({
   );
 };
 
-export default Modal;
+export default React.memo(Modal);

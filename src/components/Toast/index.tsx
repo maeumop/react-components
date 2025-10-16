@@ -2,11 +2,11 @@ import React, { createContext, useCallback, useContext, useRef, useState } from 
 import { createPortal } from 'react-dom';
 import ToastList from './component';
 import { toastDefaultOptions } from './const';
-import type { ToastContextType, ToastItem, ToastOptions, ToastProviderProps } from './types';
+import type { ToastContextType, ToastItem, ToastOptions } from './types';
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
+export const ToastProvider = ({ children }: React.PropsWithChildren) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
 
@@ -36,7 +36,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
         }
       }, newToast.duration);
     },
-    [remove],
+    [remove, idRef],
   );
 
   return (

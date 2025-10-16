@@ -1,5 +1,4 @@
-import type { Ref } from 'vue';
-import type { RuleFunc } from '../../types';
+import type { RuleFunc } from '../types';
 import { transitionCase } from './const';
 
 export type TransitionCase = (typeof transitionCase)[keyof typeof transitionCase];
@@ -54,25 +53,6 @@ export interface Calendar {
   makeCalendar(): void;
 }
 
-export interface DatePickerStore {
-  startDate: Ref<string>;
-  endDate: Ref<string>;
-  curYear: Ref<number>;
-  curMonth: Ref<number>;
-  curDay: Ref<number>;
-  dateState: DateStateType;
-  beforeState: DateStateType;
-  selectedDate: SelectedDateType;
-  dropdownState: DropdownStateType;
-  setStartDate(v: string): void;
-  setEndDate(v: string): void;
-  setDateState(main: string, sub: string, v: number): void;
-  setSelected(flag: string, v: string): void;
-  setDropdownState(flag: 'start' | 'end', type: 'year' | 'month', isOpen: boolean): void;
-  closeAllDropdowns(): void;
-  init(): void;
-}
-
 export interface LayerPosition {
   top: string;
   bottom: string;
@@ -89,7 +69,6 @@ export interface DatePickerHelper {
 }
 
 export interface DatePickerProps {
-  modelValue: string[] | string;
   validate?: RuleFunc[];
   label?: string;
   placeholder?: string[] | string;
@@ -105,18 +84,17 @@ export interface DatePickerProps {
   disabled?: boolean;
   blurValidate?: boolean;
   defaultDate?: boolean;
-}
-
-export interface DatePickerEmits {
-  (event: 'update:modelValue', value: string[] | string): void;
-  (event: 'update:set', value: string[] | string): void;
-  (event: 'blur'): void;
+  value: string[] | string;
+  onChange: (value: string[] | string) => void;
+  onUpdateSet: (value: string[] | string) => void;
 }
 
 export interface CalendarProps {
+  value: string;
   end?: boolean;
   range: boolean;
   separator: string;
+  updateDate: (value: boolean) => void;
 }
 
 export interface CalendarEmits {
@@ -136,3 +114,27 @@ export interface DateControllerProps {
   maxYear: number;
   minYear: number;
 }
+
+export interface DatePickerState {
+  startDate: string;
+  endDate: string;
+  curYear: number;
+  curMonth: number;
+  curDay: number;
+  dateState: DateStateType;
+  beforeState: DateStateType;
+  selectedDate: SelectedDateType;
+  dropdownState: DropdownStateType;
+}
+
+export interface DatePickerActions {
+  setStartDate: (v: string) => void;
+  setEndDate: (v: string) => void;
+  setDateState: (main: string, sub: string, v: number) => void;
+  setSelected: (flag: string, v: string) => void;
+  setDropdownState: (flag: 'start' | 'end', type: 'year' | 'month', isOpen: boolean) => void;
+  closeAllDropdowns: () => void;
+  init: () => void;
+}
+
+export type DatePickerStore = DatePickerState & DatePickerActions;
