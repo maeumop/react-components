@@ -141,6 +141,23 @@ const CheckButtonExample: React.FC = () => {
               <div className="result">선택된 값: {selectedGender}</div>
             </div>
           </section>
+
+          {/* 한줄 당 3개 기본 체크박스 */}
+          <section className="example-section">
+            <h2>한줄 당 3개 기본 체크박스</h2>
+            <div className="example-item">
+              <CheckButton
+                value={selectedHobbies}
+                onChange={setSelectedHobbies}
+                items={hobbyItems}
+                name="hobbies"
+                lineLimit={3}
+                label="취미"
+              />
+              <div className="result">선택된 값: {JSON.stringify(selectedHobbies)}</div>
+            </div>
+          </section>
+
           {/* 버튼 UI 모드 */}
           <section className="example-section">
             <h2>버튼 UI 모드</h2>

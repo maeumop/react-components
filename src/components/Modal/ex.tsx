@@ -1,10 +1,10 @@
 import FloatingBackButton from '@/views/FloatingBackButton';
-import { Icon } from '@iconify/react';
 import React, { useCallback, useMemo, useState } from 'react';
 import { modalPosition } from './const';
 import './ex.scss';
 import Modal from './index';
 import type { ModalPosition } from './types';
+import { Warning as WarningIcon } from '@mui/icons-material';
 
 const ModalExample: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -198,7 +198,7 @@ const ModalExample: React.FC = () => {
         escClose
         body={
           <div className="confirm-content">
-            <Icon icon="mdi:alert-circle" width={48} height={48} className="confirm-icon" />
+            <WarningIcon sx={{ width: 48, height: 48 }} className="confirm-icon" />
             <p>정말로 이 작업을 수행하시겠습니까?</p>
             <p className="confirm-detail">이 작업은 되돌릴 수 없습니다.</p>
           </div>

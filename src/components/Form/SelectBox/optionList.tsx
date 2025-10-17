@@ -1,6 +1,11 @@
-import { Icon } from '@iconify/react';
 import React, { useCallback, useMemo } from 'react';
 import type { OptionItemProps, OptionListProps } from './types';
+import {
+  CheckBox as CheckBoxIcon,
+  CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
+  Search as SearchIcon,
+  Autorenew as LoadingIcon,
+} from '@mui/icons-material';
 
 const OptionItemList = React.memo<OptionItemProps>(
   ({ item, index, multiple, isSelected, isFocused, onSelect }) => {
@@ -18,14 +23,12 @@ const OptionItemList = React.memo<OptionItemProps>(
 
     return (
       <li className={className} onClick={handleClick}>
-        {multiple && (
-          <Icon
-            className="checkbox"
-            icon={isSelected ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline'}
-            width={20}
-            height={20}
-          />
-        )}
+        {multiple &&
+          (isSelected ? (
+            <CheckBoxIcon className="checkbox" sx={{ width: 20, height: 20 }} />
+          ) : (
+            <CheckBoxOutlineBlankIcon className="checkbox" sx={{ width: 20, height: 20 }} />
+          ))}
         {item.text}
       </li>
     );
@@ -81,7 +84,7 @@ export const OptionList = React.memo<OptionListProps>(
                 type="text"
                 onInput={onSearchTextChange}
               />
-              <Icon icon="mdi:magnify" width={28} height={28} />
+              <SearchIcon sx={{ width: 28, height: 28 }} />
             </div>
           </div>
         )}
@@ -91,12 +94,14 @@ export const OptionList = React.memo<OptionListProps>(
           {/* 전체 선택/해제 */}
           {multiple && !maxLength && !searchable && (
             <li className={optionItemClassName} onClick={onSelectAll}>
-              <Icon
-                className={checkBoxClassName}
-                icon={isSelectAll ? 'mdi:checkbox-marked' : 'mdi:checkbox-blank-outline'}
-                width={20}
-                height={20}
-              />
+              {isSelectAll ? (
+                <CheckBoxIcon className={checkBoxClassName} sx={{ width: 20, height: 20 }} />
+              ) : (
+                <CheckBoxOutlineBlankIcon
+                  className={checkBoxClassName}
+                  sx={{ width: 20, height: 20 }}
+                />
+              )}
               {isSelectAll ? '전체 해제' : '전체 선택'}
             </li>
           )}
@@ -121,7 +126,7 @@ export const OptionList = React.memo<OptionListProps>(
           {/* 로딩 상태 */}
           {isLoading && (
             <li className="items-loading">
-              <Icon icon="mdi:google-circles-extended" width={24} height={24} />
+              <LoadingIcon sx={{ width: 24, height: 24 }} />
             </li>
           )}
         </ul>

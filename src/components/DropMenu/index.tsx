@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { dropMenuColor, dropMenuPosition, dropMenuTransition } from './const';
@@ -280,9 +279,7 @@ const DropMenu = ({
                 aria-disabled={item.disabled}
                 tabIndex={item.disabled ? -1 : 0}
               >
-                {item.icon && (
-                  <Icon icon={item.icon} width={18} height={18} style={{ marginRight: 8 }} />
-                )}
+                {item.icon && <item.icon width={18} height={18} style={{ marginRight: 8 }} />}
                 <span>{item.text}</span>
               </a>
             </li>

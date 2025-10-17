@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { checkButtonColor, checkButtonType } from './const';
 import {
   CheckBoxOutlineBlankRounded,
@@ -18,20 +18,10 @@ const CheckBox = ({
   color = checkButtonColor.primary,
   disabled = false,
   lineLimit = 0,
-  checkButtonStyleClass,
   isItemSelected,
   handleItemChange,
 }: CheckBoxProps) => {
-  // 라인 제한
-  const lineBreak = () => {
-    if (lineLimit > 0 && (index + 1) % lineLimit === 0) {
-      return <div className="line-break" />;
-    }
-
-    return null;
-  };
-
-  const buttonRender = () => {
+  const buttonRender = useMemo(() => {
     if (type === checkButtonType.radio) {
       return parentValue === value ? (
         <RadioButtonCheckedRounded className="check-icon" />
@@ -45,29 +35,33 @@ const CheckBox = ({
     ) : (
       <CheckBoxOutlineBlankRounded className="check-icon" />
     );
-  };
+  }, [type, parentValue, value]);
+
+  const blockStyle = useMemo(() => {
+    return lineLimit > 0
+      ? {
+          flex: 1,
+        }
+      : undefined;
+  }, [lineLimit]);
 
   return (
     <>
-      <div className={checkButtonStyleClass}>
-        <label className={color} htmlFor={`${name}${index}`}>
-          <input
-            type={type}
-            disabled={disabled}
-            id={`${name}${index}`}
-            name={name}
-            value={value}
-            checked={isItemSelected(value)}
-            onChange={() => handleItemChange(index, value)}
-          />
+      <label className={color} style={blockStyle} htmlFor={`${name}${index}`}>
+        <input
+          type={type}
+          disabled={disabled}
+          id={`${name}${index}`}
+          name={name}
+          value={value}
+          checked={isItemSelected(value)}
+          onChange={() => handleItemChange(index, value)}
+        />
 
-          {buttonRender()}
+        {buttonRender}
 
-          {text}
-        </label>
-
-        {lineBreak()}
-      </div>
+        {text}
+      </label>
     </>
   );
 };

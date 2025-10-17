@@ -1,10 +1,10 @@
-import { Icon } from '@iconify/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { messageBoxTransition } from './const';
 import './style.scss';
 import type { MessageBoxOptions } from './types';
+import { CircularProgress as LoadingIcon } from '@mui/material';
 
 /**
  * MessageBox 컴포넌트
@@ -237,11 +237,7 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
                 onClick={onButtonClick}
                 disabled={spinnerShow}
               >
-                {spinnerShow ? (
-                  <Icon icon="svg-spinners:ring-resize" className="loading" />
-                ) : (
-                  btnOkayText
-                )}
+                {spinnerShow ? <LoadingIcon size={16} className="loading" /> : btnOkayText}
               </button>
               {type === 'confirm' && (
                 <button

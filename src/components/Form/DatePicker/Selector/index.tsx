@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Icon } from '@iconify/react';
 import { CSSTransition } from 'react-transition-group';
 import type { DropdownStateType, SelectorProps } from '../types';
 import { useDatePickerStore } from '../store';
+import { KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
 
 const SelectorBase = ({
   max = 0,
@@ -247,7 +247,7 @@ const SelectorBase = ({
     >
       <div className="selector-trigger-text">
         {getDateString}
-        <Icon icon="mdi:chevron-down" className={`selector-icon ${isShow ? 'rotated' : ''}`} />
+        <ChevronDownIcon className={`selector-icon ${isShow ? 'rotated' : ''}`} />
       </div>
 
       <CSSTransition

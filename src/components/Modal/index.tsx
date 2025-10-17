@@ -1,10 +1,10 @@
-import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import { modalTransition } from './const';
 import './style.scss';
 import type { ModalProps } from './types';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 const Modal = ({
   open,
@@ -108,12 +108,7 @@ const Modal = ({
                 <span className="text">{title}</span>
               </div>
               {!hideClose && (
-                <Icon
-                  className="close"
-                  aria-label="모달 닫기"
-                  onClick={handleClose}
-                  icon="mdi:close"
-                />
+                <CloseIcon className="close" aria-label="모달 닫기" onClick={handleClose} />
               )}
             </div>
             <div className="modal-body" id={body ? 'modal-body' : undefined}>

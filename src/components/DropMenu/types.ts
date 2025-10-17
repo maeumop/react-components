@@ -1,3 +1,4 @@
+import type { IconComponent } from '../types';
 import type { dropMenuColor, dropMenuPosition, dropMenuTransition } from './const';
 
 export type DropMenuColor = (typeof dropMenuColor)[keyof typeof dropMenuColor];
@@ -10,7 +11,7 @@ export interface DropMenuItem {
   /** 클릭 시 실행할 함수 */
   action: () => void;
   /** 아이콘 (Iconify 아이콘명) */
-  icon?: string;
+  icon?: IconComponent;
   /** 비활성화 여부 */
   disabled?: boolean;
 }

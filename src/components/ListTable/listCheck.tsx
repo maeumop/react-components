@@ -1,7 +1,11 @@
-import { Icon } from '@iconify/react';
 import React, { useCallback } from 'react';
-import { listTableCheckboxIcon, listTableRadioIcon } from './const';
 import type { ListTableListCheckProps } from './types';
+import {
+  CheckBox as CheckBoxIcon,
+  CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
+  RadioButtonChecked as RadioButtonCheckedIcon,
+  RadioButtonUnchecked as RadioButtonUncheckedIcon,
+} from '@mui/icons-material';
 
 /**
  * ListTableCheck 컴포넌트 (체크박스/라디오)
@@ -13,18 +17,28 @@ const ListTableCheck: React.FC<ListTableListCheckProps> = ({
   type = 'checkbox',
   onChange,
 }) => {
-  // 아이콘 결정
-  const iconName = (() => {
-    if (disabled) {
-      return type === 'radio' ? listTableRadioIcon.disabled : listTableCheckboxIcon.disabled;
+  // 아이콘 렌더링
+  const renderIcon = () => {
+    if (type === 'radio') {
+      if (disabled) {
+        return <RadioButtonUncheckedIcon className="check-icon" />;
+      }
+      return modelValue ? (
+        <RadioButtonCheckedIcon className="check-icon" />
+      ) : (
+        <RadioButtonUncheckedIcon className="check-icon" />
+      );
+    } else {
+      if (disabled) {
+        return <CheckBoxOutlineBlankIcon className="check-icon" />;
+      }
+      return modelValue ? (
+        <CheckBoxIcon className="check-icon" />
+      ) : (
+        <CheckBoxOutlineBlankIcon className="check-icon" />
+      );
     }
-
-    if (modelValue) {
-      return type === 'radio' ? listTableRadioIcon.checked : listTableCheckboxIcon.checked;
-    }
-
-    return type === 'radio' ? listTableRadioIcon.blank : listTableCheckboxIcon.blank;
-  })();
+  };
 
   // 체크 이벤트
   const handleChange = useCallback(
@@ -45,7 +59,7 @@ const ListTableCheck: React.FC<ListTableListCheckProps> = ({
         onChange={handleChange}
         style={{ display: 'none' }}
       />
-      <Icon icon={iconName} className="check-icon" />
+      {renderIcon()}
     </label>
   );
 };

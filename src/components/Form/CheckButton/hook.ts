@@ -18,7 +18,8 @@ export const useCheckButton = ({
   onIndexChange,
   onAfterChange,
   className,
-}: Omit<CheckButtonProps, 'name' | 'label' | 'required' | 'lineLimit'>) => {
+  lineLimit = 0,
+}: Omit<CheckButtonProps, 'name' | 'label' | 'required'>) => {
   const [message, setMessage] = useState('');
   const [errorTransition, setErrorTransition] = useState(false);
 
@@ -39,11 +40,11 @@ export const useCheckButton = ({
 
   const checkButtonStyleClass = useMemo(() => {
     if (button) {
-      return `check-button-group ${color}${disabled ? ' disabled' : ''} ${className}`;
+      return `check-button-group ${color}${disabled ? 'disabled' : ''} ${className}`;
     }
 
-    return `origin-check-button${block ? ' block' : ''}`;
-  }, [color, disabled]);
+    return `origin-check-button ${block ? 'block' : ''} ${lineLimit > 0 ? 'grid' : ''}`;
+  }, [color, disabled, lineLimit]);
 
   // 선택 상태
   const isItemSelected = useCallback(

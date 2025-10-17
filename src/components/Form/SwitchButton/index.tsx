@@ -7,10 +7,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Icon } from '@iconify/react';
 import { switchButtonColor } from './const';
 import './style.scss';
 import type { SwitchButtonModel, SwitchButtonProps } from './types';
+import {
+  CheckBox as CheckBoxIcon,
+  CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
+} from '@mui/icons-material';
 
 const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
   (
@@ -135,10 +138,10 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     // 체크박스 아이콘 렌더링
     const renderCheckboxIcon = () => {
       if (value === trueValue) {
-        return <Icon icon="mdi:checkbox-marked" />;
+        return <CheckBoxIcon />;
       }
 
-      return <Icon icon={disabled ? 'mdi:checkbox-blank' : 'mdi:checkbox-blank-outline'} />;
+      return <CheckBoxOutlineBlankIcon />;
     };
 
     // 라벨 트랜지션 (간단 fade, React에서 직접 구현)

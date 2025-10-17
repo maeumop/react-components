@@ -1,13 +1,13 @@
-import { Icon } from '@iconify/react';
 import React, { useMemo } from 'react';
 import type { BadgeProps } from './types';
+import { badgeSize } from './const';
 import './style.scss';
 
 // Badge 컴포넌트
 const Badge = ({
   color = 'primary',
   position = 'right',
-  size = 'default',
+  size = badgeSize.default,
   text,
   icon,
   wrapperClass = '',
@@ -49,11 +49,13 @@ const Badge = ({
   // 접근성 라벨 생성
   const ariaLabel = text ? `${text}개의 알림` : '알림';
 
+  const Icon = icon;
+
   return (
     <div className={wrapperClassName} style={style}>
       {children}
       <div className={badgeStyle} aria-label={ariaLabel} role="status">
-        {icon ? <Icon icon={icon} /> : text}
+        {Icon ? <Icon sx={{ fontSize: 19 }} /> : text}
       </div>
     </div>
   );

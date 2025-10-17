@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
-import { Icon } from '@iconify/react';
 import type { StyledButtonProps } from './types';
 import './style.scss';
+import { CircularProgress as LoadingIcon } from '@mui/material';
 
 // StyledButton 컴포넌트
 const StyledButton = ({
@@ -103,6 +103,7 @@ const StyledButton = ({
 
   // 렌더링 태그 결정
   const Tag = tag === 'button' ? 'button' : 'a';
+  const Icon = icon;
 
   return (
     <Tag
@@ -119,32 +120,32 @@ const StyledButton = ({
         {!onlyIcon ? (
           <>
             {loading ? (
-              <Icon className="loading" icon="mdi:loading" width={iconSize} height={iconSize} />
+              <LoadingIcon size={iconSize} className="loading" />
             ) : (
               <>
-                {icon && !iconRight && (
-                  <Icon
+                {Icon && !iconRight && (
+                  <div
                     className={dropMenuToggle ? 'rotate' : ''}
-                    width={iconSize}
-                    height={iconSize}
-                    icon={icon as string}
-                  />
+                    style={{ width: iconSize, height: iconSize }}
+                  >
+                    <Icon sx={{ width: iconSize, height: iconSize }} />
+                  </div>
                 )}
                 {children}
-                {icon && iconRight && (
-                  <Icon
+                {Icon && iconRight && (
+                  <div
                     className={dropMenuToggle ? 'rotate' : ''}
-                    width={iconSize}
-                    height={iconSize}
-                    icon={icon as string}
-                  />
+                    style={{ width: iconSize, height: iconSize }}
+                  >
+                    <Icon sx={{ width: iconSize, height: iconSize }} />
+                  </div>
                 )}
               </>
             )}
           </>
         ) : (
           <div className="only-icon">
-            {icon && <Icon width={iconSize} height={iconSize} icon={icon as string} />}
+            {Icon && <Icon sx={{ width: iconSize, height: iconSize }} />}
           </div>
         )}
       </div>

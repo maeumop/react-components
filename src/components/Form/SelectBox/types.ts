@@ -85,3 +85,14 @@ export interface OptionItemProps {
   isFocused: boolean;
   onSelect: (value: string, index: number, e: React.MouseEvent<HTMLLIElement>) => void;
 }
+
+export interface RenderSelectedTextProps {
+  multiple: boolean;
+  getShowText: string[];
+  labelText: boolean;
+  isShort: boolean;
+  inLabel: boolean;
+  label: string;
+  placeholder: string;
+  removeSelected: (index: number, e: React.MouseEvent<SVGSVGElement>) => void;
+}

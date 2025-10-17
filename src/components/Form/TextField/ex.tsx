@@ -2,6 +2,7 @@ import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useState } from 'react';
 import './ex.scss';
 import TextField from './index';
+import { Search as SearchIcon, Person as PersonIcon } from '@mui/icons-material';
 
 const validateEmailFn = (value: unknown): string | boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -122,7 +123,7 @@ const TextFieldExample: React.FC = () => {
                 <TextField
                   value={iconText}
                   onChange={setIconText}
-                  icon="mdi:magnify"
+                  icon={SearchIcon}
                   iconAction={handleIconClick}
                   placeholder="검색어 입력"
                   clearable
@@ -134,7 +135,7 @@ const TextFieldExample: React.FC = () => {
                 <TextField
                   value={iconLeftText}
                   onChange={setIconLeftText}
-                  icon="mdi:account"
+                  icon={PersonIcon}
                   placeholder="사용자명 입력"
                   iconLeft
                   block
@@ -181,6 +182,7 @@ const TextFieldExample: React.FC = () => {
           </section>
         </div>
       </main>
+
       <FloatingBackButton />
     </div>
   );

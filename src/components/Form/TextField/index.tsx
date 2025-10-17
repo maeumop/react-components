@@ -1,4 +1,3 @@
-import { Icon } from '@iconify/react';
 import React, {
   forwardRef,
   useCallback,
@@ -8,10 +7,10 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Close as CloseIcon } from '@mui/icons-material';
 import { textFieldType } from './const';
 import type { TextFieldModel, TextFieldProps } from './types';
 import './style.scss';
-import FloatingBackButton from '@/views/FloatingBackButton';
 
 const TextField = forwardRef<TextFieldModel, TextFieldProps>(
   (
@@ -60,19 +59,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
 
     // input 스타일
     const inputClass = useMemo(() => {
-      let classNames = '';
-
-      if (multiline) {
-        classNames = `${message ? 'error' : ''}`;
-      } else {
-        classNames = [
-          message ? 'error' : '',
-          icon && iconLeft ? 'left-space' : '',
-          icon && !iconLeft ? 'right-space' : '',
-        ].join(' ');
-      }
-
-      classNames = [
+      const classNames = [
         className,
         message ? 'error' : '',
         icon && iconLeft ? 'left-space' : '',
@@ -81,6 +68,11 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
 
       return classNames.trim();
     }, [message, icon, iconLeft, className]);
+
+    // textarea 스타일
+    const textareaClass = useMemo(() => {
+      return [className, message ? 'error' : ''].join(' ').trim();
+    }, [className, message]);
 
     // 클리어 버튼 노출 여부
     const clearButtonShow = useMemo(() => {
@@ -105,45 +97,6 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
       [onChange, isCounting, maxLength],
     );
 
-    // blur 핸들러
-    const handleBlur = useCallback(
-      (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onBlur?.(e);
-        if (blurValidate) {
-          if (check()) {
-            // trim 적용
-            const val = e.target.value.trim();
-
-            if (val !== value) {
-              onChange?.(val);
-            }
-          }
-        }
-      },
-      [onBlur, blurValidate, value, onChange],
-    );
-
-    // 클리어 버튼 클릭
-    const handleClear = useCallback(
-      (e: React.MouseEvent) => {
-        e.preventDefault();
-        onChange?.('');
-      },
-      [onChange],
-    );
-
-    // 아이콘 클릭
-    const handleIconClick = useCallback(
-      (e: React.MouseEvent) => {
-        e.preventDefault();
-
-        if (iconAction) {
-          iconAction(e);
-        }
-      },
-      [iconAction],
-    );
-
     // 유효성 검사
     const check = useCallback(
       (silence = false): boolean => {
@@ -160,6 +113,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
 
           return false;
         }
+
         // pattern 검사
         if (pattern && Array.isArray(pattern)) {
           const [regExp, errMsg] = pattern;
@@ -173,6 +127,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
             return false;
           }
         }
+
         // validate 함수 검사
         if (validate.length) {
           for (const validateFunc of validate) {
@@ -199,18 +154,50 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
       [disabled, errorMessage, pattern, value, validate],
     );
 
+    // blur 핸들러
+    const handleBlur = useCallback(
+      (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        onBlur?.(e);
+
+        if (blurValidate && check()) {
+          // trim 적용
+          const val = e.target.value.trim();
+
+          if (val !== value) {
+            onChange?.(val);
+          }
+        }
+      },
+      [onBlur, blurValidate, value, onChange, check],
+    );
+
+    // 클리어 버튼 클릭
+    const handleClear = useCallback(() => {
+      onChange?.('');
+    }, [onChange]);
+
+    // 아이콘 클릭
+    const handleIconClick = useCallback(
+      (e: React.MouseEvent) => {
+        if (iconAction) {
+          iconAction(e);
+        }
+      },
+      [iconAction],
+    );
+
     // 폼 초기화
     const resetForm = useCallback(() => {
       onChange?.('');
+      setMessage('');
+      setErrorTransition(false);
     }, [onChange]);
 
     // 유효성 상태 초기화
     const resetValidate = useCallback(() => {
-      if (!errorMessage) {
-        setMessage('');
-        setErrorTransition(false);
-      }
-    }, [errorMessage]);
+      setMessage('');
+      setErrorTransition(false);
+    }, []);
 
     // 외부 errorMessage 변경 시 상태 동기화
     useEffect(() => {
@@ -223,22 +210,19 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
       }
     }, [errorMessage]);
 
-    // value 변경 시 validate 리셋
+    // value 변경 시 validate 리셋 (해당 컴포넌트의 value만)
     useEffect(() => {
-      if (isMounted.current) {
+      if (isMounted.current && !errorMessage) {
         resetValidate();
       }
-    }, [value]);
-
-    // validate 배열 변경 시 validate 리셋
-    useEffect(() => {
-      resetValidate();
-    }, [validate]);
+    }, [value, errorMessage, resetValidate]);
 
     // disabled 변경 시 validate 리셋
     useEffect(() => {
-      resetValidate();
-    }, [disabled]);
+      if (!errorMessage) {
+        resetValidate();
+      }
+    }, [disabled, errorMessage, resetValidate]);
 
     // 마운트 시
     useEffect(() => {
@@ -264,6 +248,8 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
       [check, resetForm, resetValidate],
     );
 
+    const IconComponent = icon;
+
     return (
       <div className={wrapperClass} style={{ width }}>
         {(label || (isCounting && maxLength)) && (
@@ -284,7 +270,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
         {multiline ? (
           <textarea
             ref={textareaRef}
-            className={`${className} ${message ? 'error' : ''}`}
+            className={textareaClass}
             style={height ? { height } : undefined}
             rows={rows}
             placeholder={placeholder}
@@ -312,34 +298,28 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
                 onChange={handleChange}
               />
               {/* 왼쪽 아이콘 */}
-              {icon &&
-                iconLeft &&
-                (typeof iconAction === 'function' ? (
-                  <a href="#" onClick={handleIconClick}>
-                    <Icon icon={icon} width={24} height={24} className="icon-left" />
-                  </a>
-                ) : (
-                  <Icon icon={icon} width={24} height={24} className="icon-left" />
-                ))}
+              {IconComponent && iconLeft && (
+                <IconComponent
+                  sx={{ width: 24, height: 24 }}
+                  className="cursor icon-left"
+                  onClick={handleIconClick}
+                />
+              )}
               {/* 오른쪽 아이콘 */}
-              {icon &&
-                !iconLeft &&
-                (typeof iconAction === 'function' ? (
-                  <a href="#" onClick={handleIconClick}>
-                    <Icon icon={icon} width={24} height={24} className="icon-right" />
-                  </a>
-                ) : (
-                  <Icon icon={icon} width={24} height={24} className="icon-right" />
-                ))}
+              {IconComponent && !iconLeft && (
+                <IconComponent
+                  sx={{ width: 24, height: 24 }}
+                  className="icon-right"
+                  onClick={handleIconClick}
+                />
+              )}
               {/* 클리어 버튼 */}
               {clearButtonShow && (
-                <a
-                  href="#"
+                <CloseIcon
+                  sx={{ width: 20, height: 20 }}
                   className={['btn-clear', icon && !iconLeft ? 'with-icon' : ''].join(' ')}
                   onClick={handleClear}
-                >
-                  <Icon icon="mdi:close-circle" width={20} height={20} />
-                </a>
+                />
               )}
             </div>
             {/* slot 자리 */}
@@ -351,8 +331,6 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>(
             {message}
           </div>
         )}
-
-        <FloatingBackButton />
       </div>
     );
   },

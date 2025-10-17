@@ -88,12 +88,11 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
         }
 
         const val = getNumber(e.target.value);
+        const numValue = Number(val);
 
-        if (val) {
-          e.target.value = format(val);
-          const numValue = Number(val);
-          console.log('inside', numValue);
-          onChange?.(isNaN(numValue) ? 0 : numValue);
+        if (!isNaN(numValue)) {
+          e.target.value = format(numValue);
+          onChange?.(numValue);
         }
       },
       [onChange, disabled],
@@ -112,22 +111,6 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
       [onChange, onFocus],
     );
 
-    const handleBlur = useCallback(
-      (e: React.FocusEvent<HTMLInputElement>) => {
-        if (e.target.value.length === 0) {
-          e.target.value = '0';
-          onChange?.(0);
-        }
-
-        if (!onBlur) {
-          check();
-        }
-
-        onBlur?.(e);
-      },
-      [onChange, onBlur],
-    );
-
     // 유효성 검사
     const check = useCallback(
       (silence = false): boolean => {
@@ -135,37 +118,54 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
           return true;
         }
 
-        if (!errorMessage) {
-          if (validate.length) {
-            const val = getNumber(inputRef.current?.value || '0');
-
-            for (const validateFunc of validate) {
-              const result = validateFunc(val);
-
-              if (typeof result === 'string') {
-                if (!silence) {
-                  setMessage(result);
-                  setErrorTransition(true);
-                }
-
-                return false;
-              }
-            }
-          }
-
+        // errorMessage가 설정되어 있으면 실패
+        if (errorMessage) {
           if (!silence) {
-            setMessage('');
-            setErrorTransition(false);
+            setMessage(errorMessage);
+            setErrorTransition(true);
           }
-
-          return true;
+          return false;
         }
 
-        setErrorTransition(true);
+        // validate 함수들 실행
+        if (validate.length) {
+          const val = getNumber(inputRef.current?.value || '0');
 
-        return false;
+          for (const validateFunc of validate) {
+            const result = validateFunc(val);
+
+            if (typeof result === 'string') {
+              if (!silence) {
+                setMessage(result);
+                setErrorTransition(true);
+              }
+              return false;
+            }
+          }
+        }
+
+        // 검증 통과
+        if (!silence) {
+          setMessage('');
+          setErrorTransition(false);
+        }
+
+        return true;
       },
-      [disabled, errorMessage, validate, value],
+      [disabled, errorMessage, validate],
+    );
+
+    const handleBlur = useCallback(
+      (e: React.FocusEvent<HTMLInputElement>) => {
+        if (e.target.value.length === 0) {
+          e.target.value = '0';
+          onChange?.(0);
+        }
+
+        check();
+        onBlur?.(e);
+      },
+      [onChange, onBlur, check],
     );
 
     // 폼 초기화
@@ -174,6 +174,8 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
         inputRef.current.value = '0';
       }
 
+      setMessage('');
+      setErrorTransition(false);
       onChange?.(0);
     }, [onChange]);
 
@@ -185,29 +187,34 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
 
     // 외부 errorMessage 변경 시 상태 동기화
     useEffect(() => {
-      if (errorMessage !== '') {
+      if (errorMessage) {
         setMessage(errorMessage);
         setErrorTransition(true);
       } else {
-        resetValidate();
+        setMessage('');
+        setErrorTransition(false);
       }
-    }, [errorMessage, resetValidate]);
+    }, [errorMessage]);
 
     // value 변경 시 validate 리셋 및 포맷 적용
     useEffect(() => {
-      if (isMounted.current) {
-        resetValidate();
+      if (isMounted.current && !errorMessage) {
+        setMessage('');
+        setErrorTransition(false);
 
         if (inputRef.current) {
           inputRef.current.value = format(value);
         }
       }
-    }, [value, resetValidate]);
+    }, [value, errorMessage]);
 
     // disabled 변경 시 validate 리셋
     useEffect(() => {
-      resetValidate();
-    }, [disabled, resetValidate]);
+      if (!errorMessage) {
+        setMessage('');
+        setErrorTransition(false);
+      }
+    }, [disabled, errorMessage]);
 
     // 마운트 시
     useEffect(() => {

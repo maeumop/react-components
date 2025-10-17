@@ -75,7 +75,6 @@ export interface CheckBoxProps {
   type: CheckButtonType;
   color: CheckButtonColor;
   parentValue: string | string[];
-  checkButtonStyleClass: string;
   isItemSelected: (value: string) => boolean;
   handleItemChange: (index: number, value: string) => void;
 }

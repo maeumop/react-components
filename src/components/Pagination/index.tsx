@@ -1,9 +1,14 @@
-import { Icon } from '@iconify/react';
 import type { ChangeEvent, KeyboardEvent } from 'react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { paginationDefaultOptions } from './const';
 import './style.scss';
 import type { PaginationItem, PaginationProps } from './types';
+import {
+  KeyboardDoubleArrowLeft as ChevronDoubleLeftIcon,
+  KeyboardArrowLeft as ChevronLeftIcon,
+  KeyboardArrowRight as ChevronRightIcon,
+  KeyboardDoubleArrowRight as ChevronDoubleRightIcon,
+} from '@mui/icons-material';
 
 /**
  * 페이지네이션 컴포넌트 (React)
@@ -187,7 +192,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => updateValue(1)}
             onKeyDown={e => handleKeyDown(e, 1)}
           >
-            <Icon icon="mdi:chevron-double-left" width="20" height="20" />
+            <ChevronDoubleLeftIcon sx={{ width: 20, height: 20 }} />
           </button>
         </li>
         {/* 이전 페이지 블록 */}
@@ -200,7 +205,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => updateValue(prev)}
             onKeyDown={e => handleKeyDown(e, prev)}
           >
-            <Icon icon="mdi:chevron-left" width="20" height="20" />
+            <ChevronLeftIcon sx={{ width: 20, height: 20 }} />
           </button>
         </li>
         {/* 페이지 번호들 */}
@@ -232,7 +237,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => updateValue(next)}
             onKeyDown={e => handleKeyDown(e, next)}
           >
-            <Icon icon="mdi:chevron-right" width="20" height="20" />
+            <ChevronRightIcon sx={{ width: 20, height: 20 }} />
           </button>
         </li>
         {/* 마지막 페이지 */}
@@ -245,7 +250,7 @@ const Pagination: React.FC<PaginationProps> = ({
             onClick={() => updateValue(maxPage)}
             onKeyDown={e => handleKeyDown(e, maxPage)}
           >
-            <Icon icon="mdi:chevron-double-right" width="20" height="20" />
+            <ChevronDoubleRightIcon sx={{ width: 20, height: 20 }} />
           </button>
         </li>
       </ul>

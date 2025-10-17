@@ -8,7 +8,7 @@ import React, {
   forwardRef,
 } from 'react';
 import type { Ref } from 'react';
-import { Icon } from '@iconify/react';
+import { CalendarMonth as DatePickerIcon } from '@mui/icons-material';
 import type { RuleFunc } from '../types';
 import { Calendar } from './Calendar';
 import { DateController } from './DateController';
@@ -754,7 +754,7 @@ const DatePickerBase = ({
             </>
           )}
 
-          <Icon icon="mdi:calendar-month" width={22} height={22} aria-hidden="true" />
+          <DatePickerIcon sx={{ fontSize: 22 }} aria-hidden="true" />
         </div>
 
         {message && !hideMessage && (

@@ -1,10 +1,10 @@
-import { Icon } from '@iconify/react';
 import type { CSSProperties } from 'react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { tooltipColor, tooltipPosition } from './const';
 import './style.scss';
 import type { TooltipPosition, TooltipProps } from './types';
+import { Close as CloseIcon } from '@mui/icons-material';
 
 const Tooltip = ({
   message,
@@ -185,7 +185,7 @@ const Tooltip = ({
                       type="button"
                       aria-label="툴팁 닫기"
                     >
-                      <Icon icon="mdi:window-close" className="close" width={14} height={14} />
+                      <CloseIcon className="close" sx={{ width: 14, height: 14 }} />
                     </button>
                   )}
                 </div>

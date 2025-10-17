@@ -2,6 +2,19 @@ import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useState } from 'react';
 import './ex.scss';
 import StyledButton from './index';
+import {
+  Home as HomeIcon,
+  Add as PlusIcon,
+  ArrowForward as ArrowRightIcon,
+  Download as DownloadIcon,
+  Share as ShareIcon,
+  Menu as MenuIcon,
+  Search as SearchIcon,
+  Favorite as HeartIcon,
+  Star as StarIcon,
+  Email as EmailIcon,
+  Settings as SettingsIcon,
+} from '@mui/icons-material';
 
 const StyledButtonExample: React.FC = () => {
   // 폼 데이터
@@ -131,7 +144,7 @@ const StyledButtonExample: React.FC = () => {
                 <span className="example-label">Outline</span>
               </div>
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:home" color="primary" />
+                <StyledButton onlyIcon icon={HomeIcon} color="primary" />
                 <span className="example-label">Icon Only</span>
               </div>
             </div>
@@ -142,25 +155,25 @@ const StyledButtonExample: React.FC = () => {
             <h2>아이콘 버튼</h2>
             <div className="example-grid">
               <div className="example-item">
-                <StyledButton icon="mdi:plus" color="success">
+                <StyledButton icon={PlusIcon} color="success">
                   추가
                 </StyledButton>
                 <span className="example-label">왼쪽 아이콘</span>
               </div>
               <div className="example-item">
-                <StyledButton icon="mdi:arrow-right" iconRight color="info">
+                <StyledButton icon={ArrowRightIcon} iconRight color="info">
                   다음
                 </StyledButton>
                 <span className="example-label">오른쪽 아이콘</span>
               </div>
               <div className="example-item">
-                <StyledButton icon="mdi:download" color="warning">
+                <StyledButton icon={DownloadIcon} color="warning">
                   다운로드
                 </StyledButton>
                 <span className="example-label">다운로드</span>
               </div>
               <div className="example-item">
-                <StyledButton icon="mdi:share" iconRight color="secondary">
+                <StyledButton icon={ShareIcon} iconRight color="secondary">
                   공유
                 </StyledButton>
                 <span className="example-label">공유</span>
@@ -173,27 +186,27 @@ const StyledButtonExample: React.FC = () => {
             <h2>아이콘 전용 버튼</h2>
             <div className="example-grid">
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:menu" color="primary" />
+                <StyledButton onlyIcon icon={MenuIcon} color="primary" />
                 <span className="example-label">메뉴</span>
               </div>
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:search" color="secondary" />
+                <StyledButton onlyIcon icon={SearchIcon} color="secondary" />
                 <span className="example-label">검색</span>
               </div>
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:heart" color="error" />
+                <StyledButton onlyIcon icon={HeartIcon} color="error" />
                 <span className="example-label">하트 아이콘</span>
               </div>
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:star" color="warning" />
+                <StyledButton onlyIcon icon={StarIcon} color="warning" />
                 <span className="example-label">즐겨찾기</span>
               </div>
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:email" color="info" />
+                <StyledButton onlyIcon icon={EmailIcon} color="info" />
                 <span className="example-label">메일</span>
               </div>
               <div className="example-item">
-                <StyledButton onlyIcon icon="mdi:settings" color="dark" />
+                <StyledButton onlyIcon icon={SettingsIcon} color="dark" />
                 <span className="example-label">설정</span>
               </div>
             </div>

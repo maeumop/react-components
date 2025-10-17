@@ -1,4 +1,4 @@
-import { Icon } from '@iconify/react';
+import { ArrowBackRounded } from '@mui/icons-material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './style.scss';
@@ -15,7 +15,7 @@ const FloatingBackButton: React.FC = () => {
 
   return (
     <div className="floating-back-button" onClick={goBack}>
-      <Icon icon="mdi:arrow-left" width={24} height={24} />
+      <ArrowBackRounded sx={{ width: 24, height: 24 }} />
       <span className="button-text">목록으로</span>
     </div>
   );

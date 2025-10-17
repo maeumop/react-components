@@ -1,8 +1,28 @@
-import { Icon } from '@iconify/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './components.module.scss';
-// import StyledButton from '../components/StyledButton'; // 추후 React 변환 시 사용
+import {
+  Badge as BadgeIcon,
+  ArrowDropDown as DropMenuIcon,
+  TableChart as ListTableIcon,
+  Message as MessageBoxIcon,
+  Fullscreen as ModalIcon,
+  ViewList as PaginationIcon,
+  Refresh as SpinnerIcon,
+  CheckBox as StatusSelectorIcon,
+  SmartButton as StyledButtonIcon,
+  Tab as TabsIcon,
+  Notifications as ToastIcon,
+  HelpOutline as TooltipIcon,
+  CheckBox as CheckButtonIcon,
+  CalendarMonth as DatePickerIcon,
+  FormatListNumbered as NumberFormatIcon,
+  FormatListBulleted as SelectBoxIcon,
+  ToggleOn as SwitchButtonIcon,
+  TextFields as TextFieldIcon,
+  Security as ValidateFormIcon,
+  Security as ValidateWrapIcon,
+} from '@mui/icons-material';
 
 const components = [
   {
@@ -10,143 +30,143 @@ const components = [
     path: '/components/badge',
     description: '알림, 상태, 카운터를 표시하는 뱃지 컴포넌트',
     color: 'primary',
-    icon: 'mdi:badge-account',
+    icon: BadgeIcon,
   },
   {
     name: 'DropMenu',
     path: '/components/dropmenu',
     description: '드롭다운 메뉴 컴포넌트',
     color: 'secondary',
-    icon: 'mdi:menu-down',
+    icon: DropMenuIcon,
   },
   {
     name: 'ListTable',
     path: '/components/listtable',
     description: '리스트 테이블 컴포넌트',
     color: 'warning',
-    icon: 'mdi:table',
+    icon: ListTableIcon,
   },
   {
     name: 'MessageBox',
     path: '/components/messagebox',
     description: '메시지 박스 컴포넌트',
     color: 'danger',
-    icon: 'mdi:message-text',
+    icon: MessageBoxIcon,
   },
   {
     name: 'Modal',
     path: '/components/modal',
     description: '모달 다이얼로그 컴포넌트',
     color: 'primary',
-    icon: 'mdi:window-maximize',
+    icon: ModalIcon,
   },
   {
     name: 'Pagination',
     path: '/components/pagination',
     description: '페이지네이션 컴포넌트',
     color: 'secondary',
-    icon: 'mdi:page-layout-body',
+    icon: PaginationIcon,
   },
   {
     name: 'Spinner',
     path: '/components/spinner',
     description: '로딩 스피너 컴포넌트',
     color: 'info',
-    icon: 'svg-spinners:ring-resize',
+    icon: SpinnerIcon,
   },
   {
     name: 'StatusSelector',
     path: '/components/statusselector',
     description: '상태 선택 컴포넌트',
     color: 'success',
-    icon: 'mdi:checkbox-multiple-marked',
+    icon: StatusSelectorIcon,
   },
   {
     name: 'StyledButton',
     path: '/components/buttons',
     description: '스타일된 버튼 컴포넌트',
     color: 'warning',
-    icon: 'mdi:button-cursor',
+    icon: StyledButtonIcon,
   },
   {
     name: 'Tabs',
     path: '/components/tabs',
     description: '탭 컴포넌트',
     color: 'danger',
-    icon: 'mdi:tab',
+    icon: TabsIcon,
   },
   {
     name: 'Toast',
     path: '/components/toast',
     description: '토스트 알림 컴포넌트',
     color: 'primary',
-    icon: 'mdi:message',
+    icon: ToastIcon,
   },
   {
     name: 'Tooltip',
     path: '/components/tooltip',
     description: '툴팁 컴포넌트',
     color: 'secondary',
-    icon: 'mdi:tooltip-text',
+    icon: TooltipIcon,
   },
 ];
 
 const formComponents = [
   {
-    name: 'CheckButton',
-    path: '/components/checkbutton',
-    description: '체크 버튼 컴포넌트',
-    color: 'info',
-    icon: 'mdi:checkbox-marked',
-  },
-  {
-    name: 'DatePicker',
-    path: '/components/datepicker',
-    description: '날짜 선택 컴포넌트',
-    color: 'success',
-    icon: 'mdi:calendar',
+    name: 'TextField',
+    path: '/components/textfield',
+    description: '텍스트 필드 컴포넌트',
+    color: 'secondary',
+    icon: TextFieldIcon,
   },
   {
     name: 'NumberFormat',
     path: '/components/numberformat',
     description: '숫자 포맷 컴포넌트',
     color: 'warning',
-    icon: 'mdi:format-list-numbered',
+    icon: NumberFormatIcon,
   },
   {
     name: 'SelectBox',
     path: '/components/selectbox',
     description: '선택 박스 컴포넌트',
     color: 'danger',
-    icon: 'mdi:format-list-bulleted',
+    icon: SelectBoxIcon,
+  },
+  {
+    name: 'CheckButton',
+    path: '/components/checkbutton',
+    description: '체크 버튼 컴포넌트',
+    color: 'info',
+    icon: CheckButtonIcon,
   },
   {
     name: 'SwitchButton',
     path: '/components/switchbutton',
     description: '스위치 버튼 컴포넌트',
     color: 'primary',
-    icon: 'mdi:toggle-switch',
+    icon: SwitchButtonIcon,
   },
   {
-    name: 'TextField',
-    path: '/components/textfield',
-    description: '텍스트 필드 컴포넌트',
-    color: 'secondary',
-    icon: 'mdi:text-box',
+    name: 'DatePicker',
+    path: '/components/datepicker',
+    description: '날짜 선택 컴포넌트',
+    color: 'success',
+    icon: DatePickerIcon,
   },
   {
     name: 'ValidateForm',
     path: '/components/validateform',
     description: '폼 검증 컴포넌트',
     color: 'info',
-    icon: 'mdi:shield-check',
+    icon: ValidateFormIcon,
   },
   {
     name: 'ValidateWrap',
     path: '/components/validatewrap',
     description: '검증 래퍼 컴포넌트',
     color: 'success',
-    icon: 'mdi:shield-check-outline',
+    icon: ValidateWrapIcon,
   },
 ];
 
@@ -174,7 +194,7 @@ const ComponentsPage: React.FC = () => {
                   onClick={() => navigate(component.path)}
                 >
                   <div className={styles['component-icon']}>
-                    <Icon icon={component.icon} width={32} height={32} />
+                    <component.icon sx={{ fontSize: 32 }} />
                   </div>
                   <div className={styles['component-info']}>
                     <h3>{component.name}</h3>
@@ -196,7 +216,7 @@ const ComponentsPage: React.FC = () => {
                   onClick={() => navigate(component.path)}
                 >
                   <div className={styles['component-icon']}>
-                    <Icon icon={component.icon} width={32} height={32} />
+                    <component.icon sx={{ fontSize: 32 }} />
                   </div>
                   <div className={styles['component-info']}>
                     <h3>{component.name}</h3>

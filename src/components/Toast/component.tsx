@@ -1,9 +1,14 @@
-import { Icon } from '@iconify/react/dist/iconify.js';
 import React, { createRef, useMemo, useRef, type RefObject } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { toastIcon } from './const';
 import './style.scss';
 import type { ToastItem, ToastListProps, ToastPosition } from './types';
+import {
+  CheckCircle as CheckCircleIcon,
+  Error as ErrorIcon,
+  Warning as WarningIcon,
+  Info as InfoIcon,
+  Close as CloseIcon,
+} from '@mui/icons-material';
 
 // position별로 그룹핑하는 함수
 function groupByPosition(toasts: ToastItem[]) {
@@ -34,6 +39,22 @@ const ToastList: React.FC<ToastListProps> = ({ toasts, remove }) => {
   // id별 ref를 저장하는 객체
   const nodeRefs = useRef<{ [key: string]: RefObject<HTMLDivElement> }>({});
 
+  // 아이콘 렌더링 함수
+  const renderIcon = (color: string) => {
+    switch (color) {
+      case 'success':
+        return <CheckCircleIcon className="toast-icon" />;
+      case 'error':
+        return <ErrorIcon className="toast-icon" />;
+      case 'warning':
+        return <WarningIcon className="toast-icon" />;
+      case 'info':
+        return <InfoIcon className="toast-icon" />;
+      default:
+        return <CheckCircleIcon className="toast-icon" />;
+    }
+  };
+
   return (
     <>
       {Object.entries(grouped).map(([position, list]) => {
@@ -57,14 +78,13 @@ const ToastList: React.FC<ToastListProps> = ({ toasts, remove }) => {
                     nodeRef={nodeRef}
                   >
                     <div className={`toast toast-${toast.color}`} ref={nodeRef}>
-                      <Icon icon={toastIcon[toast.color]} className="toast-icon" />
+                      {renderIcon(toast.color)}
                       <span className="toast-message">{toast.message}</span>
-                      <Icon
+                      <CloseIcon
                         className="toast-close"
                         onClick={() => remove(toast.id)}
                         aria-label="닫기"
                         role="button"
-                        icon="mdi:close"
                       />
                     </div>
                   </CSSTransition>

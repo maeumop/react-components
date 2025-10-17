@@ -8,10 +8,12 @@
 
 .check-button {
   .origin-check-button {
-    display: inline-block;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
 
-    &:not(&.block) {
-      margin-right: 1rem;
+    &.grid {
+      display: grid !important;
     }
 
     label {

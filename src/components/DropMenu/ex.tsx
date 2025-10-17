@@ -4,23 +4,31 @@ import { dropMenuColor, dropMenuPosition, dropMenuTransition } from './const';
 import './ex.scss';
 import DropMenu from './index';
 import type { DropMenuColor, DropMenuItem, DropMenuPosition, DropMenuTransition } from './types';
+import {
+  Person as AccountIcon,
+  Settings as CogIcon,
+  Logout as LogoutIcon,
+  Check as CheckIcon,
+  Close as CloseIcon,
+  Star as StarIcon,
+} from '@mui/icons-material';
 
 // 예제 데이터
 const menuItems: DropMenuItem[] = [
   {
     text: '프로필 보기',
     action: () => alert('프로필 보기 클릭'),
-    icon: 'mdi:account',
+    icon: AccountIcon,
   },
   {
     text: '설정',
     action: () => alert('설정 클릭'),
-    icon: 'mdi:cog',
+    icon: CogIcon,
   },
   {
     text: '로그아웃',
     action: () => alert('로그아웃 클릭'),
-    icon: 'mdi:logout',
+    icon: LogoutIcon,
   },
 ];
 
@@ -28,18 +36,18 @@ const disabledMenuItems: DropMenuItem[] = [
   {
     text: '활성 메뉴',
     action: () => alert('활성 메뉴 클릭'),
-    icon: 'mdi:check',
+    icon: CheckIcon,
   },
   {
     text: '비활성 메뉴',
     action: () => alert('이 메뉴는 비활성화되어 있습니다'),
-    icon: 'mdi:close',
+    icon: CloseIcon,
     disabled: true,
   },
   {
     text: '다른 메뉴',
     action: () => alert('다른 메뉴 클릭'),
-    icon: 'mdi:star',
+    icon: StarIcon,
   },
 ];
 

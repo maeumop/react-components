@@ -1,32 +1,32 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
-import type { Ref } from 'react';
+import React, { forwardRef, useImperativeHandle, useMemo } from 'react';
 import type { CheckButtonModel, CheckButtonProps } from './types';
 import { useCheckButton } from './hook';
 import CheckBox from './checkBox';
 import './style.scss';
 
-const CheckButtonBase = ({
-  items = [],
-  name,
-  value,
-  type = 'checkbox',
-  maxLength = 0,
-  validate = [],
-  errorMessage = '',
-  button = false,
-  block = false,
-  color = 'primary',
-  disabled = false,
-  label,
-  required = false,
-  lineLimit = 0,
-  all = false,
-  onChange,
-  onIndexChange,
-  onAfterChange,
-  className,
-  ref,
-}: CheckButtonProps & { ref: Ref<CheckButtonModel> }) => {
+const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) => {
+  const {
+    items = [],
+    name,
+    value,
+    type = 'checkbox',
+    maxLength = 0,
+    validate = [],
+    errorMessage = '',
+    button = false,
+    block = false,
+    color = 'primary',
+    disabled = false,
+    label,
+    required = false,
+    lineLimit = 0,
+    all = false,
+    onChange,
+    onIndexChange,
+    onAfterChange,
+    className,
+  } = props;
+
   const {
     check,
     resetForm,
@@ -53,7 +53,33 @@ const CheckButtonBase = ({
     onIndexChange,
     onAfterChange,
     className,
+    lineLimit,
   });
+
+  const checkBoxProps = useMemo(
+    () => ({
+      name,
+      disabled,
+      type,
+      color,
+      parentValue: value,
+      lineLimit,
+      checkButtonStyleClass,
+      isItemSelected,
+      handleItemChange,
+    }),
+    [
+      name,
+      disabled,
+      type,
+      color,
+      value,
+      lineLimit,
+      checkButtonStyleClass,
+      isItemSelected,
+      handleItemChange,
+    ],
+  );
 
   useImperativeHandle(
     ref,
@@ -75,9 +101,13 @@ const CheckButtonBase = ({
           </label>
         </div>
       )}
-      {button ? (
-        <div className={checkButtonStyleClass}>
-          {processedItems.map(({ text, value: v }, i) => (
+
+      <div
+        className={checkButtonStyleClass}
+        style={{ gridTemplateColumns: `repeat(${lineLimit}, 1fr)` }}
+      >
+        {processedItems.map(({ text, value: v }, i) => {
+          return button ? (
             <React.Fragment key={`${name}-keyword-${i}`}>
               <input
                 type="checkbox"
@@ -95,37 +125,23 @@ const CheckButtonBase = ({
                 {text}
               </label>
             </React.Fragment>
-          ))}
-        </div>
-      ) : (
-        processedItems.map(({ text, value: v }, i) => (
-          <CheckBox
-            key={`${name}-check-button-${i}`}
-            name={name}
-            disabled={disabled}
-            type={type}
-            color={color}
-            text={text}
-            parentValue={value}
-            value={v}
-            index={i}
-            lineLimit={lineLimit}
-            checkButtonStyleClass={checkButtonStyleClass}
-            isItemSelected={isItemSelected}
-            handleItemChange={handleItemChange}
-          />
-        ))
-      )}
+          ) : (
+            <CheckBox
+              key={`${name}-check-button-${i}`}
+              text={text}
+              value={v}
+              index={i}
+              {...checkBoxProps}
+            />
+          );
+        })}
+      </div>
 
       {message && <div className={feedbackStatus}>{message}</div>}
     </div>
   );
-};
-
-const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) => {
-  return <CheckButtonBase {...props} ref={ref} />;
 });
 
-CheckButton.displayName = 'CheckButton';
+CheckButton.displayName = 'CheckButtonBase';
 
 export default React.memo(CheckButton);

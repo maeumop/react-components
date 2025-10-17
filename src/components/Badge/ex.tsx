@@ -1,9 +1,17 @@
 import FloatingBackButton from '@/views/FloatingBackButton';
-import { Icon } from '@iconify/react';
 import React from 'react';
 import { badgePosition } from './const';
 import './ex.scss';
 import Badge from './index';
+import {
+  Notifications as BellIcon,
+  Email as EmailIcon,
+  Favorite as HeartIcon,
+  Person as UserIcon,
+  GitHub as GitHubIcon,
+  Star as StarIcon,
+  Inventory as PackageIcon,
+} from '@mui/icons-material';
 
 // Badge 예제 페이지
 const BadgeExample: React.FC = () => {
@@ -122,31 +130,31 @@ const BadgeExample: React.FC = () => {
                 <span className="example-label">큰 뱃지</span>
               </div>
               <div className="example-item">
-                <Badge size="large" icon="mdi:bell" color="warning">
+                <Badge size="large" icon={BellIcon} color="warning">
                   <button className="demo-button">알림</button>
                 </Badge>
                 <span className="example-label">벨 아이콘</span>
               </div>
               <div className="example-item">
-                <Badge size="large" icon="mdi:email" color="info">
+                <Badge size="large" icon={EmailIcon} color="info">
                   <button className="demo-button">메일</button>
                 </Badge>
                 <span className="example-label">메일 아이콘</span>
               </div>
               <div className="example-item">
-                <Badge size="large" icon="mdi:heart" color="error">
+                <Badge size="large" icon={HeartIcon} color="error">
                   <button className="demo-button">Error</button>
                 </Badge>
                 <span className="example-label">Error</span>
               </div>
               <div className="example-item">
-                <Badge size="large" icon="heroicons:user" color="success">
+                <Badge size="large" icon={UserIcon} color="success">
                   <button className="demo-button">사용자</button>
                 </Badge>
                 <span className="example-label">사용자 아이콘</span>
               </div>
               <div className="example-item">
-                <Badge size="large" icon="fa:github" color="dark">
+                <Badge size="large" icon={GitHubIcon} color="dark">
                   <button className="demo-button">GitHub</button>
                 </Badge>
                 <span className="example-label">GitHub 아이콘</span>
@@ -160,7 +168,7 @@ const BadgeExample: React.FC = () => {
               <div className="example-item">
                 <Badge text="3" color="error" position={badgePosition.bottomRight}>
                   <div className="notification-item">
-                    <Icon icon="mdi:email" width={24} height={24} />
+                    <EmailIcon sx={{ width: 24, height: 24 }} />
                     <span>메시지</span>
                   </div>
                 </Badge>
@@ -169,7 +177,7 @@ const BadgeExample: React.FC = () => {
               <div className="example-item">
                 <Badge text="N" color="success" position={badgePosition.right}>
                   <div className="product-item">
-                    <Icon icon="mdi:package" width={24} height={24} />
+                    <PackageIcon sx={{ width: 24, height: 24 }} />
                     <span>상품</span>
                   </div>
                 </Badge>
@@ -177,13 +185,13 @@ const BadgeExample: React.FC = () => {
               </div>
               <div className="example-item">
                 <Badge
-                  icon="mdi:star"
+                  icon={StarIcon}
                   size="large"
                   color="warning"
                   position={badgePosition.bottomLeft}
                 >
                   <div className="favorite-item">
-                    <Icon icon="mdi:heart" width={24} height={24} />
+                    <HeartIcon sx={{ width: 24, height: 24 }} />
                     <span>즐겨찾기</span>
                   </div>
                 </Badge>

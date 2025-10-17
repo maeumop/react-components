@@ -1,9 +1,9 @@
-import { Icon } from '@iconify/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { statusSelectorColor, statusSelectorDefaultOptions } from './const';
 import './style.scss';
 import type { StatusSelectorProps } from './types';
+import { KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
 
 // StatusSelector 컴포넌트
 const StatusSelector: React.FC<StatusSelectorProps> = ({
@@ -215,10 +215,8 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
           {currentText}
         </span>
         {!readOnly && (
-          <Icon
-            icon="mdi:chevron-down"
-            width={12}
-            height={12}
+          <ChevronDownIcon
+            sx={{ width: 12, height: 12 }}
             className={isShow ? 'rotate' : ''}
             aria-hidden="true"
           />

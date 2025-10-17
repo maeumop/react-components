@@ -1,8 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
-import { Icon } from '@iconify/react';
 import type { DateControllerProps } from '../types';
 import { Selector } from '../Selector';
 import { useDatePickerStore } from '../store';
+import {
+  KeyboardDoubleArrowLeft as ChevronDoubleLeftIcon,
+  KeyboardArrowLeft as ChevronLeftIcon,
+  KeyboardArrowRight as ChevronRightIcon,
+  KeyboardDoubleArrowRight as ChevronDoubleRightIcon,
+} from '@mui/icons-material';
 
 const DateControllerBase = (props: DateControllerProps) => {
   const store = useDatePickerStore();
@@ -142,7 +147,7 @@ const DateControllerBase = (props: DateControllerProps) => {
         onKeyDown={e => handleKeydown(e, 'year', 'prev')}
         tabIndex={0}
       >
-        <Icon icon="mdi:chevron-double-left" />
+        <ChevronDoubleLeftIcon />
       </button>
 
       {/*  월 이전 버튼 */}
@@ -154,7 +159,7 @@ const DateControllerBase = (props: DateControllerProps) => {
         onKeyDown={e => handleKeydown(e, 'month', 'prev')}
         tabIndex={0}
       >
-        <Icon icon="mdi:chevron-left" />
+        <ChevronLeftIcon />
       </button>
 
       {/*  연도/월 선택기 */}
@@ -172,7 +177,7 @@ const DateControllerBase = (props: DateControllerProps) => {
         onKeyDown={e => handleKeydown(e, 'month', 'next')}
         tabIndex={0}
       >
-        <Icon icon="mdi:chevron-right" />
+        <ChevronRightIcon />
       </button>
 
       {/* 연도 다음 버튼 */}
@@ -184,7 +189,7 @@ const DateControllerBase = (props: DateControllerProps) => {
         onKeyDown={e => handleKeydown(e, 'year', 'next')}
         tabIndex={0}
       >
-        <Icon icon="mdi:chevron-double-right" />
+        <ChevronDoubleRightIcon />
       </button>
     </div>
   );

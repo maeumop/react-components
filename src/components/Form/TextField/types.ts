@@ -1,3 +1,4 @@
+import type { IconComponent } from '@/components/types';
 import type { RuleFunc } from '../types';
 import { textFieldType } from './const';
 
@@ -24,7 +25,7 @@ export interface TextFieldProps {
   isCounting?: boolean;
   required?: boolean;
   hideMessage?: boolean;
-  icon?: string;
+  icon?: IconComponent;
   iconLeft?: boolean;
   iconAction?: (event: React.MouseEvent) => void;
   clearable?: boolean;
