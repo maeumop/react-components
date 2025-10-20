@@ -27,7 +27,7 @@ const DropMenu = ({
   // 트랜지션 클래스명
   const transitionName = `${transition}-${position}`;
 
-  const componentHelper = useComponentHelper();
+  const componentHelper = useRef(useComponentHelper());
 
   // 메뉴 위치 계산
   const setPosition = useCallback(() => {
@@ -35,14 +35,14 @@ const DropMenu = ({
 
     const rect = dropMenuRef.current.getBoundingClientRect();
 
-    const style = componentHelper.calcLayerPosition({
+    const { style } = componentHelper.current.calcLayerPosition({
       parent: dropMenuRef.current,
       layer: menuRef.current as HTMLElement,
       position,
       width: width ?? rect.width,
     });
 
-    setLayerStyle(style as React.CSSProperties);
+    setLayerStyle(prev => ({ ...prev, ...style }));
   }, [position, width]);
 
   // 메뉴 열기

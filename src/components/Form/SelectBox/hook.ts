@@ -3,6 +3,7 @@ import { useValidation } from '../hooks';
 import type { OptionItem, SelectBoxProps } from './types';
 import type { RuleFunc } from '../types';
 import { useComponentHelper } from '@/components/helper';
+import { layerPosition } from '@/components/const';
 
 // 스크롤 가능한 상위 요소들을 찾기
 const findScrollableParents = (element: HTMLElement): HTMLElement[] => {
@@ -85,12 +86,8 @@ export const useSelectBox = (props: SelectBoxProps) => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   // 레이어 위치 스타일
-  const [layerPositionStyle, setLayerPositionStyle] = useState<React.CSSProperties>({
-    top: '',
-    left: '',
-    bottom: '',
-    width: '',
-  });
+  const [layerPositionStyle, setLayerPositionStyle] = useState<React.CSSProperties>({});
+  const [position, setPosition] = useState<'top' | 'bottom'>('bottom');
 
   // 인라인 스타일 메모이제이션
   const containerStyle = useMemo<React.CSSProperties>(() => (width ? { width } : {}), [width]);
@@ -345,29 +342,27 @@ export const useSelectBox = (props: SelectBoxProps) => {
     [multiple, isSelectAll, optionList, btnAccept, updateValue],
   );
 
-  const componentHelper = useComponentHelper();
+  // componentHelper를 useRef로 안정화
+  const componentHelperRef = useRef(useComponentHelper());
 
+  // option list layer 포지션 설정
   const setLayerPosition = useCallback((): void => {
     const rect: DOMRect | undefined = selectBoxRef.current?.getBoundingClientRect();
-    const windowHeight: number = window.innerHeight;
 
     if (!rect) return;
 
-    const shouldShowBottom = windowHeight / 2 < rect.top;
-    let position: 'top' | 'bottom' = 'bottom';
-
-    if (shouldShowBottom) {
-      position = 'top';
-    }
-
-    const style = componentHelper.calcLayerPosition({
+    // position 계산
+    const { style, position } = componentHelperRef.current.calcLayerPosition({
       parent: selectBoxRef.current as HTMLElement,
       layer: optionContainerRef.current as HTMLElement,
-      position,
+      position: layerPosition.bottom,
       width: rect.width,
+      autoPosition: true,
     });
 
-    setLayerPositionStyle(style);
+    // position 상태 업데이트
+    setPosition(() => position as 'top' | 'bottom');
+    setLayerPositionStyle(() => style);
   }, []);
 
   const toggleOption = useCallback((): void => {
@@ -394,7 +389,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         selected?.scrollIntoView();
       });
     }
-  }, [disabled, readonly, searchable, isShowOption, setLayerPosition]);
+  }, [disabled, readonly, searchable, isShowOption]);
 
   // 적용 버튼 클릭 이벤트 핸들러
   const accept = useCallback(
@@ -426,7 +421,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     (evt: MouseEvent): void => {
       const target = evt.target as HTMLElement;
 
-      if (!isShowOption || !mainRef.current) {
+      if (!mainRef.current) {
         return;
       }
 
@@ -447,7 +442,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
 
       setIsShowOption(false);
     },
-    [btnAccept, isShowOption, mainRef, noneAccept],
+    [btnAccept, noneAccept],
   );
 
   // Intersection Observer를 사용한 옵션 레이어 위치 감지 (개선된 버전)
@@ -460,12 +455,10 @@ export const useSelectBox = (props: SelectBoxProps) => {
       entries => {
         entries.forEach(entry => {
           // 옵션 레이어가 화면에서 벗어나거나 충분히 보이지 않을 때만 닫기
-          if (!entry.isIntersecting && isShowOption) {
+          if (!entry.isIntersecting) {
             // 지연 시간을 늘려서 옵션 레이어가 완전히 렌더링될 시간을 줌
             scrollTimeoutRef.current = window.setTimeout(() => {
-              if (isShowOption) {
-                setIsShowOption(false);
-              }
+              setIsShowOption(false);
             }, 150);
           } else if (entry.isIntersecting && scrollTimeoutRef.current) {
             // 다시 보이면 타이머 취소
@@ -482,7 +475,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     );
 
     scrollObserverRef.current.observe(optionListRef.current);
-  }, [isShowOption, optionListRef]);
+  }, []);
 
   // Resize Observer를 사용한 레이아웃 변경 감지
   const setupResizeObserver = useCallback((): void => {
@@ -490,31 +483,21 @@ export const useSelectBox = (props: SelectBoxProps) => {
       return;
     }
 
-    resizeObserverRef.current = new ResizeObserver(() => {
-      if (isShowOption) {
-        // 레이아웃 변경 시 옵션 레이어 위치 재계산 (지연 적용)
-        setTimeout(() => {
-          setLayerPosition();
-        }, 50);
-      }
-    });
-
-    resizeObserverRef.current.observe(mainRef.current);
-  }, [isShowOption, setLayerPosition]);
+    // ResizeObserver를 사용하지 않음 - 불필요한 리렌더링 방지
+    // option list가 열릴 때 한 번만 위치를 계산하는 것으로 충분
+    // 만약 레이아웃 변경 시 위치 재계산이 필요하면 window resize 이벤트 사용 고려
+  }, []);
 
   // 최적화된 스크롤 이벤트 설정 (Intersection Observer 우선 사용)
   const setupOptimizedScrollEvents = useCallback((): void => {
     // window 스크롤 이벤트 등록 (Intersection Observer 보조 역할)
     const scrollListener = () => {
-      if (isShowOption) {
-        // 스크롤 시 옵션 레이어 닫기 (지연 시간 증가)
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
-
-        setIsShowOption(false);
-        setLayerPosition();
+      // 스크롤 시 옵션 레이어 닫기
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
       }
+
+      setIsShowOption(false);
     };
 
     window.addEventListener('scroll', scrollListener, { passive: true });
@@ -529,7 +512,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         scrollEventListenersRef.current.push({ element: parent, listener: scrollListener });
       });
     }
-  }, [isShowOption, setLayerPosition]);
+  }, []);
 
   // value 값 초기화
   const clearValue = useCallback(
@@ -576,10 +559,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
     (evt: KeyboardEvent): void => {
       // INPUT 태그에서 입력 중일 때는 이벤트 처리하지 않음
       if ((evt.target as HTMLElement).tagName === 'INPUT') {
-        return;
-      }
-
-      if (!isShowOption) {
         return;
       }
 
@@ -643,7 +622,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         }
       }
     },
-    [isShowOption, selectedKeyIndex, optionList, selectAll, multiple, searchable, selectOption],
+    [selectedKeyIndex, optionList, selectAll, multiple, searchable, selectOption],
   );
 
   // escape 키 이벤트 핸들러
@@ -651,7 +630,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     (event: React.KeyboardEvent<HTMLDivElement>): void => {
       const code = event.code.toLowerCase();
 
-      if (isShowOption && code === 'escape') {
+      if (code === 'escape') {
         setIsShowOption(false);
         noneAccept();
 
@@ -662,7 +641,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         }
       }
     },
-    [isShowOption, noneAccept],
+    [noneAccept],
   );
 
   // useEffect
@@ -773,17 +752,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         scrollTimeoutRef.current = null;
       }
     };
-  }, [
-    isShowOption,
-    blurValidate,
-    selectedValue,
-    outSideClickEvent,
-    onArrowKeyHandler,
-    setupIntersectionObserver,
-    setupResizeObserver,
-    setupOptimizedScrollEvents,
-    check,
-  ]);
+  }, [isShowOption, blurValidate, selectedValue, outSideClickEvent, onArrowKeyHandler, check]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -857,9 +826,10 @@ export const useSelectBox = (props: SelectBoxProps) => {
     isOptionFocused,
     noneAccept,
     outSideClickEvent,
-    calculateLayerPosition: setLayerPosition,
+    setLayerPosition,
     feedbackStatus,
     controllerClassName,
     removeSelected,
+    position,
   };
 };

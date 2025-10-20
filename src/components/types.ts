@@ -1,6 +1,6 @@
 import type { SvgIconProps } from '@mui/material/SvgIcon';
 import { layerPosition, transitionOrigin, transitionType } from './const';
-import type { Transition, Variant } from 'framer-motion';
+import type { TargetAndTransition, Transition } from 'framer-motion';
 
 // selectbox, checkbox 사용 옵션
 export interface OptionItem {
@@ -28,9 +28,9 @@ export interface UseLayerPositionProps {
   autoPosition?: boolean;
 }
 
-export interface DropMenuVariants {
-  initial: Variant;
-  animate: Variant;
-  exit: Variant;
+export interface TransitionVariants {
+  initial: TargetAndTransition;
+  animate: TargetAndTransition;
+  exit: TargetAndTransition;
   transition: Transition;
 }

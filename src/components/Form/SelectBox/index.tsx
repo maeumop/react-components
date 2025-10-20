@@ -1,12 +1,14 @@
-import React, { forwardRef, useCallback, useImperativeHandle } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { OptionList } from './optionList';
 import type { SelectBoxModel, SelectBoxProps } from './types';
 import { Close as CloseIcon, KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
 import { useSelectBox } from './hook.ts';
 import { RenderSelectedText } from './renderLabelText.tsx';
 import './style.scss';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion';
+import { useComponentHelper } from '@/components/helper.ts';
+import type { LayerPositionType } from '@/components/types.ts';
+import { transitionType } from '@/components/const.ts';
 
 const SelectBox = React.memo(
   forwardRef<SelectBoxModel, SelectBoxProps>((props, ref) => {
@@ -46,6 +48,7 @@ const SelectBox = React.memo(
       iconClassName,
       isShowOption,
       feedbackStatus,
+      position,
     } = useSelectBox(props);
 
     // expose 메서드
@@ -69,16 +72,32 @@ const SelectBox = React.memo(
       setErrorTransition(false);
     }, [setErrorTransition]);
 
-    const selectedTextProps = {
-      multiple,
-      getShowText,
-      labelText,
-      isShort,
-      inLabel,
-      label,
-      placeholder,
-      removeSelected,
-    };
+    const selectedTextProps = useMemo(
+      () => ({
+        multiple,
+        getShowText,
+        labelText,
+        isShort,
+        inLabel,
+        label,
+        placeholder,
+        removeSelected,
+      }),
+      [multiple, getShowText, labelText, isShort, inLabel, label, placeholder, removeSelected],
+    );
+
+    // componentHelper를 useRef로 안정화
+    const componentHelperRef = useRef(useComponentHelper());
+
+    // variants를 useMemo로 메모이제이션
+    const variants = useMemo(
+      () =>
+        componentHelperRef.current.getTransitionVariant(
+          transitionType.slide,
+          position as LayerPositionType,
+        ),
+      [position],
+    );
 
     return (
       <div
@@ -112,31 +131,20 @@ const SelectBox = React.memo(
           <ChevronDownIcon className={iconClassName} sx={{ width: 20, height: 20 }} />
 
           {/* 옵션 레이어 */}
-          {/* <CSSTransition
-            in={isShowOption}
-            timeout={200}
-            classNames="options-view"
-            unmountOnExit
-            nodeRef={optionContainerRef}
-            onEnter={handleTransitionEnter}
-            onExited={handleTransitionExited}
-          > */}
-
           <AnimatePresence onExitComplete={handleTransitionExited}>
             {isShowOption && (
               <motion.div
                 style={layerPositionStyle}
                 ref={optionContainerRef}
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.15, ease: 'easeInOut' }}
+                initial={variants.initial as TargetAndTransition}
+                animate={variants.animate as TargetAndTransition}
+                exit={variants.exit as TargetAndTransition}
+                transition={variants.transition}
               >
                 <OptionList {...optionListProps} />
               </motion.div>
             )}
           </AnimatePresence>
-          {/* </CSSTransition> */}
         </div>
 
         {/* 에러 메시지 */}

@@ -16,6 +16,8 @@ import type { DatePickerModel, DatePickerProps, ToggleButtonType } from './types
 import { AnimatePresence, motion } from 'framer-motion';
 import './style.scss';
 import { useComponentHelper } from '@/components/helper';
+import { transitionType } from '@/components/const';
+import type { LayerPositionType } from '@/components/types';
 
 const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref) => {
   const {
@@ -110,34 +112,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
 
     return ['', ''];
   }, [placeholder]);
-
-  const componentHelper = useComponentHelper();
-  const [positionStyle, setPositionStyle] = useState<React.CSSProperties>({});
-
-  /**
-   * 배치된 위치에 따라 달력이 보여지는 위치와 방향을 변경
-   */
-  const toggleCalendar = useCallback((): void => {
-    if (isShow && !inputAreaRef.current) return;
-
-    const style = componentHelper.calcLayerPosition({
-      parent: inputAreaRef.current as HTMLElement,
-      layer: pickerRef.current as HTMLElement,
-      position: 'bottom',
-    });
-
-    setPositionStyle(style);
-
-    if (!readonly && !disabled) {
-      // 달력을 열 때 현재 선택된 날짜를 임시 저장
-      if (!isShow && range) {
-        setTempStartDate(startDate);
-        setTempEndDate(endDate);
-      }
-
-      setIsShow(prev => !prev);
-    }
-  }, [readonly, disabled, range, startDate, endDate, isShow]);
 
   /**
    * FormValidate 컴포넌트롤 통한 validation check
@@ -559,17 +533,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     accept();
   }, [accept]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        toggleCalendar();
-      } else if (e.key === 'Escape') {
-        setIsShow(false);
-      }
-    },
-    [toggleCalendar],
-  );
-
   const handleTransitionExited = useCallback(() => {
     if (blurValidate) {
       check();
@@ -598,6 +561,65 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   const selectDateClassName = useMemo(
     () => ['select-date', selectedError ? 'selected-error' : ''].join(' '),
     [selectedError],
+  );
+
+  const componentHelper = useRef(useComponentHelper());
+  const [positionStyle, setPositionStyle] = useState<React.CSSProperties>({});
+  const [position, setPosition] = useState<string>('bottom');
+
+  /**
+   * 배치된 위치에 따라 달력이 보여지는 위치와 방향을 변경
+   */
+  const toggleCalendar = useCallback((): void => {
+    if (isShow && !inputAreaRef.current) return;
+
+    const rect: DOMRect = inputAreaRef.current!.getBoundingClientRect();
+    const windowHeight: number = window.innerHeight;
+
+    const calculatedPosition: 'top' | 'bottom' = windowHeight / 2 < rect.top ? 'top' : 'bottom';
+
+    const { style, position } = componentHelper.current.calcLayerPosition({
+      parent: inputAreaRef.current as HTMLElement,
+      layer: pickerRef.current as HTMLElement,
+      position: calculatedPosition,
+      autoPosition: true,
+    });
+
+    style.transformOrigin = position === 'bottom' ? 'top left' : 'bottom left';
+
+    setPosition(() => position);
+    setPositionStyle(() => style);
+
+    if (!readonly && !disabled) {
+      // 달력을 열 때 현재 선택된 날짜를 임시 저장
+      if (!isShow && range) {
+        setTempStartDate(() => startDate);
+        setTempEndDate(() => endDate);
+      }
+
+      setIsShow(prev => !prev);
+    }
+  }, [readonly, disabled, range, startDate, endDate]);
+
+  // componentHelper를 useRef로 안정화
+  const componentHelperRef = useRef(useComponentHelper());
+
+  const variants = useMemo(() => {
+    return componentHelperRef.current.getTransitionVariant(
+      transitionType.scale,
+      position as LayerPositionType,
+    );
+  }, [position]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        toggleCalendar();
+      } else if (e.key === 'Escape') {
+        setIsShow(false);
+      }
+    },
+    [toggleCalendar],
   );
 
   useImperativeHandle(ref, () => ({
@@ -656,13 +678,10 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
                 ref={pickerRef}
                 className="picker-popup"
                 style={positionStyle}
-                initial={{ opacity: 0, transform: 'translateY(-10px) scale(0.95)' }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{
-                  duration: 0.15,
-                  ease: 'easeInOut',
-                }}
+                initial={variants.initial}
+                animate={variants.animate}
+                exit={variants.exit}
+                transition={variants.transition}
               >
                 {range && (
                   <div className="search-date" role="group" aria-label="빠른 날짜 선택">

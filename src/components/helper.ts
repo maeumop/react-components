@@ -1,6 +1,6 @@
 import type { Transition } from 'framer-motion';
 import type {
-  DropMenuVariants,
+  TransitionVariants,
   LayerPositionType,
   TransitionType,
   UseLayerPositionProps,
@@ -15,7 +15,7 @@ class ComponentHelper {
     width,
     height,
     autoPosition = false,
-  }: UseLayerPositionProps): React.CSSProperties {
+  }: UseLayerPositionProps): { style: React.CSSProperties; position: LayerPositionType } {
     const windowHeight: number = window.innerHeight;
     const windowWidth: number = window.innerWidth;
     const rect: DOMRect = parent.getBoundingClientRect();
@@ -74,7 +74,7 @@ class ComponentHelper {
         break;
     }
 
-    return style;
+    return { style, position: pos };
   }
 
   /**
@@ -88,7 +88,7 @@ class ComponentHelper {
   public getTransitionVariant(
     transitionType: TransitionType,
     position: LayerPositionType,
-  ): DropMenuVariants {
+  ): TransitionVariants {
     // position에 따른 방향 설정
     const directions = {
       top: { y: '1em', x: 0 },
@@ -130,9 +130,9 @@ class ComponentHelper {
 
       case 'scale':
         return {
-          initial: { opacity: 0, scale: 0.5 },
+          initial: { opacity: 0, scale: 0.7 },
           animate: { opacity: 1, scale: 1 },
-          exit: { opacity: 0, scale: 0.5 },
+          exit: { opacity: 0, scale: 0.7 },
           transition: transitionConfigs[transitionType],
         };
 
@@ -142,14 +142,14 @@ class ComponentHelper {
             opacity: 0,
             x: dir.x !== 0 ? `${dir.x === '1em' ? '2em' : '-2em'}` : 0,
             y: dir.y !== 0 ? `${dir.y === '1em' ? '2em' : '-2em'}` : 0,
-            scale: 0.8,
+            scale: 0.7,
           },
           animate: { opacity: 1, x: 0, y: 0, scale: 1 },
           exit: {
             opacity: 0,
             x: dir.x !== 0 ? `${dir.x === '1em' ? '2em' : '-2em'}` : 0,
             y: dir.y !== 0 ? `${dir.y === '1em' ? '2em' : '-2em'}` : 0,
-            scale: 0.8,
+            scale: 0.7,
           },
           transition: transitionConfigs.bounce,
         };
