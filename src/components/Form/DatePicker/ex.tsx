@@ -1,31 +1,56 @@
 import React, { useState } from 'react';
-import { DatePicker } from './index';
+import DatePicker from './index';
 import FloatingBackButton from '@/views/FloatingBackButton';
 import type { RuleFunc } from '../types';
 import './ex.scss';
 
 const DatePickerExamples: React.FC = () => {
-  // 기본 선택
-  const [basicDate, setBasicDate] = useState<string>('');
-  const [rangeDate, setRangeDate] = useState<string[]>(['', '']);
+  // 기본 선택 섹션
+  const [basicDate1, setBasicDate1] = useState<string>('');
+  const [rangeDate1, setRangeDate1] = useState<string[]>(['', '']);
 
-  // 유효성 검사
+  // 라벨과 스타일 섹션
+  const [labelDate, setLabelDate] = useState<string>('');
+  const [maxRangeDate, setMaxRangeDate] = useState<string[]>(['', '']);
+
+  // 유효성 검사 섹션
   const [validateDate, setValidateDate] = useState<string>('');
   const [validateRange, setValidateRange] = useState<string[]>(['', '']);
 
-  // 에러 메시지
+  // 상태별 표시 섹션
   const [errorDate, setErrorDate] = useState<string>('');
+  const [disabledDate, setDisabledDate] = useState<string>('');
+
+  // 연도 범위 설정 섹션
+  const [yearRangeDate1, setYearRangeDate1] = useState<string>('');
+  const [yearRangeDate2, setYearRangeDate2] = useState<string[]>(['', '']);
+
+  // 구분자 설정 섹션
+  const [separatorDate1, setSeparatorDate1] = useState<string>('');
+  const [separatorDate2, setSeparatorDate2] = useState<string>('');
 
   // 타입 안전한 핸들러 함수들
-  const handleBasicDateChange = (value: string | string[]) => {
+  const handleBasicDate1Change = (value: string | string[]) => {
     if (typeof value === 'string') {
-      setBasicDate(value);
+      setBasicDate1(value);
     }
   };
 
-  const handleRangeDateChange = (value: string | string[]) => {
+  const handleRangeDate1Change = (value: string | string[]) => {
     if (Array.isArray(value)) {
-      setRangeDate(value);
+      setRangeDate1(value);
+    }
+  };
+
+  const handleLabelDateChange = (value: string | string[]) => {
+    if (typeof value === 'string') {
+      setLabelDate(value);
+    }
+  };
+
+  const handleMaxRangeDateChange = (value: string | string[]) => {
+    if (Array.isArray(value)) {
+      setMaxRangeDate(value);
     }
   };
 
@@ -44,6 +69,36 @@ const DatePickerExamples: React.FC = () => {
   const handleErrorDateChange = (value: string | string[]) => {
     if (typeof value === 'string') {
       setErrorDate(value);
+    }
+  };
+
+  const handleDisabledDateChange = (value: string | string[]) => {
+    if (typeof value === 'string') {
+      setDisabledDate(value);
+    }
+  };
+
+  const handleYearRangeDate1Change = (value: string | string[]) => {
+    if (typeof value === 'string') {
+      setYearRangeDate1(value);
+    }
+  };
+
+  const handleYearRangeDate2Change = (value: string | string[]) => {
+    if (Array.isArray(value)) {
+      setYearRangeDate2(value);
+    }
+  };
+
+  const handleSeparatorDate1Change = (value: string | string[]) => {
+    if (typeof value === 'string') {
+      setSeparatorDate1(value);
+    }
+  };
+
+  const handleSeparatorDate2Change = (value: string | string[]) => {
+    if (typeof value === 'string') {
+      setSeparatorDate2(value);
     }
   };
 
@@ -108,9 +163,9 @@ const DatePickerExamples: React.FC = () => {
             <div className="example-grid">
               <div className="example-item">
                 <DatePicker
-                  value={basicDate}
-                  onChange={handleBasicDateChange}
-                  onUpdateSet={handleBasicDateChange}
+                  value={basicDate1}
+                  onChange={handleBasicDate1Change}
+                  onUpdateSet={handleBasicDate1Change}
                   placeholder="날짜를 선택하세요"
                   block
                 />
@@ -118,9 +173,9 @@ const DatePickerExamples: React.FC = () => {
               </div>
               <div className="example-item">
                 <DatePicker
-                  value={rangeDate}
-                  onChange={handleRangeDateChange}
-                  onUpdateSet={handleRangeDateChange}
+                  value={rangeDate1}
+                  onChange={handleRangeDate1Change}
+                  onUpdateSet={handleRangeDate1Change}
                   range
                   placeholder={['시작일', '종료일']}
                   block
@@ -136,9 +191,9 @@ const DatePickerExamples: React.FC = () => {
             <div className="example-grid">
               <div className="example-item">
                 <DatePicker
-                  value={basicDate}
-                  onChange={handleBasicDateChange}
-                  onUpdateSet={handleBasicDateChange}
+                  value={labelDate}
+                  onChange={handleLabelDateChange}
+                  onUpdateSet={handleLabelDateChange}
                   label="시작일"
                   placeholder="시작일을 선택하세요"
                   required
@@ -148,9 +203,9 @@ const DatePickerExamples: React.FC = () => {
               </div>
               <div className="example-item">
                 <DatePicker
-                  value={rangeDate}
-                  onChange={handleRangeDateChange}
-                  onUpdateSet={handleRangeDateChange}
+                  value={maxRangeDate}
+                  onChange={handleMaxRangeDateChange}
+                  onUpdateSet={handleMaxRangeDateChange}
                   range
                   placeholder={['시작일', '종료일']}
                   maxRange={7}
@@ -209,9 +264,9 @@ const DatePickerExamples: React.FC = () => {
               </div>
               <div className="example-item">
                 <DatePicker
-                  value={basicDate}
-                  onChange={handleBasicDateChange}
-                  onUpdateSet={handleBasicDateChange}
+                  value={disabledDate}
+                  onChange={handleDisabledDateChange}
+                  onUpdateSet={handleDisabledDateChange}
                   disabled
                   placeholder="비활성화 상태"
                   block
@@ -227,9 +282,9 @@ const DatePickerExamples: React.FC = () => {
             <div className="example-grid">
               <div className="example-item">
                 <DatePicker
-                  value={basicDate}
-                  onChange={handleBasicDateChange}
-                  onUpdateSet={handleBasicDateChange}
+                  value={yearRangeDate1}
+                  onChange={handleYearRangeDate1Change}
+                  onUpdateSet={handleYearRangeDate1Change}
                   minYear={2020}
                   maxYear={2030}
                   placeholder="2020-2030년 범위"
@@ -239,9 +294,9 @@ const DatePickerExamples: React.FC = () => {
               </div>
               <div className="example-item">
                 <DatePicker
-                  value={rangeDate}
-                  onChange={handleRangeDateChange}
-                  onUpdateSet={handleRangeDateChange}
+                  value={yearRangeDate2}
+                  onChange={handleYearRangeDate2Change}
+                  onUpdateSet={handleYearRangeDate2Change}
                   range
                   minYear={2023}
                   maxYear={2025}
@@ -259,9 +314,9 @@ const DatePickerExamples: React.FC = () => {
             <div className="example-grid">
               <div className="example-item">
                 <DatePicker
-                  value={basicDate}
-                  onChange={handleBasicDateChange}
-                  onUpdateSet={handleBasicDateChange}
+                  value={separatorDate1}
+                  onChange={handleSeparatorDate1Change}
+                  onUpdateSet={handleSeparatorDate1Change}
                   separator="/"
                   placeholder="슬래시 구분자"
                   block
@@ -270,9 +325,9 @@ const DatePickerExamples: React.FC = () => {
               </div>
               <div className="example-item">
                 <DatePicker
-                  value={basicDate}
-                  onChange={handleBasicDateChange}
-                  onUpdateSet={handleBasicDateChange}
+                  value={separatorDate2}
+                  onChange={handleSeparatorDate2Change}
+                  onUpdateSet={handleSeparatorDate2Change}
                   separator="."
                   placeholder="점 구분자"
                   block

@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import { useValidation } from '../hooks';
 import type { OptionItem, SelectBoxProps } from './types';
 import type { RuleFunc } from '../types';
+import { useComponentHelper } from '@/components/helper';
 
 // 스크롤 가능한 상위 요소들을 찾기
 const findScrollableParents = (element: HTMLElement): HTMLElement[] => {
@@ -52,8 +53,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
 
   // 반응형 상태
   const [isShowOption, setIsShowOption] = useState<boolean>(false);
-  const [showBottom, setShowBottom] = useState<boolean>(false);
-  const [transitionStatus, setTransitionStatus] = useState<boolean>(false);
 
   // 선택된 값들
   const [selectedText, setSelectedText] = useState<string | string[]>(multiple ? [] : '');
@@ -180,11 +179,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
       .join(' ')
       .trim();
   }, [disabled, readonly, message, isShowOption]);
-
-  const optionBoxPositionClassName = useMemo<string>(
-    () => ['option-list', showBottom ? 'show-bottom' : 'show-top'].join(' ').trim(),
-    [showBottom],
-  );
 
   const setDefaultModelValue = useCallback((): void => {
     if (multiple) {
@@ -351,40 +345,38 @@ export const useSelectBox = (props: SelectBoxProps) => {
     [multiple, isSelectAll, optionList, btnAccept, updateValue],
   );
 
-  const calculateLayerPosition = useCallback((): void => {
-    const windowHeight: number = window.innerHeight;
-    const rect: DOMRect | undefined = selectBoxRef.current?.getBoundingClientRect();
+  const componentHelper = useComponentHelper();
 
-    if (!rect) {
-      return;
-    }
+  const setLayerPosition = useCallback((): void => {
+    const rect: DOMRect | undefined = selectBoxRef.current?.getBoundingClientRect();
+    const windowHeight: number = window.innerHeight;
+
+    if (!rect) return;
 
     const shouldShowBottom = windowHeight / 2 < rect.top;
-    setShowBottom(shouldShowBottom);
-
-    const newStyle: React.CSSProperties = {
-      position: 'fixed',
-      left: `${rect.left}px`,
-      width: `${rect.width}px`,
-      zIndex: 1000,
-    };
+    let position: 'top' | 'bottom' = 'bottom';
 
     if (shouldShowBottom) {
-      newStyle.bottom = `${windowHeight - rect.top + 6}px`;
-    } else {
-      newStyle.top = `${rect.top + rect.height + 6}px`;
+      position = 'top';
     }
 
-    setLayerPositionStyle(newStyle);
+    const style = componentHelper.calcLayerPosition({
+      parent: selectBoxRef.current as HTMLElement,
+      layer: optionContainerRef.current as HTMLElement,
+      position,
+      width: rect.width,
+    });
+
+    setLayerPositionStyle(style);
   }, []);
 
   const toggleOption = useCallback((): void => {
-    if (disabled || readonly || transitionStatus) {
+    if (disabled || readonly) {
       return;
     }
 
     if (!isShowOption) {
-      calculateLayerPosition();
+      setLayerPosition();
     }
 
     setIsShowOption(!isShowOption);
@@ -402,7 +394,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         selected?.scrollIntoView();
       });
     }
-  }, [disabled, readonly, transitionStatus, searchable, isShowOption, calculateLayerPosition]);
+  }, [disabled, readonly, searchable, isShowOption, setLayerPosition]);
 
   // 적용 버튼 클릭 이벤트 핸들러
   const accept = useCallback(
@@ -502,13 +494,13 @@ export const useSelectBox = (props: SelectBoxProps) => {
       if (isShowOption) {
         // 레이아웃 변경 시 옵션 레이어 위치 재계산 (지연 적용)
         setTimeout(() => {
-          calculateLayerPosition();
+          setLayerPosition();
         }, 50);
       }
     });
 
     resizeObserverRef.current.observe(mainRef.current);
-  }, [isShowOption, calculateLayerPosition]);
+  }, [isShowOption, setLayerPosition]);
 
   // 최적화된 스크롤 이벤트 설정 (Intersection Observer 우선 사용)
   const setupOptimizedScrollEvents = useCallback((): void => {
@@ -521,7 +513,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         }
 
         setIsShowOption(false);
-        calculateLayerPosition();
+        setLayerPosition();
       }
     };
 
@@ -537,7 +529,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
         scrollEventListenersRef.current.push({ element: parent, listener: scrollListener });
       });
     }
-  }, [isShowOption, calculateLayerPosition]);
+  }, [isShowOption, setLayerPosition]);
 
   // value 값 초기화
   const clearValue = useCallback(
@@ -857,8 +849,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
     layerPositionStyle,
     selectedKeyIndex,
     isShowOption,
-    showBottom,
-    transitionStatus,
     toggleOption,
     accept,
     isSelectAll,
@@ -867,11 +857,9 @@ export const useSelectBox = (props: SelectBoxProps) => {
     isOptionFocused,
     noneAccept,
     outSideClickEvent,
-    calculateLayerPosition,
+    calculateLayerPosition: setLayerPosition,
     feedbackStatus,
     controllerClassName,
-    optionBoxPositionClassName,
     removeSelected,
-    setTransitionStatus,
   };
 };

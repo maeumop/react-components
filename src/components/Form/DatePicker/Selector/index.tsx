@@ -1,8 +1,47 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { DropdownStateType, SelectorProps } from '../types';
 import { useDatePickerStore } from '../store';
 import { KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
+import './style.scss';
+
+// 개별 아이템 컴포넌트
+const SelectorItem = React.memo<{
+  num: number;
+  index: number;
+  isActive: boolean;
+  isFocused: boolean;
+  isYear: boolean;
+  isShow: boolean;
+  onItemClick: (e: React.MouseEvent<HTMLLIElement>, num: number, index: number) => void;
+  onItemFocus: (index: number) => void;
+}>(({ num, index, isActive, isFocused, isYear, isShow, onItemClick, onItemFocus }) => {
+  const className = useMemo(
+    () => `${isActive ? 'active' : ''} ${isFocused ? 'focused' : ''}`,
+    [isActive, isFocused],
+  );
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLLIElement>) => onItemClick(e, num, index),
+    [onItemClick, num, index],
+  );
+
+  const handleFocus = useCallback(() => onItemFocus(index), [onItemFocus, index]);
+
+  return (
+    <li
+      key={`date-${num}`}
+      className={className}
+      onClick={handleClick}
+      onFocus={handleFocus}
+      tabIndex={isShow ? 0 : -1}
+    >
+      {isYear ? num : num + 1}
+    </li>
+  );
+});
+
+SelectorItem.displayName = 'SelectorItem';
 
 const SelectorBase = ({
   max = 0,
@@ -47,29 +86,28 @@ const SelectorBase = ({
     return year ? dateState[flag].year : dateState[flag].month - 1;
   }, [flag, year, dateState]);
 
-  // 아이템 초기화
-  const initializeItems = (): void => {
-    setItems([]);
-
+  // 아이템 초기화 - useMemo로 변경
+  const initialItems = useMemo<number[]>(() => {
     if (year) {
       const maxYear = max ? max : new Date().getFullYear();
+      const yearItems: number[] = [];
 
       for (let i = maxYear; i >= min; i--) {
-        setItems(prev => [...prev, i]);
+        yearItems.push(i);
       }
-    } else if (month) {
-      for (let i = 0; i < 12; i++) {
-        setItems(prev => [...prev, i]);
-      }
-    }
-  };
 
-  // 아이템 변경 감지
-  useEffect(() => {
-    if (year) {
-      initializeItems();
+      return yearItems;
+    } else if (month) {
+      return Array.from({ length: 12 }, (_, i) => i);
     }
-  }, [max]);
+
+    return [];
+  }, [year, month, max, min]);
+
+  // items 초기화
+  useEffect(() => {
+    setItems(initialItems);
+  }, [initialItems]);
 
   // 드롭다운 표시 상태 감지
   useEffect(() => {
@@ -98,7 +136,7 @@ const SelectorBase = ({
       setFocusedIndex(-1);
       setSearchText('');
     },
-    [flag, year, setDateState, setDropdownState, setFocusedIndex, setSearchText],
+    [flag, year, setDateState, setDropdownState],
   );
 
   // 클릭 이벤트 처리
@@ -124,7 +162,7 @@ const SelectorBase = ({
         }
       }
     });
-  }, [focusedIndex, itemListRef.current]);
+  }, [focusedIndex]);
 
   // 키보드 네비게이션
   const handleKeydown = useCallback(
@@ -198,16 +236,13 @@ const SelectorBase = ({
       setFocusedIndex(index);
       changedDate(item);
     },
-    [setFocusedIndex, changedDate],
+    [changedDate],
   );
 
   // 아이템 포커스 처리
-  const handleItemFocus = useCallback(
-    (index: number): void => {
-      setFocusedIndex(index);
-    },
-    [setFocusedIndex],
-  );
+  const handleItemFocus = useCallback((index: number): void => {
+    setFocusedIndex(index);
+  }, []);
 
   const selectorRef = useRef<HTMLDivElement>(null);
 
@@ -225,17 +260,33 @@ const SelectorBase = ({
         setFocusedIndex(-1);
       }
     },
-    [flag, year, setDropdownState, setSearchText, setFocusedIndex],
+    [flag, year, setDropdownState],
   );
 
-  const itemListWrapRef = useRef<HTMLDivElement>(null);
-
+  // 외부 클릭 이벤트 등록
   useEffect(() => {
-    initializeItems();
     document.addEventListener('click', outsideClickEvent);
 
     return () => document.removeEventListener('click', outsideClickEvent);
-  });
+  }, [outsideClickEvent]);
+
+  // 인라인 함수 메모이제이션
+  const handleStopPropagation = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+  }, []);
+
+  // className 메모이제이션
+  const selectorTriggerClassName = useMemo(
+    () => ['selector-trigger', month ? 'month' : '', year ? 'year' : ''].filter(Boolean).join(' '),
+    [month, year],
+  );
+
+  const selectorIconClassName = useMemo(() => `selector-icon ${isShow ? 'rotated' : ''}`, [isShow]);
+
+  const selectorBoxClassName = useMemo(
+    () => ['selector-box', month ? 'month' : '', year ? 'year' : ''].filter(Boolean).join(' '),
+    [month, year],
+  );
 
   return (
     <div
@@ -243,46 +294,46 @@ const SelectorBase = ({
       onClick={handleClick}
       onKeyDown={handleKeydown}
       tabIndex={0}
-      className={['selector-trigger', { month, year }].join(' ')}
+      className={selectorTriggerClassName}
     >
       <div className="selector-trigger-text">
         {getDateString}
-        <ChevronDownIcon className={`selector-icon ${isShow ? 'rotated' : ''}`} />
+        <ChevronDownIcon className={selectorIconClassName} />
       </div>
 
-      <CSSTransition
-        in={isShow}
-        timeout={200}
-        classNames="trans-slide-down"
-        unmountOnExit
-        nodeRef={itemListWrapRef}
-      >
-        <div
-          ref={itemListWrapRef}
-          className={['selector-box', { month, year }].join(' ')}
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="selector-box-wrap">
-            <ul ref={itemListRef} onClick={e => e.stopPropagation()}>
-              {filteredItems.map((num, index) => (
-                <li
-                  key={`date-${num}`}
-                  className={`${num === getDate ? 'active' : ''}${focusedIndex === index ? ' focused' : ''}`}
-                  onClick={e => handleItemClick(e, num, index)}
-                  onFocus={() => handleItemFocus(index)}
-                  tabIndex={isShow ? 0 : -1}
-                >
-                  {year ? num : num + 1}
-                </li>
-              ))}
-            </ul>
-
-            <div className="no-results" role="status" aria-live="polite">
-              검색 결과가 없습니다.
+      <AnimatePresence>
+        {isShow && (
+          <motion.div
+            className={selectorBoxClassName}
+            onClick={handleStopPropagation}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{
+              duration: 0.15,
+              ease: [0.4, 0, 0.2, 1],
+            }}
+          >
+            <div className="selector-box-wrap">
+              <ul ref={itemListRef} onClick={handleStopPropagation}>
+                {filteredItems.map((num, index) => (
+                  <SelectorItem
+                    key={`date-${num}`}
+                    num={num}
+                    index={index}
+                    isActive={num === getDate}
+                    isFocused={focusedIndex === index}
+                    isYear={year}
+                    isShow={isShow}
+                    onItemClick={handleItemClick}
+                    onItemFocus={handleItemFocus}
+                  />
+                ))}
+              </ul>
             </div>
-          </div>
-        </div>
-      </CSSTransition>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

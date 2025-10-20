@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* @/components/Form/DatePicker/DateController/_style.scss */
 @use 'sass:color';
-@use '@/assets/styles/components' as _;
+@use '@/assets/styles/components' as *;
 
 .select-month {
   display: flex;
@@ -10,9 +10,7 @@
   font-size: 0.9rem;
   gap: 0.4rem;
   padding: 0.2rem 0.4rem;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid $gray-100;
   position: relative;
   z-index: 1001;
 
@@ -22,30 +20,21 @@
     justify-content: center;
     width: 1.5rem;
     height: 1.5rem;
-    border: 1px solid rgba(_.$gray-300, 0.6);
+    border: 1px solid rgba($gray-300, 0.6);
     border-radius: 0.4rem;
-    background: linear-gradient(135deg, white, rgba(_.$gray-100, 0.8));
-    color: _.$gray-700;
+    background: linear-gradient(135deg, white, rgba($gray-100, 0.8));
+    color: $gray-700;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 0;
-    box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
 
     &:hover:not(:disabled) {
-      background: linear-gradient(135deg, rgba(_.$primary, 0.08), rgba(_.$primary, 0.04));
-      border-color: rgba(_.$primary, 0.3);
-      color: _.$primary;
-      transform: translateY(-1px) scale(1.05);
-      box-shadow:
-        0 4px 12px rgba(_.$primary, 0.15),
-        0 2px 6px rgba(_.$primary, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      background: linear-gradient(135deg, rgba($primary, 0.08), rgba($primary, 0.04));
+      border-color: rgba($primary, 0.3);
+      color: $primary;
     }
 
     &:focus {
-      outline: 2px solid _.$primary;
+      outline: 2px solid $primary;
       outline-offset: 2px;
       z-index: 1;
     }
@@ -56,23 +45,17 @@
 
     &:active:not(:disabled) {
       transform: translateY(0) scale(1.02);
-      box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
     }
 
     &.disabled {
       opacity: 0.4;
       cursor: not-allowed;
-      background: linear-gradient(135deg, rgba(_.$gray-200, 0.6), rgba(_.$gray-100, 0.4));
-      border-color: rgba(_.$gray-200, 0.4);
-      color: _.$gray-400;
+      background: linear-gradient(135deg, rgba($gray-200, 0.6), rgba($gray-100, 0.4));
+      border-color: rgba($gray-200, 0.4);
+      color: $gray-400;
 
       &:hover {
         transform: none;
-        box-shadow:
-          0 2px 4px rgba(0, 0, 0, 0.04),
-          inset 0 1px 0 rgba(255, 255, 255, 0.9);
       }
     }
 
@@ -80,7 +63,6 @@
       width: 1rem;
       height: 1rem;
       pointer-events: none;
-      transition: transform 0.2s ease;
     }
 
     &:hover:not(:disabled) svg {
@@ -101,15 +83,13 @@
     > span:not(.selector-trigger) {
       font-size: 1rem;
       font-weight: 600;
-      color: _.$text-default;
+      color: $text-default;
       cursor: pointer;
       padding: 0.6rem 1rem;
       border-radius: 0.8rem;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       background: rgba(255, 255, 255, 0.6);
       border: 1px solid transparent;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -117,17 +97,14 @@
       flex-shrink: 0;
 
       &:hover {
-        background: linear-gradient(135deg, rgba(_.$primary, 0.1), rgba(_.$primary, 0.05));
-        color: _.$primary;
+        background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
+        color: $primary;
         transform: translateY(-1px);
-        box-shadow:
-          0 3px 8px rgba(_.$primary, 0.15),
-          0 1px 3px rgba(_.$primary, 0.1);
-        border-color: rgba(_.$primary, 0.2);
+        border-color: rgba($primary, 0.2);
       }
 
       &:focus {
-        outline: 2px solid _.$primary;
+        outline: 2px solid $primary;
         outline-offset: 2px;
       }
 
@@ -141,13 +118,10 @@
 
       // 활성 상태 스타일
       &.active {
-        background: linear-gradient(135deg, _.$primary, color.change(_.$primary, $lightness: 85%));
+        background: linear-gradient(135deg, $primary, color.change($primary, $lightness: 85%));
         color: white;
         font-weight: 700;
-        border-color: _.$primary;
-        box-shadow:
-          0 4px 12px rgba(_.$primary, 0.3),
-          0 2px 6px rgba(_.$primary, 0.2);
+        border-color: $primary;
         transform: translateY(-1px);
       }
     }

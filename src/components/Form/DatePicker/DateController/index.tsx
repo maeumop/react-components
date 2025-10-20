@@ -8,6 +8,7 @@ import {
   KeyboardArrowRight as ChevronRightIcon,
   KeyboardDoubleArrowRight as ChevronDoubleRightIcon,
 } from '@mui/icons-material';
+import './style.scss';
 
 const DateControllerBase = (props: DateControllerProps) => {
   const store = useDatePickerStore();
@@ -68,7 +69,7 @@ const DateControllerBase = (props: DateControllerProps) => {
 
       setDateState(flag, 'year', year);
     },
-    [dateState, props.end, setDateState],
+    [dateState, props.end, props.maxYear, props.minYear, setDateState],
   );
 
   /**
@@ -137,14 +138,56 @@ const DateControllerBase = (props: DateControllerProps) => {
     ],
   );
 
+  // onClick 핸들러들 메모이제이션
+  const handleYearPrev = useCallback(() => changedYear(-1, true), [changedYear]);
+  const handleYearNext = useCallback(() => changedYear(1, true), [changedYear]);
+  const handleMonthPrev = useCallback(() => changedMonth(-1, true), [changedMonth]);
+  const handleMonthNext = useCallback(() => changedMonth(1, true), [changedMonth]);
+
+  // onKeyDown 핸들러들 메모이제이션
+  const handleKeydownYearPrev = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => handleKeydown(e, 'year', 'prev'),
+    [handleKeydown],
+  );
+  const handleKeydownYearNext = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => handleKeydown(e, 'year', 'next'),
+    [handleKeydown],
+  );
+  const handleKeydownMonthPrev = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => handleKeydown(e, 'month', 'prev'),
+    [handleKeydown],
+  );
+  const handleKeydownMonthNext = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => handleKeydown(e, 'month', 'next'),
+    [handleKeydown],
+  );
+
+  // className 메모이제이션
+  const yearPrevClassName = useMemo(
+    () => `control-button year-prev ${!canDecreaseYear ? 'disabled' : ''}`,
+    [canDecreaseYear],
+  );
+  const yearNextClassName = useMemo(
+    () => `control-button year-next ${!canIncreaseYear ? 'disabled' : ''}`,
+    [canIncreaseYear],
+  );
+  const monthPrevClassName = useMemo(
+    () => `control-button month-prev ${!canDecreaseMonth ? 'disabled' : ''}`,
+    [canDecreaseMonth],
+  );
+  const monthNextClassName = useMemo(
+    () => `control-button month-next ${!canIncreaseMonth ? 'disabled' : ''}`,
+    [canIncreaseMonth],
+  );
+
   return (
     <div className="select-month">
       <button
         type="button"
-        className={`control-button year-prev ${!canDecreaseYear ? 'disabled' : ''}`}
+        className={yearPrevClassName}
         disabled={!canDecreaseYear}
-        onClick={() => changedYear(-1, true)}
-        onKeyDown={e => handleKeydown(e, 'year', 'prev')}
+        onClick={handleYearPrev}
+        onKeyDown={handleKeydownYearPrev}
         tabIndex={0}
       >
         <ChevronDoubleLeftIcon />
@@ -153,10 +196,10 @@ const DateControllerBase = (props: DateControllerProps) => {
       {/*  월 이전 버튼 */}
       <button
         type="button"
-        className={`control-button month-prev ${!canDecreaseMonth ? 'disabled' : ''}`}
+        className={monthPrevClassName}
         disabled={!canDecreaseMonth}
-        onClick={() => changedMonth(-1, true)}
-        onKeyDown={e => handleKeydown(e, 'month', 'prev')}
+        onClick={handleMonthPrev}
+        onKeyDown={handleKeydownMonthPrev}
         tabIndex={0}
       >
         <ChevronLeftIcon />
@@ -171,10 +214,10 @@ const DateControllerBase = (props: DateControllerProps) => {
       {/* 월 다음 버튼 */}
       <button
         type="button"
-        className={`control-button month-next ${!canIncreaseMonth ? 'disabled' : ''}`}
+        className={monthNextClassName}
         disabled={!canIncreaseMonth}
-        onClick={() => changedMonth(1, true)}
-        onKeyDown={e => handleKeydown(e, 'month', 'next')}
+        onClick={handleMonthNext}
+        onKeyDown={handleKeydownMonthNext}
         tabIndex={0}
       >
         <ChevronRightIcon />
@@ -183,10 +226,10 @@ const DateControllerBase = (props: DateControllerProps) => {
       {/* 연도 다음 버튼 */}
       <button
         type="button"
-        className={`control-button year-next ${!canIncreaseYear ? 'disabled' : ''}`}
+        className={yearNextClassName}
         disabled={!canIncreaseYear}
-        onClick={() => changedYear(1, true)}
-        onKeyDown={e => handleKeydown(e, 'year', 'next')}
+        onClick={handleYearNext}
+        onKeyDown={handleKeydownYearNext}
         tabIndex={0}
       >
         <ChevronDoubleRightIcon />

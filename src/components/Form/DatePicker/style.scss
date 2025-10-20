@@ -12,10 +12,9 @@
   text-decoration: none;
   border: 0.1rem solid _.$gray-300;
   border-radius: 0.4rem;
-  font-size: form-common.$form-input-font-size;
-  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
   color: _.$text-default;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
@@ -42,44 +41,48 @@ $_button-colors: _.getButtonColors();
     width: 100%;
   }
 
-  .picker-popup {
-    position: fixed;
-    box-shadow: 0.2rem 0.2rem 0.5rem 0.2rem rgba(0, 0, 0, 0.3);
-    border-radius: 0.4rem;
-    background: #fff;
-    z-index: 100;
-    line-height: 1;
+  .date-picker-wrapper {
+    position: relative;
 
-    .pick-name-text {
-      border-bottom: 0.1rem solid _.$gray-300;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      padding: 0;
-      list-style: none;
+    .picker-popup {
+      position: fixed;
+      box-shadow: 0.2rem 0.2rem 0.5rem 0.2rem rgba(0, 0, 0, 0.2);
+      margin: 0.2rem 0;
+      border-radius: 0.4rem;
+      background: #fff;
+      z-index: 100;
 
-      li {
-        line-height: 3;
-        font-size: 1rem;
-        font-weight: 400;
-        width: 100%;
-        text-align: center;
+      .pick-name-text {
+        border-bottom: 0.1rem solid _.$gray-300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
 
-        & + li {
-          border-left: 0.1rem solid _.$gray-300;
+        li {
+          line-height: 3;
+          font-size: 1rem;
+          font-weight: 400;
+          width: 100%;
+          text-align: center;
+
+          & + li {
+            border-left: 0.1rem solid _.$gray-300;
+          }
         }
       }
-    }
 
-    .picker-wrap {
-      .calendar {
-        display: inline-block;
-        box-sizing: border-box;
-        vertical-align: top;
+      .picker-wrap {
+        .calendar {
+          display: inline-block;
+          box-sizing: border-box;
+          vertical-align: top;
 
-        & + .calendar {
-          border-left: 0.1rem solid _.$gray-300;
+          & + .calendar {
+            border-left: 0.1rem solid _.$gray-300;
+          }
         }
       }
     }
@@ -90,19 +93,18 @@ $_button-colors: _.getButtonColors();
     border-bottom: 0.1rem solid _.$gray-300;
     text-align: left;
 
-    a {
+    button {
       @include picker-button;
+      font-size: 0.8rem;
 
-      & + a {
+      & + button {
         margin-left: 0.3rem;
       }
 
       &:hover {
-        background: linear-gradient(135deg, rgba(_.$primary, 0.1), rgba(_.$primary, 0.05));
+        background: rgba(_.$primary, 0.1);
         border-color: rgba(_.$primary, 0.3);
         color: _.$primary;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(_.$primary, 0.15);
       }
 
       &.active {
@@ -115,8 +117,6 @@ $_button-colors: _.getButtonColors();
             map.get($_button-colors, primary, hover)
           );
           font-weight: 600;
-          box-shadow: 0 2px 8px rgba(map.get($_button-colors, primary, default), 0.3);
-          transform: translateY(-1px);
         }
       }
     }
@@ -138,7 +138,7 @@ $_button-colors: _.getButtonColors();
       }
     }
 
-    a {
+    button {
       @include picker-button;
 
       &.okay {
@@ -247,18 +247,6 @@ $_button-colors: _.getButtonColors();
   // feedback 스타일은 공통 스타일에서 상속
 }
 
-// 트랜지션 애니메이션
-.picker-scale-enter-from,
-.picker-scale-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.picker-scale-enter-active,
-.picker-scale-leave-active {
-  transition: all 0.2s ease;
-}
-
 // 반응형 디자인
 @media (max-width: 768px) {
   .date-picker {
@@ -266,9 +254,10 @@ $_button-colors: _.getButtonColors();
       position: fixed;
       top: 50% !important;
       left: 50% !important;
-      transform: translate(-50%, -50%) !important;
+      transform: translate(-50%, -50%);
       width: 90vw;
-      max-width: 400px;
+      max-width: 32rem;
+      min-width: 28rem;
     }
 
     .picker-wrap {
@@ -284,7 +273,7 @@ $_button-colors: _.getButtonColors();
     }
 
     .search-date {
-      a {
+      button {
         font-size: 0.9rem;
         padding: 0.6rem 0.8rem;
       }

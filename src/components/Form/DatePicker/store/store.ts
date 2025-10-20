@@ -1,13 +1,13 @@
-import { create } from 'zustand';
-import type { DatePickerStore, DropdownStateType } from './types';
+import { createStore } from 'zustand';
+import type { DatePickerStore, DropdownStateType } from '../types';
 
 /**
- * 기간 선택 달력에서 사용되는 Zustand store
+ * 각 DatePicker 인스턴스마다 독립적인 store를 생성하는 factory 함수
  */
-export const useDatePickerStore = create<DatePickerStore>((set, get) => {
+export const createDatePickerStore = () => {
   const date: Date = new Date();
 
-  return {
+  return createStore<DatePickerStore>((set, get) => ({
     // State
     startDate: '',
     endDate: '',
@@ -146,5 +146,5 @@ export const useDatePickerStore = create<DatePickerStore>((set, get) => {
         },
       });
     },
-  };
-});
+  }));
+};

@@ -37,10 +37,6 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     const inputId = useMemo(() => `switch-btn-${Math.random().toString(36).slice(2, 10)}`, []);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const labelText = useMemo(() => {
-      return Array.isArray(label) ? (value === trueValue ? label[1] : label[0]) : label;
-    }, [label, value, trueValue]);
-
     // 값 변경 핸들러
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +51,10 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
       },
       [onChange, readonly, trueValue, falseValue],
     );
+
+    const labelText = useMemo(() => {
+      return Array.isArray(label) ? (value === trueValue ? label[1] : label[0]) : label;
+    }, [label, value, trueValue]);
 
     // 유효성 검사
     const check = useCallback(
@@ -104,17 +104,17 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
       [validate, value, labelText, trueValue],
     );
 
-    // 폼 초기화
-    const resetForm = useCallback(() => {
-      onChange?.(falseValue);
-      resetValidate();
-    }, [onChange, falseValue]);
-
     // 유효성 상태 초기화
     const resetValidate = useCallback(() => {
       setMessage('');
       setErrorTransition(false);
     }, []);
+
+    // 폼 초기화
+    const resetForm = useCallback(() => {
+      onChange?.(falseValue);
+      resetValidate();
+    }, [onChange, falseValue, resetValidate]);
 
     // value 변경 시 validate 리셋
     useEffect(() => {
@@ -135,20 +135,26 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
       [errorTransition],
     );
 
+    // 인라인 콜백 메모이제이션
+    const handleErrorAnimationEnd = useCallback(() => {
+      setErrorTransition(false);
+    }, []);
+
+    // className 메모이제이션
+    const wrapperClassName = useMemo(() => ['switch-wrap', color].join(' '), [color]);
+
+    const labelClassName = useMemo(
+      () => ['switch', checkbox ? 'checkbox' : ''].join(' '),
+      [checkbox],
+    );
+
     // 체크박스 아이콘 렌더링
-    const renderCheckboxIcon = () => {
+    const renderCheckboxIcon = useMemo(() => {
       if (value === trueValue) {
         return <CheckBoxIcon />;
       }
 
       return <CheckBoxOutlineBlankIcon />;
-    };
-
-    // 라벨 트랜지션 (간단 fade, React에서 직접 구현)
-    const [, setLabelFade] = useState(value === trueValue ? 1 : 0);
-
-    useEffect(() => {
-      setLabelFade(value === trueValue ? 1 : 0);
     }, [value, trueValue]);
 
     // imperative handle (expose)
@@ -163,8 +169,8 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     );
 
     return (
-      <div className={['switch-wrap', color].join(' ')}>
-        <label htmlFor={inputId} className={['switch', checkbox ? 'checkbox' : ''].join(' ')}>
+      <div className={wrapperClassName}>
+        <label htmlFor={inputId} className={labelClassName}>
           <input
             id={inputId}
             ref={inputRef}
@@ -176,7 +182,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
             role="switch"
           />
           {checkbox ? (
-            <React.Fragment>{renderCheckboxIcon()}</React.Fragment>
+            <>{renderCheckboxIcon}</>
           ) : (
             <span>
               <i />
@@ -187,9 +193,10 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
             {labelText}
           </div>
         </label>
+
         {/* 에러 메시지 트랜지션 */}
         {message && (
-          <div className={feedbackStatus} onAnimationEnd={() => setErrorTransition(false)}>
+          <div className={feedbackStatus} onAnimationEnd={handleErrorAnimationEnd}>
             {message}
           </div>
         )}

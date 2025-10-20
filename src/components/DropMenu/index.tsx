@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { dropMenuColor, dropMenuPosition, dropMenuTransition } from './const';
 import './style.scss';
 import type { DropMenuItem, DropMenuProps } from './types';
+import { useComponentHelper } from '../helper';
 
 // DropMenu 컴포넌트
 const DropMenu = ({
@@ -26,52 +27,29 @@ const DropMenu = ({
   // 트랜지션 클래스명
   const transitionName = `${transition}-${position}`;
 
+  const componentHelper = useComponentHelper();
+
   // 메뉴 위치 계산
-  const calcLayerPosition = useCallback(() => {
-    if (!dropMenuRef.current) {
-      return;
-    }
+  const setPosition = useCallback(() => {
+    if (!dropMenuRef.current) return;
 
-    const windowHeight = window.innerHeight;
-    const windowWidth = window.innerWidth;
     const rect = dropMenuRef.current.getBoundingClientRect();
-    const style: React.CSSProperties = {};
 
-    switch (position) {
-      case dropMenuPosition.top:
-        style.left = `${rect.left}px`;
-        style.bottom = `${windowHeight - rect.top}px`;
-        break;
-      case dropMenuPosition.right:
-        style.left = `${rect.right}px`;
-        style.top = `${rect.top}px`;
-        break;
-      case dropMenuPosition.left:
-        style.right = `${windowWidth - rect.left}px`;
-        style.top = `${rect.top}px`;
-        break;
-      default:
-        style.left = `${rect.left}px`;
-        style.top = `${rect.top + rect.height}px`;
-        break;
-    }
+    const style = componentHelper.calcLayerPosition({
+      parent: dropMenuRef.current,
+      layer: menuRef.current as HTMLElement,
+      position,
+      width: width ?? rect.width,
+    });
 
-    if (width) {
-      style.width = `${width}px`;
-    } else {
-      style.minWidth = `${rect.width}px`;
-    }
-
-    setLayerStyle(style);
+    setLayerStyle(style as React.CSSProperties);
   }, [position, width]);
 
   // 메뉴 열기
   const openMenu = useCallback(() => {
-    if (disabled) {
-      return;
-    }
+    if (disabled) return;
 
-    calcLayerPosition();
+    setPosition();
     setIsOpen(true);
 
     if (rest.onOpen) {
@@ -87,7 +65,7 @@ const DropMenu = ({
         }
       }
     }, 0);
-  }, [disabled, calcLayerPosition, rest]);
+  }, [disabled, setPosition, rest]);
 
   // 메뉴 닫기
   const closeMenu = useCallback(() => {
@@ -109,14 +87,10 @@ const DropMenu = ({
 
   // 외부 클릭 닫기
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
 
     const handleClick = (e: MouseEvent) => {
-      if (disableAutoClose) {
-        return;
-      }
+      if (disableAutoClose) return;
 
       if (
         dropMenuRef.current &&
@@ -240,14 +214,11 @@ const DropMenu = ({
       className={dropWrapperClassName}
       onClick={toggle}
       onKeyDown={handleTriggerKeyDown}
-      role="button"
-      aria-expanded={isOpen}
-      aria-haspopup="true"
-      aria-disabled={disabled}
       tabIndex={0}
     >
       {/* 트리거(슬롯) */}
       {children}
+
       {/* 드롭다운 메뉴 트랜지션 */}
       <CSSTransition
         in={isOpen}
@@ -255,7 +226,7 @@ const DropMenu = ({
         classNames={transitionName}
         unmountOnExit
         nodeRef={ulTransitionRef}
-        onEnter={calcLayerPosition}
+        onEnter={setPosition}
       >
         <ul
           ref={el => {
@@ -264,8 +235,6 @@ const DropMenu = ({
           }}
           style={layerStyle}
           className={['drop-menu-wrap', position].join(' ')}
-          role="menu"
-          aria-label="드롭다운 메뉴"
           onKeyDown={handleKeydown}
         >
           {items.map((item, idx) => (
@@ -275,8 +244,6 @@ const DropMenu = ({
                 className={item.disabled ? 'disabled' : ''}
                 onClick={e => handleItemClick(item, idx, e)}
                 onKeyDown={e => onKeyDownEvent(item, idx, e)}
-                role="menuitem"
-                aria-disabled={item.disabled}
                 tabIndex={item.disabled ? -1 : 0}
               >
                 {item.icon && <item.icon width={18} height={18} style={{ marginRight: 8 }} />}

@@ -6,6 +6,7 @@ import { Close as CloseIcon, KeyboardArrowDown as ChevronDownIcon } from '@mui/i
 import { useSelectBox } from './hook.ts';
 import { RenderSelectedText } from './renderLabelText.tsx';
 import './style.scss';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const SelectBox = React.memo(
   forwardRef<SelectBoxModel, SelectBoxProps>((props, ref) => {
@@ -42,11 +43,8 @@ const SelectBox = React.memo(
       onEscapeKeyHandler,
       controllerClassName,
       removeSelected,
-      setTransitionStatus,
       iconClassName,
       isShowOption,
-      showBottom,
-      optionBoxPositionClassName,
       feedbackStatus,
     } = useSelectBox(props);
 
@@ -65,9 +63,7 @@ const SelectBox = React.memo(
     );
 
     // 인라인 콜백 메모이제이션
-    const handleTransitionExited = useCallback(() => {
-      setTransitionStatus(false);
-    }, [setTransitionStatus]);
+    const handleTransitionExited = () => {};
 
     const handleErrorAnimationEnd = useCallback(() => {
       setErrorTransition(false);
@@ -116,22 +112,31 @@ const SelectBox = React.memo(
           <ChevronDownIcon className={iconClassName} sx={{ width: 20, height: 20 }} />
 
           {/* 옵션 레이어 */}
-          <CSSTransition
+          {/* <CSSTransition
             in={isShowOption}
             timeout={200}
-            classNames={showBottom ? 'options-view-bottom' : 'options-view'}
+            classNames="options-view"
             unmountOnExit
             nodeRef={optionContainerRef}
+            onEnter={handleTransitionEnter}
             onExited={handleTransitionExited}
-          >
-            <div
-              style={layerPositionStyle}
-              className={optionBoxPositionClassName}
-              ref={optionContainerRef}
-            >
-              <OptionList {...optionListProps} />
-            </div>
-          </CSSTransition>
+          > */}
+
+          <AnimatePresence onExitComplete={handleTransitionExited}>
+            {isShowOption && (
+              <motion.div
+                style={layerPositionStyle}
+                ref={optionContainerRef}
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.15, ease: 'easeInOut' }}
+              >
+                <OptionList {...optionListProps} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          {/* </CSSTransition> */}
         </div>
 
         {/* 에러 메시지 */}

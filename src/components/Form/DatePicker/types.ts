@@ -62,7 +62,6 @@ export interface LayerPosition {
 }
 
 export interface DatePickerHelper {
-  getLayerPosition(input: HTMLDivElement, isRange?: boolean): LayerPosition;
   getDateFormat(d: Date, format: string, days?: number): string;
   getDateString(year: number, month: number, day: number, s: string): string;
   getBeforeDay(year: number, month: number, week: number): number;

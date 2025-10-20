@@ -1,14 +1,38 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { transitionCase } from '../const';
 import { useDatePickerHelper } from '../helper';
 import { useDatePickerStore } from '../store';
 import type { CalendarProps, DateCellType, DateStateValueType, TransitionCase } from '../types';
-import { CSSTransition } from 'react-transition-group';
+import { AnimatePresence, motion } from 'framer-motion';
+import './style.scss';
 
 const head: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 
+// framer-motion transition variants
+const transitionVariants = {
+  left: {
+    initial: { opacity: 0, x: '2rem', scale: 0.98, filter: 'blur(1px)' },
+    animate: { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' },
+    exit: { opacity: 0 },
+  },
+  right: {
+    initial: { opacity: 0, x: '-2rem', scale: 0.98, filter: 'blur(1px)' },
+    animate: { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' },
+    exit: { opacity: 0 },
+  },
+  down: {
+    initial: { opacity: 0, y: '-2rem', scale: 0.98, filter: 'blur(1px)' },
+    animate: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' },
+    exit: { opacity: 0 },
+  },
+  up: {
+    initial: { opacity: 0, y: '2rem', scale: 0.98, filter: 'blur(1px)' },
+    animate: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' },
+    exit: { opacity: 0 },
+  },
+};
+
 const CalendarBase = ({
-  value = '',
   end = false,
   separator = '-',
   range = false,
@@ -30,19 +54,13 @@ const CalendarBase = ({
     setSelected,
   } = store;
 
-  const calendarRef = useRef<HTMLDivElement>(null);
-
   const caseStartEnd: string = end ? 'end' : 'start';
   const before: DateStateValueType = beforeState[caseStartEnd];
   const state: DateStateValueType = dateState[caseStartEnd];
 
-  const [isShow, setIsShow] = useState<boolean>(true);
   const [focusedDateIndex, setFocusedDateIndex] = useState<{ row: number; col: number } | null>();
-
   const [transitionName, setTransitionName] = useState<TransitionCase>(transitionCase.down);
-
-  // transition을 위한 별도 상태 변수
-  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [calendarKey, setCalendarKey] = useState<number>(0);
 
   // 달력 데이터 생성 함수
   const generateCalendarData = useCallback((): DateCellType[][] => {
@@ -119,8 +137,6 @@ const CalendarBase = ({
 
     return calendarData;
   }, [
-    state.year,
-    state.month,
     state,
     curYear,
     curMonth,
@@ -130,6 +146,8 @@ const CalendarBase = ({
     endDate,
     range,
     separator,
+    caseStartEnd,
+    end,
     helper,
   ]);
 
@@ -139,96 +157,111 @@ const CalendarBase = ({
   }, [generateCalendarData]);
 
   // 날짜 선택 처리
-  const selectedDay = (tr: number, td: number, e?: React.MouseEvent): void => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    const { type, day } = dateRender[tr][td];
-
-    if (['current', 'today', 'date-range'].includes(type)) {
-      const date: string = helper.getDateString(state.year, state.month, day, separator);
-      setSelected(caseStartEnd, date);
-
-      if (end) {
-        // 종료일 선택 시 시작일이 없어도 선택 가능
-        setEndDate(selectedDate[caseStartEnd]);
-      } else {
-        setStartDate(selectedDate[caseStartEnd]);
+  const selectedDay = useCallback(
+    (tr: number, td: number, e?: React.MouseEvent): void => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
       }
 
-      // 범위 선택 모드에서는 날짜 선택 시 창을 닫지 않음
-      // 단일 날짜 선택 모드에서만 창이 닫힘
-      updateDate(end);
-    }
-  };
+      const { type, day } = dateRender[tr][td];
+
+      if (['current', 'today', 'date-range'].includes(type)) {
+        const date: string = helper.getDateString(state.year, state.month, day, separator);
+        setSelected(caseStartEnd, date);
+
+        if (end) {
+          // 종료일 선택 시 계산된 date를 직접 설정
+          setEndDate(date);
+        } else {
+          // 시작일 선택 시 계산된 date를 직접 설정
+          setStartDate(date);
+        }
+
+        // 범위 선택 모드에서는 날짜 선택 시 창을 닫지 않음
+        // 단일 날짜 선택 모드에서만 창이 닫힘
+        updateDate(end);
+      }
+    },
+    [
+      dateRender,
+      helper,
+      state.year,
+      state.month,
+      separator,
+      caseStartEnd,
+      setSelected,
+      end,
+      setEndDate,
+      setStartDate,
+      updateDate,
+    ],
+  );
 
   // 키보드 네비게이션
-  const handleKeydown = (
-    event: React.KeyboardEvent<HTMLLIElement>,
-    row: number,
-    col: number,
-  ): void => {
-    const { type } = dateRender[row][col];
+  const handleKeydown = useCallback(
+    (event: React.KeyboardEvent<HTMLLIElement>, row: number, col: number): void => {
+      const { type } = dateRender[row][col];
 
-    if (['beforeMonth', 'afterMonth', 'disabled'].includes(type)) {
-      return;
-    }
-
-    let newRow = row;
-    let newCol = col;
-
-    switch (event.key) {
-      case 'ArrowLeft':
-        if (col > 0) {
-          newCol = col - 1;
-        } else if (row > 0) {
-          newRow = row - 1;
-          newCol = 6;
-        }
-        break;
-      case 'ArrowRight':
-        if (col < 6) {
-          newCol = col + 1;
-        } else if (row < 5) {
-          newRow = row + 1;
-          newCol = 0;
-        }
-        break;
-      case 'ArrowUp':
-        if (row > 0) {
-          newRow = row - 1;
-        }
-        break;
-      case 'ArrowDown':
-        if (row < 5) {
-          newRow = row + 1;
-        }
-        break;
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        selectedDay(row, col);
+      if (['beforeMonth', 'afterMonth', 'disabled'].includes(type)) {
         return;
-      default:
-        return;
-    }
+      }
 
-    // 유효한 날짜인지 확인
-    const newCell = dateRender[newRow]?.[newCol];
-    if (newCell && !['beforeMonth', 'afterMonth', 'disabled'].includes(newCell.type)) {
-      setFocusedDateIndex({ row: newRow, col: newCol });
-    }
-  };
+      let newRow = row;
+      let newCol = col;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          if (col > 0) {
+            newCol = col - 1;
+          } else if (row > 0) {
+            newRow = row - 1;
+            newCol = 6;
+          }
+          break;
+        case 'ArrowRight':
+          if (col < 6) {
+            newCol = col + 1;
+          } else if (row < 5) {
+            newRow = row + 1;
+            newCol = 0;
+          }
+          break;
+        case 'ArrowUp':
+          if (row > 0) {
+            newRow = row - 1;
+          }
+          break;
+        case 'ArrowDown':
+          if (row < 5) {
+            newRow = row + 1;
+          }
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          selectedDay(row, col);
+          return;
+        default:
+          return;
+      }
+
+      // 유효한 날짜인지 확인
+      const newCell = dateRender[newRow]?.[newCol];
+      if (newCell && !['beforeMonth', 'afterMonth', 'disabled'].includes(newCell.type)) {
+        setFocusedDateIndex({ row: newRow, col: newCol });
+      }
+    },
+    [dateRender, selectedDay],
+  );
 
   // 포커스 설정
-  const setFocus = (row: number, col: number): void => {
+  const setFocus = useCallback((row: number, col: number): void => {
     setFocusedDateIndex({ row, col });
-  };
+  }, []);
 
   // 날짜 셀의 ARIA 라벨 생성
-  const getAriaLabel = (cell: DateCellType): string => {
+  const getAriaLabel = useCallback((cell: DateCellType): string => {
     const { day, type } = cell;
 
     if (type === 'beforeMonth' || type === 'afterMonth') {
@@ -252,17 +285,17 @@ const CalendarBase = ({
     }
 
     return `${day}일`;
-  };
+  }, []);
 
   // 날짜 셀의 선택 가능 여부 확인
-  const isSelectable = (type: string): boolean => {
+  const isSelectable = useCallback((type: string): boolean => {
     return ['current', 'today', 'date-range'].includes(type);
-  };
+  }, []);
 
   // 날짜 셀의 포커스 가능 여부 확인
-  const isFocusable = (type: string): boolean => {
+  const isFocusable = useCallback((type: string): boolean => {
     return !['beforeMonth', 'afterMonth', 'disabled'].includes(type);
-  };
+  }, []);
 
   useEffect(() => {
     const date = end ? endDate : startDate;
@@ -272,57 +305,68 @@ const CalendarBase = ({
     } else {
       setSelected(caseStartEnd, '');
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, end, caseStartEnd, setSelected]);
 
   useEffect(() => {
-    if (state.year > before.year) {
-      setTransitionName(transitionCase.down);
-    } else {
-      setTransitionName(transitionCase.up);
+    // 년도와 월 변경을 함께 확인하여 transition 방향 결정
+    const yearChanged = state.year !== before.year;
+    const monthChanged = state.month !== before.month;
+
+    if (yearChanged && !monthChanged) {
+      // 1. 년도만 변경된 경우
+      if (state.year > before.year) {
+        setTransitionName(transitionCase.down); // 년도 증가: 아래로
+      } else {
+        setTransitionName(transitionCase.up); // 년도 감소: 위로
+      }
+    } else if (!yearChanged && monthChanged) {
+      // 2. 월만 변경된 경우 (년도는 동일)
+      if (state.month > before.month) {
+        setTransitionName(transitionCase.left); // 월 증가: 왼쪽으로
+      } else {
+        setTransitionName(transitionCase.right); // 월 감소: 오른쪽으로
+      }
+    } else if (yearChanged && monthChanged) {
+      // 3. 년도와 월이 모두 변경된 경우 (예: 12월 → 다음해 1월)
+      if (state.year > before.year) {
+        setTransitionName(transitionCase.down); // 년도 증가: 아래로
+      } else {
+        setTransitionName(transitionCase.up); // 년도 감소: 위로
+      }
     }
 
-    // transition 효과를 위해 잠시 숨기고 다시 보이기
-    setIsTransitioning(true);
-    setIsShow(false);
-  }, [state.year]);
+    // key 변경으로 transition 트리거
+    setCalendarKey(prev => prev + 1);
 
-  useEffect(() => {
-    if (state.month > before.month) {
-      setTransitionName(transitionCase.left);
-    } else {
-      setTransitionName(transitionCase.right);
-    }
-
-    // transition 효과를 위해 잠시 숨기고 다시 보이기
-    setIsTransitioning(true);
-    setIsShow(false);
-  }, [state.month]);
-
-  const resetTransition = (): void => {
+    // 포커스 초기화
     setTimeout(() => {
-      setIsShow(true);
-      setIsTransitioning(false);
+      setFocusedDateIndex(null);
+    });
+  }, [state.year, state.month, before.year, before.month]);
 
-      // 포커스 초기화
-      setTimeout(() => {
-        setFocusedDateIndex(null);
-      });
-    }, 20);
-  };
+  const dayClassName = useCallback(
+    (type: string, i: number, j: number): string => {
+      const classes = [type];
 
-  // const resetSelected = (): void => {
-  //   setSelected(caseStartEnd, '');
-  // };
+      if (j === 0) classes.push('sun');
+      if (j === 6) classes.push('sat');
+      if (focusedDateIndex?.row === i && focusedDateIndex?.col === j) classes.push('focused');
 
-  const dayClassName = (type: string, i: number, j: number): string => {
-    const classes = [type];
+      return classes.join(' ');
+    },
+    [focusedDateIndex],
+  );
 
-    if (j === 0) classes.push('sun');
-    if (j === 6) classes.push('sat');
-    if (focusedDateIndex?.row === i && focusedDateIndex?.col === j) classes.push('focused');
-
+  // 헤더 className 메모이제이션
+  const getHeaderClassName = useCallback((index: number): string => {
+    const classes: string[] = [];
+    if (index === 0) classes.push('sun');
+    if (index === 6) classes.push('sat');
     return classes.join(' ');
-  };
+  }, []);
+
+  // 현재 transition variant 가져오기
+  const currentVariant = transitionVariants[transitionName];
 
   return (
     <div
@@ -330,20 +374,22 @@ const CalendarBase = ({
       role="grid"
       aria-label={end ? '종료일 달력' : '시작일 달력'}
     >
-      <CSSTransition
-        in={isShow}
-        timeout={200}
-        classNames={transitionName}
-        unmountOnExit
-        nodeRef={calendarRef}
-        onExited={resetTransition}
-      >
-        <div ref={calendarRef} className="select-calendar">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={calendarKey}
+          className="select-calendar"
+          initial={currentVariant.initial}
+          animate={currentVariant.animate}
+          transition={{
+            duration: 0.15,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+        >
           <ul className="header" role="row">
             {head.map((name, i) => (
               <li
                 key={`start-head-${name}`}
-                className={`${i === 0 ? 'sun' : ''} ${i === 6 ? 'sat' : ''}`}
+                className={getHeaderClassName(i)}
                 role="columnheader"
                 aria-label={`${name}요일`}
               >
@@ -371,8 +417,8 @@ const CalendarBase = ({
               ))}
             </ul>
           ))}
-        </div>
-      </CSSTransition>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

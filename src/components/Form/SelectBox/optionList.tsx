@@ -73,7 +73,7 @@ export const OptionList = React.memo<OptionListProps>(
     );
 
     return (
-      <>
+      <div className="option-list">
         {/* 검색 영역 */}
         {searchable && (
           <div className="search" onClick={e => e.stopPropagation()}>
@@ -137,7 +137,7 @@ export const OptionList = React.memo<OptionListProps>(
             적용 + {selectedValueCount}
           </a>
         )}
-      </>
+      </div>
     );
   },
 );

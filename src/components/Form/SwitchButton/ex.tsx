@@ -73,9 +73,9 @@ const SwitchButtonExample: React.FC = () => {
                     if (typeof v === 'boolean') setColor(v);
                   }}
                   label={['OFF', 'ON']}
-                  color="secondary"
+                  color="primary"
                 />
-                <span className="example-label">secondary, 라벨</span>
+                <span className="example-label">primary, 라벨</span>
               </div>
             </div>
           </section>
