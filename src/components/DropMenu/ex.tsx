@@ -1,9 +1,9 @@
 import FloatingBackButton from '@/views/FloatingBackButton/index';
 import React, { useCallback, useState } from 'react';
-import { dropMenuColor, dropMenuPosition, dropMenuTransition } from './const';
+import { dropMenuColor } from './const';
 import './ex.scss';
 import DropMenu from './index';
-import type { DropMenuColor, DropMenuItem, DropMenuPosition, DropMenuTransition } from './types';
+import type { DropMenuColor, DropMenuItem } from './types';
 import {
   Person as AccountIcon,
   Settings as CogIcon,
@@ -12,6 +12,8 @@ import {
   Close as CloseIcon,
   Star as StarIcon,
 } from '@mui/icons-material';
+import type { LayerPositionType, TransitionType } from '../types';
+import { layerPosition, transitionType } from '../const';
 
 // 예제 데이터
 const menuItems: DropMenuItem[] = [
@@ -53,10 +55,8 @@ const disabledMenuItems: DropMenuItem[] = [
 
 const DropMenuExample: React.FC = () => {
   // 상태 관리
-  const [currentPosition, setCurrentPosition] = useState<DropMenuPosition>(dropMenuPosition.bottom);
-  const [currentTransition, setCurrentTransition] = useState<DropMenuTransition>(
-    dropMenuTransition.slide,
-  );
+  const [currentPosition, setCurrentPosition] = useState<LayerPositionType>(layerPosition.bottom);
+  const [currentTransition, setCurrentTransition] = useState<TransitionType>(transitionType.slide);
   const [currentColor, setCurrentColor] = useState<DropMenuColor>(dropMenuColor.primary);
 
   // 이벤트 핸들러
@@ -71,8 +71,8 @@ const DropMenuExample: React.FC = () => {
   }, []);
 
   // 위치/트랜지션/색상 변경
-  const changePosition = (position: DropMenuPosition) => setCurrentPosition(position);
-  const changeTransition = (transition: DropMenuTransition) => setCurrentTransition(transition);
+  const changePosition = (position: LayerPositionType) => setCurrentPosition(position);
+  const changeTransition = (transition: TransitionType) => setCurrentTransition(transition);
   const changeColor = (color: DropMenuColor) => setCurrentColor(color);
 
   return (
@@ -112,7 +112,7 @@ const DropMenuExample: React.FC = () => {
           <section className="example-section">
             <h2>위치별 드롭메뉴</h2>
             <div className="position-controls">
-              {Object.values(dropMenuPosition).map(position => (
+              {Object.values(layerPosition).map(position => (
                 <button
                   key={position}
                   className={`control-button${currentPosition === position ? ' active' : ''}`}
@@ -167,7 +167,7 @@ const DropMenuExample: React.FC = () => {
               </ul>
             </div>
             <div className="transition-controls">
-              {Object.values(dropMenuTransition).map(transition => (
+              {Object.values(transitionType).map(transition => (
                 <button
                   key={transition}
                   className={`control-button${currentTransition === transition ? ' active' : ''}`}

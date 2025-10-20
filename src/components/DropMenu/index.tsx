@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
-import { dropMenuColor, dropMenuPosition, dropMenuTransition } from './const';
+import { dropMenuColor } from './const';
 import './style.scss';
 import type { DropMenuItem, DropMenuProps } from './types';
 import { useComponentHelper } from '../helper';
+import { AnimatePresence, motion } from 'framer-motion';
+import type { LayerPositionType } from '../types';
+import { layerPosition, transitionType } from '../const';
 
 // DropMenu 컴포넌트
 const DropMenu = ({
   items,
-  position = dropMenuPosition.bottom,
-  transition = dropMenuTransition.slide,
+  position = layerPosition.bottom,
+  transition = transitionType.slide,
   color = dropMenuColor.primary,
   width,
   disabled = false,
@@ -24,13 +26,10 @@ const DropMenu = ({
   const menuRef = useRef<HTMLUListElement>(null);
   const ulTransitionRef = useRef<HTMLUListElement>(null);
 
-  // 트랜지션 클래스명
-  const transitionName = `${transition}-${position}`;
-
   const componentHelper = useRef(useComponentHelper());
 
   // 메뉴 위치 계산
-  const setPosition = useCallback(() => {
+  const setLayerPosition = useCallback(() => {
     if (!dropMenuRef.current) return;
 
     const rect = dropMenuRef.current.getBoundingClientRect();
@@ -42,15 +41,15 @@ const DropMenu = ({
       width: width ?? rect.width,
     });
 
-    setLayerStyle(prev => ({ ...prev, ...style }));
+    setLayerStyle(() => style);
   }, [position, width]);
 
   // 메뉴 열기
   const openMenu = useCallback(() => {
     if (disabled) return;
 
-    setPosition();
-    setIsOpen(true);
+    setLayerPosition();
+    setIsOpen(() => true);
 
     if (rest.onOpen) {
       rest.onOpen();
@@ -65,7 +64,7 @@ const DropMenu = ({
         }
       }
     }, 0);
-  }, [disabled, setPosition, rest]);
+  }, [disabled, rest]);
 
   // 메뉴 닫기
   const closeMenu = useCallback(() => {
@@ -207,6 +206,15 @@ const DropMenu = ({
     [color, disabled],
   );
 
+  const componentHelperRef = useRef(useComponentHelper());
+
+  const variants = useMemo(() => {
+    return componentHelperRef.current.getTransitionVariant(
+      transition,
+      position as LayerPositionType,
+    );
+  }, [position, transition]);
+
   // 렌더
   return (
     <div
@@ -220,39 +228,38 @@ const DropMenu = ({
       {children}
 
       {/* 드롭다운 메뉴 트랜지션 */}
-      <CSSTransition
-        in={isOpen}
-        timeout={200}
-        classNames={transitionName}
-        unmountOnExit
-        nodeRef={ulTransitionRef}
-        onEnter={setPosition}
-      >
-        <ul
-          ref={el => {
-            menuRef.current = el;
-            ulTransitionRef.current = el;
-          }}
-          style={layerStyle}
-          className={['drop-menu-wrap', position].join(' ')}
-          onKeyDown={handleKeydown}
-        >
-          {items.map((item, idx) => (
-            <li key={`menu-item-${idx}`} role="none">
-              <a
-                href="#"
-                className={item.disabled ? 'disabled' : ''}
-                onClick={e => handleItemClick(item, idx, e)}
-                onKeyDown={e => onKeyDownEvent(item, idx, e)}
-                tabIndex={item.disabled ? -1 : 0}
-              >
-                {item.icon && <item.icon width={18} height={18} style={{ marginRight: 8 }} />}
-                <span>{item.text}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </CSSTransition>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.ul
+            ref={el => {
+              menuRef.current = el;
+              ulTransitionRef.current = el;
+            }}
+            style={layerStyle}
+            className={['drop-menu-wrap', position].join(' ')}
+            onKeyDown={handleKeydown}
+            initial={variants.initial}
+            animate={variants.animate}
+            exit={variants.exit}
+            transition={variants.transition}
+          >
+            {items.map((item, idx) => (
+              <li key={`menu-item-${idx}`} role="none">
+                <a
+                  href="#"
+                  className={item.disabled ? 'disabled' : ''}
+                  onClick={e => handleItemClick(item, idx, e)}
+                  onKeyDown={e => onKeyDownEvent(item, idx, e)}
+                  tabIndex={item.disabled ? -1 : 0}
+                >
+                  {item.icon && <item.icon width={18} height={18} style={{ marginRight: 8 }} />}
+                  <span>{item.text}</span>
+                </a>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
