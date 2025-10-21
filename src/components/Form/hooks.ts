@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import type { UseValidationProps, UseValidationReturn } from './types';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import type { UseAppendFormComponentProps, UseValidationProps, UseValidationReturn } from './types';
+import { VFContext } from './ValidateForm/context';
 
 export const useValidation = <T = unknown>({
   validate,
@@ -84,5 +85,39 @@ export const useValidation = <T = unknown>({
     setMessage,
     setErrorTransition,
     validateValue,
+  };
+};
+
+/**
+ * ValidateForm과 컴포넌트 연계를 위한 hook
+ * @param {UseAppendFormComponentProps} { check, resetForm, resetValidate }
+ * @returns { { motherRef: React.RefObject<HTMLDivElement> } }
+ */
+export const useAppendFormComponent = ({
+  check,
+  resetForm,
+  resetValidate,
+  motherRef,
+}: UseAppendFormComponentProps) => {
+  const vfContext = useContext(VFContext);
+  const tagRef = motherRef ?? useRef<HTMLDivElement>(null);
+  const componentRef = useRef<UseAppendFormComponentProps>({
+    check,
+    resetForm,
+    resetValidate,
+  });
+
+  useEffect(() => {
+    if (vfContext) {
+      vfContext.addComponent(componentRef.current, tagRef.current);
+
+      return () => {
+        vfContext.removeComponent(componentRef.current);
+      };
+    }
+  }, []);
+
+  return {
+    motherRef: tagRef,
   };
 };

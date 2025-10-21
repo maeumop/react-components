@@ -9,7 +9,7 @@ import React, {
 import { CancelRounded as ClearIcon } from '@mui/icons-material';
 import { textFieldType } from './const';
 import type { TextFieldModel, TextFieldProps } from './types';
-import { useValidation } from '../hooks';
+import { useAppendFormComponent, useValidation } from '../hooks';
 import './style.scss';
 
 const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
@@ -183,6 +183,12 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
     }
   }, [autofocus, multiline]);
 
+  const { motherRef } = useAppendFormComponent({
+    check: checkWithPattern,
+    resetForm,
+    resetValidate,
+  });
+
   // imperative handle (expose)
   useImperativeHandle(
     ref,
@@ -197,7 +203,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   const IconComponent = icon;
 
   return (
-    <div className={wrapperClass} style={{ width }}>
+    <div className={wrapperClass} style={{ width }} ref={motherRef}>
       {(label || (isCounting && maxLength)) && (
         <div className="options-wrap">
           {label && (

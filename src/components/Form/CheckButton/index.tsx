@@ -3,6 +3,7 @@ import type { CheckButtonModel, CheckButtonProps } from './types';
 import { useCheckButton } from './hook';
 import CheckBox from './checkBox';
 import './style.scss';
+import { useAppendFormComponent } from '../hooks';
 
 const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) => {
   const {
@@ -85,6 +86,12 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
     initCount.current++;
   }, []);
 
+  const { motherRef } = useAppendFormComponent({
+    check,
+    resetForm,
+    resetValidate,
+  });
+
   useImperativeHandle(
     ref,
     () => ({
@@ -96,7 +103,7 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
   );
 
   return (
-    <div className="check-button">
+    <div className="check-button" ref={motherRef}>
       {label && (
         <div className="options-wrap">
           <label className="input-label">

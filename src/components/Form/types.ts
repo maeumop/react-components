@@ -19,3 +19,10 @@ export interface UseValidationReturn {
   setErrorTransition: (errorTransition: boolean) => void;
   validateValue: () => Promise<boolean>;
 }
+
+export interface UseAppendFormComponentProps {
+  check: (silence?: boolean) => boolean;
+  resetForm: () => void;
+  resetValidate: () => void;
+  motherRef?: React.RefObject<HTMLDivElement>;
+}

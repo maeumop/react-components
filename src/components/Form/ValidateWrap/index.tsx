@@ -30,8 +30,6 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
     ref,
   ) => {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const elementRef = useRef<HTMLDivElement>(null);
-    const vfContext = useContext<ValidateFormContext | null>(VFContext);
 
     const { message, errorTransition, check, resetValidate, setMessage, setErrorTransition } =
       useValidation<string | string[] | number | number[]>({
@@ -75,32 +73,6 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
       };
     }, [errorTransition]);
 
-    // componentRef를 최신 함수로 업데이트 (ValidateForm에서 사용)
-    const componentRef = useRef({
-      check,
-      resetForm,
-      resetValidate,
-    });
-
-    useEffect(() => {
-      componentRef.current = {
-        check,
-        resetForm,
-        resetValidate,
-      };
-    }, [check, resetForm, resetValidate]);
-
-    // ValidateForm에 컴포넌트 등록
-    useEffect(() => {
-      if (vfContext) {
-        vfContext.addComponent(componentRef.current, elementRef.current);
-
-        return () => {
-          vfContext.removeComponent(componentRef.current);
-        };
-      }
-    }, [vfContext]);
-
     // className 메모이제이션
     const wrapClassName = useMemo(() => `validate-wrap ${className || ''}`, [className]);
     const inputWrapClassName = useMemo(
@@ -115,6 +87,26 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
     // children에 전달할 props 메모이제이션
     const childProps = useMemo(() => ({ onBlur: childBlur }), [childBlur]);
 
+    // componentRef를 최신 함수로 업데이트 (ValidateForm에서 사용)
+    const motherRef = useRef<HTMLDivElement>(null);
+    const vfContext = useContext<ValidateFormContext | null>(VFContext);
+    const componentRef = useRef({
+      check,
+      resetForm,
+      resetValidate,
+    });
+
+    // ValidateForm에 컴포넌트 등록
+    useEffect(() => {
+      if (vfContext) {
+        vfContext.addComponent(componentRef.current, motherRef.current);
+
+        return () => {
+          vfContext.removeComponent(componentRef.current);
+        };
+      }
+    }, []);
+
     // useImperativeHandle로 ref 노출
     useImperativeHandle(
       ref,
@@ -127,7 +119,7 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
     );
 
     return (
-      <div className={wrapClassName} ref={elementRef}>
+      <div className={wrapClassName} ref={motherRef}>
         {label && (
           <div className="options-wrap">
             <label className="input-label">

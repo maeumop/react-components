@@ -19,7 +19,7 @@ import { useComponentHelper } from '@/components/helper';
 import { transitionType } from '@/components/const';
 import type { LayerPositionType } from '@/components/types';
 import { CancelRounded as ClearIcon } from '@mui/icons-material';
-import { useValidation } from '../hooks';
+import { useAppendFormComponent, useValidation } from '../hooks';
 
 const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref) => {
   const {
@@ -599,6 +599,13 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       initCount.current++;
     }
   }, []);
+
+  useAppendFormComponent({
+    check,
+    resetForm,
+    resetValidate,
+    motherRef: elRef as React.RefObject<HTMLDivElement>,
+  });
 
   useImperativeHandle(ref, () => ({
     check,

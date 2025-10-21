@@ -1,17 +1,12 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { VFContext } from './context';
-import { validateExplorKey } from './const';
-import type { ValidatableComponent, ValidateExplorKey, ValidateFormRef } from './types';
+import type {
+  ComponentEntry,
+  ValidatableComponent,
+  ValidateFormProps,
+  ValidateFormRef,
+} from './types';
 import './style.scss';
-
-interface ValidateFormProps {
-  children: React.ReactNode;
-}
-
-interface ComponentEntry {
-  ref: ValidatableComponent;
-  element: HTMLElement | null;
-}
 
 const ValidateFormBase = forwardRef<ValidateFormRef, ValidateFormProps>(({ children }, ref) => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -59,7 +54,13 @@ const ValidateFormBase = forwardRef<ValidateFormRef, ValidateFormProps>(({ child
    */
   const resetForm = (): void => {
     if (formRef.current) {
-      explore(validateExplorKey.resetForm);
+      for (const entry of formValidItemsRef.current) {
+        const { ref: componentRef } = entry;
+
+        if (typeof componentRef.resetForm === 'function') {
+          componentRef.resetForm();
+        }
+      }
     }
   };
 
@@ -68,40 +69,13 @@ const ValidateFormBase = forwardRef<ValidateFormRef, ValidateFormProps>(({ child
    */
   const resetValidate = (): void => {
     if (formRef.current) {
-      explore(validateExplorKey.resetValidate);
-    }
-  };
+      for (const entry of formValidItemsRef.current) {
+        const { ref: componentRef } = entry;
 
-  /**
-   * 컴포넌트 인스턴스에서 제공하는 함수 호출
-   *
-   * @param componentRef 컴포넌트 참조
-   * @param flag 플래그
-   */
-  const validateCheck = (componentRef: ValidatableComponent, flag: ValidateExplorKey): void => {
-    const { resetForm, resetValidate } = componentRef ?? {};
-
-    switch (flag) {
-      case validateExplorKey.resetForm:
-        if (typeof resetForm === 'function') {
-          resetForm();
-
-          if (typeof resetValidate === 'function') {
-            resetValidate();
-          }
+        if (typeof componentRef.resetValidate === 'function') {
+          componentRef.resetValidate();
         }
-
-        break;
-      case validateExplorKey.resetValidate:
-        if (typeof resetValidate === 'function') {
-          resetValidate();
-        }
-    }
-  };
-
-  const explore = (flag: ValidateExplorKey): void => {
-    for (const entry of formValidItemsRef.current) {
-      validateCheck(entry.ref, flag);
+      }
     }
   };
 

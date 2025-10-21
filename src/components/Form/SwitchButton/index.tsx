@@ -13,7 +13,7 @@ import {
   CheckBox as CheckBoxIcon,
   CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
 } from '@mui/icons-material';
-import { useValidation } from '../hooks';
+import { useAppendFormComponent, useValidation } from '../hooks';
 
 const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
   (
@@ -110,6 +110,12 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
       return <CheckBoxOutlineBlankIcon />;
     }, [value, trueValue]);
 
+    const { motherRef } = useAppendFormComponent({
+      check,
+      resetForm,
+      resetValidate,
+    });
+
     // imperative handle (expose)
     useImperativeHandle(
       ref,
@@ -122,7 +128,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     );
 
     return (
-      <div className={wrapperClassName}>
+      <div className={wrapperClassName} ref={motherRef}>
         <label htmlFor={inputId} className={labelClassName}>
           <input
             id={inputId}

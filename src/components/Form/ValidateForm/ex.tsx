@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import type { RuleFunc } from '../types';
 import CheckButton from '../CheckButton/index';
 import DatePicker from '../DatePicker';
@@ -9,6 +9,7 @@ import ValidateWrap from '../ValidateWrap';
 import { ValidateForm } from './index';
 import type { ValidateFormRef } from './types';
 import './ex.scss';
+import FloatingBackButton from '@/views/FloatingBackButton';
 
 const ValidateFormExample: React.FC = () => {
   // 폼 데이터
@@ -23,8 +24,8 @@ const ValidateFormExample: React.FC = () => {
   // 폼 참조
   const validateFormRef = useRef<ValidateFormRef>(null);
 
-  // 유효성 검사 함수들
-  const requiredRule: RuleFunc = (value: unknown): boolean | string => {
+  // 유효성 검사 함수들 - useCallback으로 메모이제이션
+  const requiredRule: RuleFunc = useCallback((value: unknown): boolean | string => {
     if (
       !value ||
       (typeof value === 'string' && value.trim() === '') ||
@@ -32,78 +33,93 @@ const ValidateFormExample: React.FC = () => {
     ) {
       return '필수 입력 항목입니다.';
     }
-    return true;
-  };
 
-  const phoneRule: RuleFunc = (value: unknown): boolean | string => {
+    return true;
+  }, []);
+
+  const phoneRule: RuleFunc = useCallback((value: unknown): boolean | string => {
     if (typeof value === 'string' && value) {
       const phoneRegex = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/;
+
       if (!phoneRegex.test(value)) {
         return '올바른 전화번호 형식이 아닙니다. (예: 010-1234-5678)';
       }
     }
-    return true;
-  };
 
-  const numberRangeRule = (min: number, max: number): RuleFunc => {
+    return true;
+  }, []);
+
+  const numberRangeRule = useCallback((min: number, max: number): RuleFunc => {
     return (value: unknown): boolean | string => {
       if (typeof value === 'string' && value) {
         const numValue = Number(value.replace(/,/g, ''));
+
         if (isNaN(numValue) || numValue < min || numValue > max) {
           return `${min.toLocaleString()}-${max.toLocaleString()} 사이의 금액을 입력해주세요.`;
         }
       }
+
       return true;
     };
-  };
+  }, []);
 
-  // 지역 옵션
-  const regionOptions = [
-    { value: '', text: '선택하세요' },
-    { value: 'seoul', text: '서울특별시' },
-    { value: 'busan', text: '부산광역시' },
-    { value: 'daegu', text: '대구광역시' },
-    { value: 'incheon', text: '인천광역시' },
-    { value: 'gwangju', text: '광주광역시' },
-    { value: 'daejeon', text: '대전광역시' },
-    { value: 'ulsan', text: '울산광역시' },
-    { value: 'gyeonggi', text: '경기도' },
-    { value: 'gangwon', text: '강원도' },
-    { value: 'chungbuk', text: '충청북도' },
-    { value: 'chungnam', text: '충청남도' },
-    { value: 'jeonbuk', text: '전라북도' },
-    { value: 'jeonnam', text: '전라남도' },
-    { value: 'gyeongbuk', text: '경상북도' },
-    { value: 'gyeongnam', text: '경상남도' },
-    { value: 'jeju', text: '제주특별자치도' },
-  ];
+  // 옵션들 - useMemo로 메모이제이션하여 재생성 방지
+  const regionOptions = useMemo(
+    () => [
+      { value: '', text: '선택하세요' },
+      { value: 'seoul', text: '서울특별시' },
+      { value: 'busan', text: '부산광역시' },
+      { value: 'daegu', text: '대구광역시' },
+      { value: 'incheon', text: '인천광역시' },
+      { value: 'gwangju', text: '광주광역시' },
+      { value: 'daejeon', text: '대전광역시' },
+      { value: 'ulsan', text: '울산광역시' },
+      { value: 'gyeonggi', text: '경기도' },
+      { value: 'gangwon', text: '강원도' },
+      { value: 'chungbuk', text: '충청북도' },
+      { value: 'chungnam', text: '충청남도' },
+      { value: 'jeonbuk', text: '전라북도' },
+      { value: 'jeonnam', text: '전라남도' },
+      { value: 'gyeongbuk', text: '경상북도' },
+      { value: 'gyeongnam', text: '경상남도' },
+      { value: 'jeju', text: '제주특별자치도' },
+    ],
+    [],
+  );
 
-  // 취미 옵션
-  const hobbyOptions = [
-    { value: 'reading', text: '독서' },
-    { value: 'sports', text: '운동' },
-    { value: 'music', text: '음악 감상' },
-    { value: 'travel', text: '여행' },
-    { value: 'cooking', text: '요리' },
-    { value: 'gaming', text: '게임' },
-    { value: 'photography', text: '사진 촬영' },
-    { value: 'painting', text: '그림 그리기' },
-    { value: 'dancing', text: '춤' },
-    { value: 'fishing', text: '낚시' },
-  ];
+  const hobbyOptions = useMemo(
+    () => [
+      { value: 'reading', text: '독서' },
+      { value: 'sports', text: '운동' },
+      { value: 'music', text: '음악 감상' },
+      { value: 'travel', text: '여행' },
+      { value: 'cooking', text: '요리' },
+      { value: 'gaming', text: '게임' },
+      { value: 'photography', text: '사진 촬영' },
+      { value: 'painting', text: '그림 그리기' },
+      { value: 'dancing', text: '춤' },
+      { value: 'fishing', text: '낚시' },
+    ],
+    [],
+  );
 
-  // 성별 옵션
-  const genderOptions = [
-    { value: 'male', text: '남성' },
-    { value: 'female', text: '여성' },
-  ];
+  const genderOptions = useMemo(
+    () => [
+      { value: 'male', text: '남성' },
+      { value: 'female', text: '여성' },
+    ],
+    [],
+  );
 
-  // 폼 검증
-  const validateFormAction = (): void => {
+  // 폼 검증 - useCallback으로 메모이제이션
+  const validateFormAction = useCallback((): void => {
+    validateFormRef.current?.validate();
+    return;
+
     const isValid = validateFormRef.current?.validate();
 
     if (isValid) {
-      alert(
+      console.log(
         '모든 검증을 통과했습니다!\n\n입력된 정보:\n' +
           `이름: ${name}\n` +
           `전화번호: ${phone}\n` +
@@ -114,33 +130,68 @@ const ValidateFormExample: React.FC = () => {
           `취미: ${hobbies.map(h => hobbyOptions.find(ho => ho.value === h)?.text).join(', ')}`,
       );
     } else {
-      alert('검증에 실패했습니다. 오류 메시지를 확인해주세요.');
+      console.log('검증에 실패했습니다. 오류 메시지를 확인해주세요.');
     }
-  };
+  }, [
+    name,
+    phone,
+    birthDate,
+    gender,
+    amount,
+    region,
+    hobbies,
+    genderOptions,
+    regionOptions,
+    hobbyOptions,
+  ]);
 
-  // 취미 토글 함수
-  const toggleHobby = (hobbyValue: string): void => {
-    const index = hobbies.indexOf(hobbyValue);
-    if (index > -1) {
-      setHobbies(hobbies.filter(h => h !== hobbyValue));
-    } else {
-      if (hobbies.length < 4) {
-        setHobbies([...hobbies, hobbyValue]);
+  // 취미 토글 함수 - useCallback으로 메모이제이션
+  const toggleHobby = useCallback((hobbyValue: string): void => {
+    setHobbies(prev => {
+      const index = prev.indexOf(hobbyValue);
+
+      if (index > -1) {
+        return prev.filter(h => h !== hobbyValue);
+      } else if (prev.length < 4) {
+        return [...prev, hobbyValue];
       }
-    }
-  };
 
-  // 폼 초기화
-  const resetForm = (): void => {
+      return prev;
+    });
+  }, []);
+
+  // 폼 초기화 - useCallback으로 메모이제이션
+  const resetForm = useCallback((): void => {
     validateFormRef.current?.resetForm();
-    setName('');
-    setPhone('');
-    setBirthDate('');
-    setGender('');
-    setAmount(0);
-    setRegion('');
-    setHobbies([]);
-  };
+  }, []);
+
+  // validate 배열들을 useMemo로 메모이제이션
+  const nameValidate = useMemo(() => [requiredRule], [requiredRule]);
+  const phoneValidate = useMemo(() => [requiredRule, phoneRule], [requiredRule, phoneRule]);
+  const birthDateValidate = useMemo(() => [requiredRule], [requiredRule]);
+  const genderValidate = useMemo(() => [requiredRule], [requiredRule]);
+  const amountValidate = useMemo(
+    () => [requiredRule, numberRangeRule(1000000, 100000000)],
+    [requiredRule, numberRangeRule],
+  );
+  const regionValidate = useMemo(() => [requiredRule], [requiredRule]);
+  const hobbiesValidate = useMemo(() => [requiredRule], [requiredRule]);
+
+  // DatePicker onChange 핸들러 메모이제이션
+  const handleBirthDateChange = useCallback((v: string | string[]) => {
+    setBirthDate(v as string);
+  }, []);
+
+  const handleGenderChange = useCallback((v: string | string[]) => {
+    setGender(v as string);
+  }, []);
+
+  const handleRegionChange = useCallback((v: string | string[]) => {
+    setRegion(v as string);
+  }, []);
+
+  // hobbies checkValue 메모이제이션
+  const hobbiesCheckValue = useMemo(() => hobbies.join(','), [hobbies]);
 
   return (
     <div id="app">
@@ -163,7 +214,7 @@ const ValidateFormExample: React.FC = () => {
                     <TextField
                       value={name}
                       onChange={setName}
-                      validate={[requiredRule]}
+                      validate={nameValidate}
                       label="이름"
                       placeholder="이름을 입력하세요"
                       required
@@ -176,7 +227,7 @@ const ValidateFormExample: React.FC = () => {
                     <TextField
                       value={phone}
                       onChange={setPhone}
-                      validate={[requiredRule, phoneRule]}
+                      validate={phoneValidate}
                       label="전화번호"
                       placeholder="010-1234-5678"
                       required
@@ -185,27 +236,26 @@ const ValidateFormExample: React.FC = () => {
                   </div>
 
                   {/* 생년월일 */}
-                  {/* <div className="form-row">
+                  <div className="form-row">
                     <DatePicker
                       value={birthDate}
-                      onChange={v => setBirthDate(v as string)}
-                      onUpdateSet={v => setBirthDate(v as string)}
-                      validate={[requiredRule]}
+                      onChange={handleBirthDateChange}
+                      validate={birthDateValidate}
                       label="생년월일"
                       placeholder="생년월일을 선택하세요"
                       required
                       block
                     />
-                  </div> */}
+                  </div>
 
                   {/* 성별 */}
                   <div className="form-row">
                     <CheckButton
                       value={gender}
-                      onChange={v => setGender(v as string)}
+                      onChange={handleGenderChange}
                       items={genderOptions}
                       name="gender"
-                      validate={[requiredRule]}
+                      validate={genderValidate}
                       label="성별"
                       required
                       type="radio"
@@ -217,7 +267,7 @@ const ValidateFormExample: React.FC = () => {
                     <NumberFormat
                       value={amount}
                       onChange={setAmount}
-                      validate={[requiredRule, numberRangeRule(1000000, 100000000)]}
+                      validate={amountValidate}
                       label="보유 금액"
                       placeholder="1,000,000 - 100,000,000"
                       required
@@ -229,9 +279,9 @@ const ValidateFormExample: React.FC = () => {
                   <div className="form-row">
                     <SelectBox
                       value={region}
-                      onChange={v => setRegion(v as string)}
+                      onChange={handleRegionChange}
                       options={regionOptions}
-                      validate={[requiredRule]}
+                      validate={regionValidate}
                       label="거주 지역"
                       required
                       block
@@ -241,8 +291,8 @@ const ValidateFormExample: React.FC = () => {
                   {/* 취미 */}
                   <div className="form-row">
                     <ValidateWrap
-                      checkValue={hobbies.join(',')}
-                      validate={[requiredRule]}
+                      checkValue={hobbiesCheckValue}
+                      validate={hobbiesValidate}
                       label="취미 (2~4개 선택)"
                       required
                     >
@@ -279,6 +329,8 @@ const ValidateFormExample: React.FC = () => {
           </section>
         </div>
       </main>
+
+      <FloatingBackButton />
     </div>
   );
 };

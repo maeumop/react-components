@@ -9,7 +9,7 @@ import React, {
 import './style.scss';
 import type { NumberFormatModel, NumberFormatProps } from './types';
 import { useComponentHelper } from '@/components/helper';
-import { useValidation } from '../hooks';
+import { useAppendFormComponent, useValidation } from '../hooks';
 
 const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
   (
@@ -164,6 +164,12 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
       }
     }, [autofocus, value]);
 
+    const { motherRef } = useAppendFormComponent({
+      check,
+      resetForm,
+      resetValidate,
+    });
+
     useImperativeHandle(
       ref,
       () => ({
@@ -175,7 +181,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
     );
 
     return (
-      <div className={wrapperClass} style={{ width }}>
+      <div className={wrapperClass} style={{ width }} ref={motherRef}>
         {label && (
           <div className="options-wrap">
             <label className="input-label">
@@ -191,7 +197,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readonly}
-          maxLength={Number(maxLength)}
+          maxLength={maxLength ? Number(maxLength) : undefined}
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={handleChange}

@@ -12,6 +12,7 @@ import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion
 import { useComponentHelper } from '@/components/helper.ts';
 import type { LayerPositionType } from '@/components/types.ts';
 import { transitionType } from '@/components/const.ts';
+import { useAppendFormComponent } from '../hooks.ts';
 
 const SelectBox = React.memo(
   forwardRef<SelectBoxModel, SelectBoxProps>((props, ref) => {
@@ -87,6 +88,13 @@ const SelectBox = React.memo(
         ),
       [position],
     );
+
+    useAppendFormComponent({
+      check,
+      resetForm,
+      resetValidate,
+      motherRef: mainRef as React.RefObject<HTMLDivElement>,
+    });
 
     // expose 메서드
     useImperativeHandle(

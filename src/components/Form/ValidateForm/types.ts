@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface ValidateFormRef {
   formProtection(protect?: boolean): void;
   resetForm(): void;
@@ -17,4 +19,13 @@ export interface ValidatableComponent {
 export interface ValidateFormContext {
   addComponent: (ref: ValidatableComponent, element: HTMLElement | null) => void;
   removeComponent: (ref: ValidatableComponent) => void;
+}
+
+export interface ValidateFormProps {
+  children: React.ReactNode;
+}
+
+export interface ComponentEntry {
+  ref: ValidatableComponent;
+  element: HTMLElement | null;
 }
