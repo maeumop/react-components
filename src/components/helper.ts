@@ -233,6 +233,41 @@ class ComponentHelper {
         };
     }
   }
+
+  /**
+   * 천단위로 콤마 포맷
+   * @param v - 숫자
+   * @returns 천단위 콤마 포맷팅된 문자열
+   */
+  public numberFormat(v: number | string): string {
+    if (v === '-' || v === '') {
+      return String(v);
+    }
+
+    const num = Number(v);
+
+    if (isNaN(num)) {
+      return '0';
+    }
+
+    return new Intl.NumberFormat().format(num);
+  }
+
+  /**
+   * 천단위 콤마 포맷되어 있는 문자열을 숫자로 전환
+   * @param v - 천단위 콤마 포맷되어 있는 문자열
+   * @returns  number
+   */
+  public commaStringToNumber(v: string): number {
+    let val = v
+      .replace(/[^\d-]/g, '')
+      .replace(/-{2,}/g, '-')
+      .replace(/^$/, '');
+
+    val = val.charAt(0) === '-' ? '-' + val.replace(/[-]/g, '') : val.replace(/[-]/g, '');
+
+    return Number(val);
+  }
 }
 
 export const useComponentHelper = () => {

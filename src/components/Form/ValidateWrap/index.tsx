@@ -1,9 +1,17 @@
-import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react';
 import { VFContext } from '../ValidateForm/context';
+import { useValidation } from '../hooks';
 import type { ValidateWrapProps, ValidateWrapRef } from './types';
 import type { ValidateFormContext } from '../ValidateForm/types';
 import './style.scss';
-import React from 'react';
 
 const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
   (
@@ -14,27 +22,43 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
       label,
       required = false,
       disabled = false,
-      children,
       addOn,
+      className,
+      children,
+      resetValue,
     },
     ref,
   ) => {
-    const [isValidate, setIsValidate] = useState<boolean>(true);
-    const [message, setMessage] = useState<string>('');
-    const [errorTransition, setErrorTransition] = useState<boolean>(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const elementRef = useRef<HTMLDivElement>(null);
     const vfContext = useContext<ValidateFormContext | null>(VFContext);
 
-    // checkValue 변경 감지
-    useEffect(() => {
-      resetForm();
-    }, [checkValue]);
+    const { message, errorTransition, check, resetValidate, setMessage, setErrorTransition } =
+      useValidation<string | string[] | number | number[]>({
+        validate,
+        errorMessage,
+        disabled,
+        value: checkValue,
+      });
+
+    const transitionEnd = useCallback((): void => {
+      setErrorTransition(false);
+    }, [setErrorTransition]);
+
+    const resetForm = useCallback((): void => {
+      setMessage('');
+      setErrorTransition(false);
+      resetValue?.();
+    }, [setMessage, setErrorTransition]);
+
+    const childBlur = useCallback((): void => {
+      check();
+    }, [check]);
 
     // errorMessage prop 변경 감지
     useEffect(() => {
       setMessage(errorMessage);
-    }, [errorMessage]);
+    }, [errorMessage, setMessage]);
 
     // errorTransition 타이머
     useEffect(() => {
@@ -42,10 +66,6 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
         }
-
-        timeoutRef.current = setTimeout(() => {
-          setErrorTransition(false);
-        }, 300);
       }
 
       return () => {
@@ -55,73 +75,20 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
       };
     }, [errorTransition]);
 
-    const check = (silence: boolean = false): boolean => {
-      if (disabled) {
-        return true;
-      }
-
-      // errorMessage가 설정되어 있으면 해당 메시지 사용
-      if (errorMessage) {
-        if (!silence) {
-          setMessage(errorMessage);
-          setErrorTransition(true);
-          setIsValidate(false);
-        }
-        return false;
-      }
-
-      // validate 함수들 실행
-      if (validate.length) {
-        for (const validateFunc of validate) {
-          const result = validateFunc(checkValue);
-
-          if (typeof result === 'string') {
-            if (!silence) {
-              setMessage(result);
-              setErrorTransition(true);
-              setIsValidate(false);
-            }
-
-            return false;
-          }
-        }
-      }
-
-      // 모든 검증 통과
-      setMessage('');
-      setErrorTransition(false);
-      setIsValidate(true);
-      return true;
-    };
-
-    const resetForm = (): void => {
-      setIsValidate(true);
-      setMessage('');
-      setErrorTransition(false);
-    };
-
-    const resetValidate = (): void => {
-      resetForm();
-    };
-
-    const childBlur = (): void => {
-      check();
-    };
-
+    // componentRef를 최신 함수로 업데이트 (ValidateForm에서 사용)
     const componentRef = useRef({
       check,
       resetForm,
       resetValidate,
     });
 
-    // componentRef를 최신 함수로 업데이트
     useEffect(() => {
       componentRef.current = {
         check,
         resetForm,
         resetValidate,
       };
-    });
+    }, [check, resetForm, resetValidate]);
 
     // ValidateForm에 컴포넌트 등록
     useEffect(() => {
@@ -134,14 +101,33 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
       }
     }, [vfContext]);
 
-    useImperativeHandle(ref, () => ({
-      check,
-      resetForm,
-      resetValidate,
-    }));
+    // className 메모이제이션
+    const wrapClassName = useMemo(() => `validate-wrap ${className || ''}`, [className]);
+    const inputWrapClassName = useMemo(
+      () => `input-wrap ${errorTransition ? 'error' : ''}`,
+      [errorTransition],
+    );
+    const feedbackClassName = useMemo(
+      () => `feedback ${errorTransition ? 'error' : ''}`,
+      [errorTransition],
+    );
+
+    // children에 전달할 props 메모이제이션
+    const childProps = useMemo(() => ({ onBlur: childBlur }), [childBlur]);
+
+    // useImperativeHandle로 ref 노출
+    useImperativeHandle(
+      ref,
+      () => ({
+        check,
+        resetForm,
+        resetValidate,
+      }),
+      [check, resetForm, resetValidate],
+    );
 
     return (
-      <div className="validate-wrap" ref={elementRef}>
+      <div className={wrapClassName} ref={elementRef}>
         {label && (
           <div className="options-wrap">
             <label className="input-label">
@@ -152,11 +138,11 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
           </div>
         )}
 
-        <div className={`input-wrap ${errorTransition ? 'error' : ''}`}>
-          {children({ onBlur: childBlur })}
-        </div>
+        <div className={inputWrapClassName}>{children(childProps)}</div>
 
-        <div className={`feedback ${errorTransition ? 'error' : ''}`}>{message}</div>
+        <div className={feedbackClassName} onTransitionEnd={transitionEnd}>
+          {message}
+        </div>
       </div>
     );
   },
@@ -164,4 +150,39 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
 
 ValidateWrapBase.displayName = 'ValidateWrap';
 
-export const ValidateWrap = React.memo(ValidateWrapBase);
+// React.memo 비교 함수 - props가 실제로 변경되었을 때만 리렌더링
+export default React.memo(ValidateWrapBase, (prevProps, nextProps) => {
+  // checkValue가 변경되면 리렌더링 필요
+  if (prevProps.checkValue !== nextProps.checkValue) {
+    return false;
+  }
+
+  // errorMessage가 변경되면 리렌더링 필요
+  if (prevProps.errorMessage !== nextProps.errorMessage) {
+    return false;
+  }
+
+  // label, required, disabled, className이 변경되면 리렌더링 필요
+  if (
+    prevProps.label !== nextProps.label ||
+    prevProps.required !== nextProps.required ||
+    prevProps.disabled !== nextProps.disabled ||
+    prevProps.className !== nextProps.className
+  ) {
+    return false;
+  }
+
+  // validate 배열의 참조가 변경되면 리렌더링 필요
+  if (prevProps.validate !== nextProps.validate) {
+    return false;
+  }
+
+  // children 함수는 비교하지 않음 (항상 같다고 가정)
+  // addOn은 변경 가능성이 낮으므로 참조 비교
+  if (prevProps.addOn !== nextProps.addOn) {
+    return false;
+  }
+
+  // 모든 조건을 통과하면 리렌더링 하지 않음
+  return true;
+});

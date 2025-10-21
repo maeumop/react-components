@@ -104,24 +104,23 @@ const DatePickerExamples: React.FC = () => {
 
   // 유효성 검사 함수들
   const validateRequired: RuleFunc = (value: unknown): string | boolean => {
-    if (Array.isArray(value)) {
-      if (value.length === 0 || value.every(v => !v)) {
-        return '필수 선택 항목입니다.';
-      }
-    } else {
-      if (!value || value === '') {
-        return '필수 선택 항목입니다.';
-      }
+    if (Array.isArray(value) && (value.length === 0 || value.every(v => !v))) {
+      return '필수 선택 항목입니다.';
+    } else if (value === '' || value === undefined || value === null) {
+      return '필수 선택 항목입니다.';
     }
+
     return true;
   };
 
   const validateDateRange: RuleFunc = (value: unknown): string | boolean => {
     if (Array.isArray(value) && value.length === 2) {
       const [start, end] = value;
+
       if (start && end) {
         const startDate = new Date(start);
         const endDate = new Date(end);
+
         if (startDate > endDate) {
           return '시작일은 종료일보다 이전이어야 합니다.';
         }
@@ -165,24 +164,22 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={basicDate1}
                   onChange={handleBasicDate1Change}
-                  onUpdateSet={handleBasicDate1Change}
                   placeholder="날짜를 선택하세요"
                   clearable={true}
                   block
                 />
-                <span className="example-label">단일 날짜 선택</span>
+                <span className="example-label">단일 날짜 선택 {basicDate1}</span>
               </div>
               <div className="example-item">
                 <DatePicker
                   value={rangeDate1}
                   onChange={handleRangeDate1Change}
-                  onUpdateSet={handleRangeDate1Change}
                   range
                   placeholder={['시작일', '종료일']}
                   clearable={true}
                   block
                 />
-                <span className="example-label">날짜 범위 선택</span>
+                <span className="example-label">날짜 범위 선택 {rangeDate1.join(' ~ ')}</span>
               </div>
             </div>
           </section>
@@ -195,7 +192,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={labelDate}
                   onChange={handleLabelDateChange}
-                  onUpdateSet={handleLabelDateChange}
                   label="시작일"
                   placeholder="시작일을 선택하세요"
                   required
@@ -207,7 +203,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={maxRangeDate}
                   onChange={handleMaxRangeDateChange}
-                  onUpdateSet={handleMaxRangeDateChange}
                   range
                   placeholder={['시작일', '종료일']}
                   maxRange={7}
@@ -226,7 +221,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={validateDate}
                   onChange={handleValidateDateChange}
-                  onUpdateSet={handleValidateDateChange}
                   validate={[validateRequired]}
                   placeholder="필수 선택"
                   required
@@ -238,7 +232,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={validateRange}
                   onChange={handleValidateRangeChange}
-                  onUpdateSet={handleValidateRangeChange}
                   range
                   validate={[validateRequired, validateDateRange, validateMaxRange]}
                   placeholder={['시작일', '종료일']}
@@ -258,7 +251,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={errorDate}
                   onChange={handleErrorDateChange}
-                  onUpdateSet={handleErrorDateChange}
                   placeholder="에러 상태"
                   block
                 />
@@ -268,7 +260,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={disabledDate}
                   onChange={handleDisabledDateChange}
-                  onUpdateSet={handleDisabledDateChange}
                   disabled
                   placeholder="비활성화 상태"
                   block
@@ -286,7 +277,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={yearRangeDate1}
                   onChange={handleYearRangeDate1Change}
-                  onUpdateSet={handleYearRangeDate1Change}
                   minYear={2020}
                   maxYear={2030}
                   placeholder="2020-2030년 범위"
@@ -298,7 +288,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={yearRangeDate2}
                   onChange={handleYearRangeDate2Change}
-                  onUpdateSet={handleYearRangeDate2Change}
                   range
                   minYear={2023}
                   maxYear={2025}
@@ -318,7 +307,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={separatorDate1}
                   onChange={handleSeparatorDate1Change}
-                  onUpdateSet={handleSeparatorDate1Change}
                   separator="/"
                   placeholder="슬래시 구분자"
                   block
@@ -329,7 +317,6 @@ const DatePickerExamples: React.FC = () => {
                 <DatePicker
                   value={separatorDate2}
                   onChange={handleSeparatorDate2Change}
-                  onUpdateSet={handleSeparatorDate2Change}
                   separator="."
                   placeholder="점 구분자"
                   block

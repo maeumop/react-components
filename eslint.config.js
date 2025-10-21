@@ -35,7 +35,12 @@ export default [
       'react/prop-types': 'off',
       'brace-style': ['error', '1tbs', { allowSingleLine: false }],
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+        },
+      ],
     },
   },
 ];

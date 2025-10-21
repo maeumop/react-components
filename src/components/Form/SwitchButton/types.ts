@@ -1,3 +1,4 @@
+import type { RuleFunc } from '../types';
 import type { switchButtonColor } from './const';
 
 export type SwitchButtonColor = (typeof switchButtonColor)[keyof typeof switchButtonColor];
@@ -12,7 +13,7 @@ export interface SwitchButtonProps {
   checkbox?: boolean;
   color?: SwitchButtonColor;
   disabled?: boolean;
-  validate?: string | ((value: unknown) => boolean | string);
+  validate?: RuleFunc[];
 }
 
 export interface SwitchButtonModel {

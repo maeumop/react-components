@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { RuleFunc } from '../types';
-import { ValidateWrap } from './index';
+import ValidateWrap from './index';
 import type { ValidateWrapRef } from './types';
 import './ex.scss';
+import StyledButton from '@/components/StyledButton';
+import FloatingBackButton from '@/views/FloatingBackButton';
 
-const ValidateWrapExample: React.FC = () => {
+export default function ValidateWrapEx() {
   // 기본 입력
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -92,21 +94,21 @@ const ValidateWrapExample: React.FC = () => {
     const isValid = results.every(result => result === true);
 
     if (isValid) {
-      alert('모든 검증을 통과했습니다!');
+      console.log('모든 검증을 통과했습니다!');
     } else {
-      alert('검증에 실패했습니다. 오류 메시지를 확인해주세요.');
+      console.log('검증에 실패했습니다. 오류 메시지를 확인해주세요.');
     }
   };
 
   // 폼 초기화
   const resetForm = (): void => {
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setAge('');
-    setPhone('');
-    setCustomValue('');
-    setCustomError('');
+    // setEmail('');
+    // setPassword('');
+    // setConfirmPassword('');
+    // setAge('');
+    // setPhone('');
+    // setCustomValue('');
+    // setCustomError('');
 
     emailRef.current?.resetForm();
     passwordRef.current?.resetForm();
@@ -136,14 +138,16 @@ const ValidateWrapExample: React.FC = () => {
                   ref={emailRef}
                   checkValue={email}
                   validate={[requiredRule, emailRule]}
+                  resetValue={() => setEmail('')}
+                  className="block"
                   label="이메일 주소"
                   required
                 >
-                  {({ onBlur }) => (
+                  {slotProps => (
                     <input
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      onBlur={onBlur}
+                      onBlur={slotProps.onBlur}
                       type="email"
                       className="form-input"
                       placeholder="이메일을 입력하세요"
@@ -157,14 +161,16 @@ const ValidateWrapExample: React.FC = () => {
                   ref={passwordRef}
                   checkValue={password}
                   validate={[requiredRule, minLengthRule(8)]}
+                  resetValue={() => setPassword('')}
+                  className="block"
                   label="비밀번호"
                   required
                 >
-                  {({ onBlur }) => (
+                  {slotProps => (
                     <input
                       value={password}
                       onChange={e => setPassword(e.target.value)}
-                      onBlur={onBlur}
+                      onBlur={slotProps.onBlur}
                       type="password"
                       className="form-input"
                       placeholder="8자 이상 입력하세요"
@@ -185,14 +191,16 @@ const ValidateWrapExample: React.FC = () => {
                   ref={confirmPasswordRef}
                   checkValue={confirmPassword}
                   validate={[requiredRule]}
+                  resetValue={() => setConfirmPassword('')}
+                  className="block"
                   label="비밀번호 확인"
                   required
                 >
-                  {({ onBlur }) => (
+                  {slotProps => (
                     <input
                       value={confirmPassword}
                       onChange={e => setConfirmPassword(e.target.value)}
-                      onBlur={onBlur}
+                      onBlur={slotProps.onBlur}
                       type="password"
                       className="form-input"
                       placeholder="비밀번호를 다시 입력하세요"
@@ -206,14 +214,16 @@ const ValidateWrapExample: React.FC = () => {
                   ref={ageRef}
                   checkValue={age}
                   validate={[requiredRule, numberRangeRule(1, 120)]}
+                  resetValue={() => setAge('')}
+                  className="block"
                   label="나이"
                   required
                 >
-                  {({ onBlur }) => (
+                  {slotProps => (
                     <input
                       value={age}
                       onChange={e => setAge(e.target.value)}
-                      onBlur={onBlur}
+                      onBlur={slotProps.onBlur}
                       type="number"
                       className="form-input"
                       placeholder="1-120 사이의 숫자"
@@ -233,7 +243,9 @@ const ValidateWrapExample: React.FC = () => {
                 <ValidateWrap
                   ref={customRef}
                   checkValue={customValue}
+                  resetValue={() => setCustomValue('')}
                   errorMessage={customError}
+                  className="block"
                   label="커스텀 에러"
                   addOn={
                     <button type="button" onClick={toggleCustomError} className="error-toggle-btn">
@@ -241,11 +253,11 @@ const ValidateWrapExample: React.FC = () => {
                     </button>
                   }
                 >
-                  {({ onBlur }) => (
+                  {slotProps => (
                     <input
                       value={customValue}
                       onChange={e => setCustomValue(e.target.value)}
-                      onBlur={onBlur}
+                      onBlur={slotProps.onBlur}
                       type="text"
                       className="form-input"
                       placeholder="아무 값이나 입력하세요"
@@ -259,14 +271,16 @@ const ValidateWrapExample: React.FC = () => {
                   ref={phoneRef}
                   checkValue={phone}
                   validate={[requiredRule, phoneRule]}
+                  resetValue={() => setPhone('')}
+                  className="block"
                   label="전화번호"
                   required
                 >
-                  {({ onBlur }) => (
+                  {slotProps => (
                     <input
                       value={phone}
                       onChange={e => setPhone(e.target.value)}
-                      onBlur={onBlur}
+                      onBlur={slotProps.onBlur}
                       type="tel"
                       className="form-input"
                       placeholder="010-1234-5678"
@@ -282,12 +296,12 @@ const ValidateWrapExample: React.FC = () => {
           <section className="example-section">
             <h2>폼 액션</h2>
             <div className="actions">
-              <button type="button" onClick={validateForm} className="validate-btn">
+              <StyledButton large color="primary" onClick={validateForm}>
                 전체 검증
-              </button>
-              <button type="button" onClick={resetForm} className="reset-btn">
+              </StyledButton>
+              <StyledButton large color="warning" onClick={resetForm}>
                 폼 초기화
-              </button>
+              </StyledButton>
             </div>
           </section>
 
@@ -327,8 +341,7 @@ const ValidateWrapExample: React.FC = () => {
           </section>
         </div>
       </main>
+      <FloatingBackButton />
     </div>
   );
-};
-
-export default ValidateWrapExample;
+}

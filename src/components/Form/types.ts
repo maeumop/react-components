@@ -2,25 +2,20 @@ export interface RuleFunc {
   (v: string | string[] | number | number[]): string | boolean;
 }
 
-// validate rule type
-export interface Rules {
-  [index: string]: RuleFunc[];
-}
-
 export interface UseValidationProps<T = unknown> {
-  validate: RuleFunc[];
+  validate?: RuleFunc[];
   errorMessage?: string;
   disabled?: boolean;
   value?: T;
   onValidationChange?: (isValid: boolean, message: string) => void;
 }
 
-export interface UseValidationReturn<T = unknown> {
+export interface UseValidationReturn {
   message: string;
   errorTransition: boolean;
-  check: (value: T, silence?: boolean) => boolean;
+  check: (silence?: boolean) => boolean;
   resetValidate: () => void;
   setMessage: (message: string) => void;
   setErrorTransition: (errorTransition: boolean) => void;
-  validateValue: (value: T) => Promise<boolean>;
+  validateValue: () => Promise<boolean>;
 }

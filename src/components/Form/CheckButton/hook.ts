@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import type { CheckButtonItem, CheckButtonProps } from './types';
 import { checkButtonType } from './const';
+import { useValidation } from '../hooks';
 
 export const useCheckButton = ({
   items = [],
@@ -20,8 +21,14 @@ export const useCheckButton = ({
   className,
   lineLimit = 0,
 }: Omit<CheckButtonProps, 'name' | 'label' | 'required'>) => {
-  const [message, setMessage] = useState('');
-  const [errorTransition, setErrorTransition] = useState(false);
+  const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
+    string | string[]
+  >({
+    validate,
+    errorMessage,
+    disabled,
+    value,
+  });
 
   // 전체 선택 기능
   const processedItems = useMemo<CheckButtonItem[]>(() => {
@@ -105,84 +112,14 @@ export const useCheckButton = ({
     [type, value, maxLength, onChange, processedItems, all],
   );
 
-  // 유효성 검사
-  const check = useCallback(
-    (silence = false): boolean => {
-      if (disabled) {
-        return true;
-      }
-
-      if (errorMessage) {
-        if (!silence) {
-          setMessage(errorMessage);
-          setErrorTransition(true);
-        }
-
-        return false;
-      }
-
-      if (!validate.length) {
-        if (!silence) {
-          setMessage('');
-          setErrorTransition(false);
-        }
-
-        return true;
-      }
-
-      for (const validator of validate) {
-        let valueToValidate: string | string[];
-
-        if (type === checkButtonType.checkbox) {
-          // 체크박스의 경우 선택된 값들의 배열을 전달
-          valueToValidate = Array.isArray(value) ? value : [];
-        } else {
-          // 라디오의 경우 선택된 단일 값을 전달
-          valueToValidate = value;
-        }
-
-        const result = validator(valueToValidate);
-
-        if (typeof result !== 'boolean') {
-          if (!silence) {
-            setMessage(result);
-            setErrorTransition(true);
-          }
-
-          return false;
-        }
-      }
-
-      if (!silence) {
-        setMessage('');
-        setErrorTransition(false);
-      }
-
-      return true;
-    },
-    [disabled, errorMessage, validate, value],
-  );
-
   const resetForm = useCallback(() => {
     onChange(type === 'radio' ? '' : []);
   }, [type]);
-
-  const resetValidate = useCallback(() => {
-    setMessage('');
-    setErrorTransition(false);
-  }, []);
 
   // 외부 value prop 변경 시 내부 상태 동기화
   useEffect(() => {
     onChange(value ?? (type === 'radio' ? '' : []));
   }, [value, type, onChange]);
-
-  // value 변경 시 자동 validation 실행
-  useEffect(() => {
-    if (validate.length > 0) {
-      check();
-    }
-  }, [value, validate, check]);
 
   // 에러 트랜지션 자동 해제
   useEffect(() => {

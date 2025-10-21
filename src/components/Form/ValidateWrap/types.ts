@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { RuleFunc } from '../../types';
+import type { RuleFunc } from '../types';
 
 export interface ValidateWrapProps {
   checkValue: string | string[] | number | number[];
@@ -10,6 +10,8 @@ export interface ValidateWrapProps {
   disabled?: boolean;
   children: (props: { onBlur: () => void }) => ReactNode;
   addOn?: ReactNode;
+  className?: string;
+  resetValue?: () => void;
 }
 
 export interface ValidateWrapRef {

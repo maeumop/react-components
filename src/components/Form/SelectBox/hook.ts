@@ -195,7 +195,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
       onAfterChange?.(v);
 
       // 사용자 상호작용으로 인한 값 변경이므로 유효성 검사 실행
-      await validateValue(v);
+      await validateValue();
     },
     [onChange, onChangeIndex, onAfterChange, validateValue],
   );
@@ -651,7 +651,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     // 유효성 검사 규칙이 실제로 변경된 경우에만 재검사
     if (validate !== prevValidate.current) {
       prevValidate.current = validate;
-      check(selectedValue);
+      check();
     }
   }, [validate, check, selectedValue]);
 
@@ -664,9 +664,9 @@ export const useSelectBox = (props: SelectBoxProps) => {
       setDefaultModelValue();
 
       // 값이 변경된 경우 유효성 검사 실행
-      check(selectedValue);
+      check();
     }
-  }, [value, setDefaultModelValue, check, selectedValue]);
+  }, [value, setDefaultModelValue, check]);
 
   const prevOptions = useRef<OptionItem[]>(options);
 
@@ -677,9 +677,9 @@ export const useSelectBox = (props: SelectBoxProps) => {
       setDefaultModelValue();
 
       // 옵션이 변경된 경우 유효성 검사 실행
-      check(selectedValue);
+      check();
     }
-  }, [options, setDefaultModelValue, check, selectedValue]);
+  }, [options, setDefaultModelValue, check]);
 
   const prevDisabled = useRef<boolean>(disabled);
 
@@ -705,7 +705,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     } else {
       // 옵션 목록이 닫히면서 유효성 검사를 실행
       if (isMounted.current && blurValidate) {
-        check(selectedValue);
+        check();
       }
     }
 

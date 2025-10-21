@@ -5,7 +5,6 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import { switchButtonColor } from './const';
 import './style.scss';
@@ -14,6 +13,7 @@ import {
   CheckBox as CheckBoxIcon,
   CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
 } from '@mui/icons-material';
+import { useValidation } from '../hooks';
 
 const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
   (
@@ -32,8 +32,15 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     ref,
   ) => {
     // 내부 상태
-    const [message, setMessage] = useState('');
-    const [errorTransition, setErrorTransition] = useState(false);
+
+    const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
+      string | boolean
+    >({
+      validate,
+      disabled,
+      value,
+    });
+
     const inputId = useMemo(() => `switch-btn-${Math.random().toString(36).slice(2, 10)}`, []);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,60 +62,6 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
     const labelText = useMemo(() => {
       return Array.isArray(label) ? (value === trueValue ? label[1] : label[0]) : label;
     }, [label, value, trueValue]);
-
-    // 유효성 검사
-    const check = useCallback(
-      (silence = false): boolean => {
-        if (validate !== undefined) {
-          let valid = true;
-          if (typeof validate === 'function') {
-            const result = validate(value);
-
-            if (typeof result === 'string') {
-              valid = false;
-
-              if (!silence) {
-                setMessage(result);
-                setErrorTransition(true);
-              }
-            } else if (result === false) {
-              valid = false;
-
-              if (!silence) {
-                setMessage(`${labelText}을(를) 선택해주세요.`);
-                setErrorTransition(true);
-              }
-            }
-          } else if (value !== trueValue) {
-            valid = false;
-
-            if (!silence) {
-              setMessage(
-                typeof validate === 'string' ? validate : `${labelText}을(를) 선택해주세요.`,
-              );
-              setErrorTransition(true);
-            }
-          }
-
-          if (valid) {
-            setMessage('');
-            setErrorTransition(false);
-            return true;
-          }
-
-          return false;
-        }
-
-        return true;
-      },
-      [validate, value, labelText, trueValue],
-    );
-
-    // 유효성 상태 초기화
-    const resetValidate = useCallback(() => {
-      setMessage('');
-      setErrorTransition(false);
-    }, []);
 
     // 폼 초기화
     const resetForm = useCallback(() => {

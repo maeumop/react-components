@@ -86,7 +86,6 @@ export interface DatePickerProps {
   value: string[] | string;
   clearable?: boolean;
   onChange: (value: string[] | string) => void;
-  onUpdateSet: (value: string[] | string) => void;
 }
 
 export interface CalendarProps {

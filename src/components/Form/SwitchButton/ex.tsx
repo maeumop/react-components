@@ -183,7 +183,7 @@ const SwitchButtonExample: React.FC = () => {
                   onChange={v => {
                     if (typeof v === 'boolean') setValidateValue(v);
                   }}
-                  validate={validateFn}
+                  validate={[validateFn]}
                   label={['동의 안함', '동의함']}
                 />
                 <button className="demo-button" onClick={checkValidate}>

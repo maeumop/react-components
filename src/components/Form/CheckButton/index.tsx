@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useMemo } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import type { CheckButtonModel, CheckButtonProps } from './types';
 import { useCheckButton } from './hook';
 import CheckBox from './checkBox';
@@ -56,30 +56,34 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
     lineLimit,
   });
 
-  const checkBoxProps = useMemo(
-    () => ({
-      name,
-      disabled,
-      type,
-      color,
-      parentValue: value,
-      lineLimit,
-      checkButtonStyleClass,
-      isItemSelected,
-      handleItemChange,
-    }),
-    [
-      name,
-      disabled,
-      type,
-      color,
-      value,
-      lineLimit,
-      checkButtonStyleClass,
-      isItemSelected,
-      handleItemChange,
-    ],
-  );
+  const checkBoxProps = {
+    name,
+    disabled,
+    type,
+    color,
+    parentValue: value,
+    lineLimit,
+    checkButtonStyleClass,
+    isItemSelected,
+    handleItemChange,
+  };
+
+  const initCount = useRef<number>(0);
+
+  useEffect(() => {
+    console.log(initCount.current);
+    if (process.env.NODE_ENV === 'development' && initCount.current < 2) {
+      return;
+    }
+
+    if (initCount.current) {
+      check();
+    }
+  }, [value]);
+
+  useEffect(() => {
+    initCount.current++;
+  }, []);
 
   useImperativeHandle(
     ref,

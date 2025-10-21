@@ -36,3 +36,17 @@ export const useDatePickerStore = () => {
 
   return useStore(store);
 };
+
+/**
+ * DatePicker Store Instance Hook
+ * getState()로 최신 상태를 직접 읽을 수 있는 store 인스턴스 반환
+ */
+export const useDatePickerStoreInstance = () => {
+  const store = useContext(DatePickerStoreContext);
+
+  if (!store) {
+    throw new Error('useDatePickerStoreInstance must be used within DatePickerStoreProvider');
+  }
+
+  return store;
+};

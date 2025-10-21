@@ -11,7 +11,7 @@ import { CalendarMonth as DatePickerIcon } from '@mui/icons-material';
 import { Calendar } from './Calendar';
 import { DateController } from './DateController';
 import { useDatePickerHelper } from './helper';
-import { DatePickerStoreProvider, useDatePickerStore } from './store';
+import { DatePickerStoreProvider, useDatePickerStore, useDatePickerStoreInstance } from './store';
 import type { DatePickerModel, DatePickerProps, ToggleButtonType } from './types';
 import { AnimatePresence, motion } from 'framer-motion';
 import './style.scss';
@@ -19,6 +19,7 @@ import { useComponentHelper } from '@/components/helper';
 import { transitionType } from '@/components/const';
 import type { LayerPositionType } from '@/components/types';
 import { CancelRounded as ClearIcon } from '@mui/icons-material';
+import { useValidation } from '../hooks';
 
 const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref) => {
   const {
@@ -40,14 +41,12 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     clearable = false,
     value,
     onChange,
-    onUpdateSet,
   } = props;
 
-  const store = useDatePickerStore();
-
-  const { startDate, endDate, setStartDate, setEndDate, setDateState, setSelected, init } = store;
-
   const helper = useDatePickerHelper();
+  const store = useDatePickerStore();
+  const storeInstance = useDatePickerStoreInstance(); // getState()를 사용하기 위한 인스턴스
+  const { startDate, endDate, setStartDate, setEndDate, setDateState, setSelected, init } = store;
 
   const elRef = useRef<HTMLDivElement>(null);
   const inputAreaRef = useRef<HTMLDivElement>(null);
@@ -64,12 +63,16 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   ]);
 
   const [selectedError, setSelectedError] = useState<string>('');
-  const [message, setMessage] = useState<string | boolean>('');
-  const [errorTransition, setErrorTransition] = useState<boolean>(false);
 
   // 범위 선택 모드에서 임시 저장용 변수
   const [tempStartDate, setTempStartDate] = useState<string>('');
   const [tempEndDate, setTempEndDate] = useState<string>('');
+
+  const { message, errorTransition, check, resetValidate } = useValidation<string | string[]>({
+    validate,
+    disabled,
+    value,
+  });
 
   // 스크롤 이벤트 리스너 배열 (여러 요소에 등록할 수 있도록)
   const scrollEventListenersRef = useRef<
@@ -116,83 +119,87 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   }, [placeholder]);
 
   /**
-   * FormValidate 컴포넌트롤 통한 validation check
-   */
-  const check = useCallback(
-    (silence: boolean = false): boolean => {
-      // 비활성화 상태인 경우 검증 성공
-      if (disabled) return true;
-
-      // 유효성 검사 규칙이 없는 경우 성공으로 처리
-      if (!validate.length) {
-        if (!silence) {
-          setMessage('');
-          setErrorTransition(false);
-        }
-
-        return true;
-      }
-
-      // 데이터 검증
-      for (let i = 0; i < validate.length; i++) {
-        let result1: string | boolean = true;
-        let result2: string | boolean = true;
-
-        if (range) {
-          result1 = validate[i](startDate);
-          result2 = validate[i](endDate);
-        } else {
-          result1 = validate[i](startDate);
-        }
-
-        if (result1 !== true || result2 !== true) {
-          if (!silence) {
-            if (range) {
-              setMessage((result1 && !result2) || result2);
-            } else {
-              setMessage(result1);
-            }
-
-            setErrorTransition(true);
-          }
-
-          return false;
-        }
-      }
-
-      // 모든 검증을 통과한 경우
-      if (!silence) {
-        setMessage('');
-        setErrorTransition(false);
-      }
-
-      return true;
-    },
-    [disabled, validate, range, startDate, endDate],
-  );
-
-  /**
    * model update
    */
   const updateValue = useCallback((): void => {
+    // getState()로 최신 상태를 직접 읽기
+    const { startDate: currentStartDate, endDate: currentEndDate } = storeInstance.getState();
+
     if (range) {
-      // 시작일과 종료일 중 하나라도 선택된 경우 데이터 적용
-      if (startDate || endDate) {
-        onChange?.([startDate, endDate]);
+      // 시작일과 종료일이 모두 선택되어야 한다.
+      if (currentStartDate && currentEndDate) {
+        onChange?.([currentStartDate, currentEndDate]);
       } else {
         setStartDate('');
         setEndDate('');
         onChange?.(['', '']);
       }
     } else {
-      onChange?.(startDate);
+      onChange?.(currentStartDate);
+    }
+  }, [range, storeInstance, onChange, setStartDate, setEndDate]);
+
+  /**
+   * 적용 버튼 클릭
+   */
+  const accept = useCallback((): void => {
+    if (range && !startDate && !endDate) {
+      setErrorMsg();
+      return;
     }
 
-    // 사용자 상호작용으로 인한 값 변경이므로 유효성 검사 실행
-    setTimeout(() => {
-      check();
-    });
-  }, [range, startDate, endDate, onChange, setStartDate, setEndDate, check]);
+    updateValue();
+
+    // 적용 시 임시 저장 변수도 업데이트
+    if (range) {
+      setTempStartDate(startDate);
+      setTempEndDate(endDate);
+    }
+
+    setIsShow(false);
+  }, [range, startDate, endDate, updateValue, onChange]);
+
+  /**
+   * 달력에서 전달된 날짜의 기간을 검수 하여 maxRange를 초과 한경우 컴포넌트 업데이트 안함
+   * @param flag start | end
+   */
+  const dateTermCheck = useCallback(
+    (isEnd: boolean): void => {
+      // getState()로 최신 상태를 직접 읽기
+      const { startDate: currentStartDate, endDate: currentEndDate } = storeInstance.getState();
+
+      // 단일 날짜 선택 모드
+      if (!range) {
+        updateValue();
+        setIsShow(false);
+        return;
+      }
+
+      setToggleDateButton(prev => prev.map(item => ({ ...item, checked: false })));
+
+      // 범위 선택 모드 - 시작일과 종료일이 모두 선택된 경우에만 maxRange 검사
+      if (maxRange && currentStartDate && currentEndDate) {
+        const startTime: number = new Date(currentStartDate).getTime();
+        const endTime: number = new Date(currentEndDate).getTime();
+
+        // 선택 최대 기간이 설정된 경우 날짜를 계산하여 선택이 안되도록 처리
+        const term: number = Math.abs(endTime - startTime) / (86400 * 1000) + 1;
+
+        // 만약 기간이 초과 한다면 변수를 초기화 하고, 다시 랜더링 하지 않는다.
+        if (maxRange < term) {
+          if (!isEnd) {
+            setStartDate('');
+          } else {
+            setEndDate('');
+          }
+
+          setErrorMsg(`최대 선택기간 ${maxRange}일을 초과 하였습니다.`);
+          return;
+        }
+      }
+    },
+    [range, maxRange, updateValue, storeInstance, setStartDate, setEndDate],
+  );
 
   const setDateCalender = useCallback((): void => {
     // 해당 달력으로 변환
@@ -328,27 +335,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   ]);
 
   /**
-   * 적용 버튼 클릭
-   */
-  const accept = useCallback((): void => {
-    if (range && !startDate && !endDate) {
-      setErrorMsg();
-      return;
-    }
-
-    updateValue();
-    onUpdateSet?.([startDate, endDate]);
-
-    // 적용 시 임시 저장 변수도 업데이트
-    if (range) {
-      setTempStartDate(startDate);
-      setTempEndDate(endDate);
-    }
-
-    setIsShow(false);
-  }, [range, startDate, endDate, updateValue, onUpdateSet]);
-
-  /**
    * 폼 초기화 처리
    */
   const resetForm = useCallback((): void => {
@@ -362,14 +348,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       onChange?.('');
     }
   }, [range, onChange, init]);
-
-  /**
-   * 유효성 검사 초기화
-   */
-  const resetValidate = useCallback((): void => {
-    setMessage('');
-    setErrorTransition(false);
-  }, []);
 
   // 스크롤 이벤트 처리 - 일반 함수로 변경
   const setScrollEvent = (el: HTMLElement): void => {
@@ -420,47 +398,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
 
     addWindowScrollEvent();
   }, []);
-
-  /**
-   * 달력에서 전달된 날짜의 기간을 검수 하여 maxRange를 초과 한경우 컴포넌트 업데이트 안함
-   * @param flag start | end
-   */
-  const dateTermCheck = useCallback(
-    (isEnd: boolean): void => {
-      // 단일 날짜 선택 모드
-      if (!range) {
-        updateValue();
-        setIsShow(false);
-        return;
-      }
-
-      setToggleDateButton(prev => prev.map(item => ({ ...item, checked: false })));
-
-      setTimeout(() => {
-        // 범위 선택 모드 - 시작일과 종료일이 모두 선택된 경우에만 maxRange 검사
-        if (maxRange && startDate && endDate) {
-          const startTime: number = new Date(startDate).getTime();
-          const endTime: number = new Date(endDate).getTime();
-
-          // 선택 최대 기간이 설정된 경우 날짜를 계산하여 선택이 안되도록 처리
-          const term: number = Math.abs(endTime - startTime) / (86400 * 1000) + 1;
-
-          // 만약 기간이 초과 한다면 변수를 초기화 하고, 다시 랜더링 하지 않는다.
-          if (maxRange < term) {
-            if (!isEnd) {
-              setStartDate('');
-            } else {
-              setEndDate('');
-            }
-
-            setErrorMsg(`최대 선택기간 ${maxRange}일을 초과 하였습니다.`);
-            return;
-          }
-        }
-      });
-    },
-    [range, startDate, endDate, maxRange, updateValue, setStartDate, setEndDate],
-  );
 
   // window 스크롤 이벤트 추가
   const addWindowScrollEvent = useCallback((): void => {
@@ -645,6 +582,23 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     },
     [onChange],
   );
+
+  // value 변경 시 유효성 검사
+  const initCount = useRef<number>(0);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development' && initCount.current < 2) {
+      return;
+    }
+
+    check();
+  }, [value]);
+
+  useEffect(() => {
+    if (initCount.current < 2) {
+      initCount.current++;
+    }
+  }, []);
 
   useImperativeHandle(ref, () => ({
     check,

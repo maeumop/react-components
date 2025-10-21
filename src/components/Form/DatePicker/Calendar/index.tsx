@@ -166,6 +166,7 @@ const CalendarBase = ({
 
       const { type, day } = dateRender[tr][td];
 
+      // 시작일 선택 시 계산된 date를 직접 설정
       if (['current', 'today', 'date-range'].includes(type)) {
         const date: string = helper.getDateString(state.year, state.month, day, separator);
         setSelected(caseStartEnd, date);
@@ -174,13 +175,14 @@ const CalendarBase = ({
           // 종료일 선택 시 계산된 date를 직접 설정
           setEndDate(date);
         } else {
-          // 시작일 선택 시 계산된 date를 직접 설정
           setStartDate(date);
         }
 
         // 범위 선택 모드에서는 날짜 선택 시 창을 닫지 않음
         // 단일 날짜 선택 모드에서만 창이 닫힘
-        updateDate(end);
+        setTimeout(() => {
+          updateDate(end);
+        }, 0);
       }
     },
     [

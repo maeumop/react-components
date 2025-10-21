@@ -25,7 +25,6 @@ const SelectBox = React.memo(
       isShort = false,
       labelText = false,
       hideMessage = false,
-      clearable = false,
     } = props;
 
     const {
@@ -54,20 +53,6 @@ const SelectBox = React.memo(
       feedbackStatus,
       position,
     } = useSelectBox(props);
-
-    // expose 메서드
-    useImperativeHandle(
-      ref,
-      () => ({
-        check: (silence?: boolean) => {
-          const result = check(selectedValue, silence);
-          return typeof result === 'boolean' ? result : false;
-        },
-        resetForm,
-        resetValidate,
-      }),
-      [check, resetForm, resetValidate, selectedValue],
-    );
 
     // 인라인 콜백 메모이제이션
     const handleTransitionExited = () => {};
@@ -101,6 +86,17 @@ const SelectBox = React.memo(
           position as LayerPositionType,
         ),
       [position],
+    );
+
+    // expose 메서드
+    useImperativeHandle(
+      ref,
+      () => ({
+        check,
+        resetForm,
+        resetValidate,
+      }),
+      [check, resetForm, resetValidate, selectedValue],
     );
 
     return (

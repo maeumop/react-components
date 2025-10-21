@@ -5,35 +5,11 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import './style.scss';
 import type { NumberFormatModel, NumberFormatProps } from './types';
-
-const format = (v: number | string): string => {
-  if (v === '-' || v === '') {
-    return String(v);
-  }
-
-  const num = Number(v);
-
-  if (isNaN(num)) {
-    return '0';
-  }
-
-  return new Intl.NumberFormat().format(num);
-};
-
-const getNumber = (v: string): number => {
-  let val = v
-    .replace(/[^\d-]/g, '')
-    .replace(/-{2,}/g, '-')
-    .replace(/^$/, '');
-
-  val = val.charAt(0) === '-' ? '-' + val.replace(/[-]/g, '') : val.replace(/[-]/g, '');
-
-  return Number(val);
-};
+import { useComponentHelper } from '@/components/helper';
+import { useValidation } from '../hooks';
 
 const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
   (
@@ -59,10 +35,18 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
     ref,
   ) => {
     // 내부 상태
-    const [message, setMessage] = useState('');
-    const [errorTransition, setErrorTransition] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const isMounted = useRef(false);
+
+    const { numberFormat, commaStringToNumber } = useComponentHelper();
+
+    const { message, errorTransition, check, resetValidate, setMessage, setErrorTransition } =
+      useValidation<number | string>({
+        validate,
+        errorMessage,
+        disabled,
+        value,
+      });
 
     // wrapper 스타일
     const wrapperClass = useMemo(() => {
@@ -87,12 +71,11 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
           return;
         }
 
-        const val = getNumber(e.target.value);
-        const numValue = Number(val);
+        const val = commaStringToNumber(e.target.value);
 
-        if (!isNaN(numValue)) {
-          e.target.value = format(numValue);
-          onChange?.(numValue);
+        if (!isNaN(val)) {
+          e.target.value = numberFormat(val);
+          onChange?.(val);
         }
       },
       [onChange, disabled],
@@ -109,50 +92,6 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
         onFocus?.(e);
       },
       [onChange, onFocus],
-    );
-
-    // 유효성 검사
-    const check = useCallback(
-      (silence = false): boolean => {
-        if (disabled) {
-          return true;
-        }
-
-        // errorMessage가 설정되어 있으면 실패
-        if (errorMessage) {
-          if (!silence) {
-            setMessage(errorMessage);
-            setErrorTransition(true);
-          }
-          return false;
-        }
-
-        // validate 함수들 실행
-        if (validate.length) {
-          const val = getNumber(inputRef.current?.value || '0');
-
-          for (const validateFunc of validate) {
-            const result = validateFunc(val);
-
-            if (typeof result === 'string') {
-              if (!silence) {
-                setMessage(result);
-                setErrorTransition(true);
-              }
-              return false;
-            }
-          }
-        }
-
-        // 검증 통과
-        if (!silence) {
-          setMessage('');
-          setErrorTransition(false);
-        }
-
-        return true;
-      },
-      [disabled, errorMessage, validate],
     );
 
     const handleBlur = useCallback(
@@ -179,12 +118,6 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
       onChange?.(0);
     }, [onChange]);
 
-    // 유효성 상태 초기화
-    const resetValidate = useCallback(() => {
-      setMessage('');
-      setErrorTransition(false);
-    }, []);
-
     // 외부 errorMessage 변경 시 상태 동기화
     useEffect(() => {
       if (errorMessage) {
@@ -203,7 +136,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
         setErrorTransition(false);
 
         if (inputRef.current) {
-          inputRef.current.value = format(value);
+          inputRef.current.value = numberFormat(value);
         }
       }
     }, [value, errorMessage]);
@@ -226,12 +159,11 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
         }
 
         if (value) {
-          inputRef.current.value = format(value);
+          inputRef.current.value = numberFormat(value);
         }
       }
     }, [autofocus, value]);
 
-    // imperative handle (expose)
     useImperativeHandle(
       ref,
       () => ({
@@ -263,7 +195,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={handleChange}
-          defaultValue={format(value)}
+          defaultValue={numberFormat(value)}
           style={{ textAlign: 'right' }}
         />
         {/* 에러 메시지 트랜지션 */}

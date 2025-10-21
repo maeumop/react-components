@@ -5,11 +5,11 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import { CancelRounded as ClearIcon } from '@mui/icons-material';
 import { textFieldType } from './const';
 import type { TextFieldModel, TextFieldProps } from './types';
+import { useValidation } from '../hooks';
 import './style.scss';
 
 const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
@@ -43,9 +43,16 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
     className,
   } = props;
 
-  // 내부 상태
-  const [message, setMessage] = useState('');
-  const [errorTransition, setErrorTransition] = useState(false);
+  // useValidation 훅 사용
+  const { message, errorTransition, check, resetValidate, setMessage, setErrorTransition } =
+    useValidation<string>({
+      validate,
+      errorMessage,
+      disabled,
+      value,
+    });
+
+  // 내부 ref
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isMounted = useRef(false);
@@ -95,24 +102,10 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
     [onChange, isCounting, maxLength],
   );
 
-  // 유효성 검사
-  const check = useCallback(
+  // pattern 검사를 추가한 check 함수
+  const checkWithPattern = useCallback(
     (silence = false): boolean => {
-      if (disabled) {
-        return true;
-      }
-
-      // 강제 에러 메시지
-      if (errorMessage) {
-        if (!silence) {
-          setMessage(errorMessage);
-          setErrorTransition(true);
-        }
-
-        return false;
-      }
-
-      // pattern 검사
+      // pattern 검사 (useValidation 이전에 실행)
       if (pattern && Array.isArray(pattern)) {
         const [regExp, errMsg] = pattern;
 
@@ -126,30 +119,10 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
         }
       }
 
-      // validate 함수 검사
-      if (validate.length) {
-        for (const validateFunc of validate) {
-          const result = validateFunc(value);
-
-          if (typeof result === 'string') {
-            if (!silence) {
-              setMessage(result);
-              setErrorTransition(true);
-            }
-
-            return false;
-          }
-        }
-      }
-
-      if (!silence) {
-        setMessage('');
-        setErrorTransition(false);
-      }
-
-      return true;
+      // useValidation의 check 실행
+      return check(silence);
     },
-    [disabled, errorMessage, pattern, value, validate],
+    [pattern, value, check, setMessage, setErrorTransition],
   );
 
   // blur 핸들러
@@ -157,7 +130,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
     (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       onBlur?.(e);
 
-      if (blurValidate && check()) {
+      if (blurValidate && checkWithPattern()) {
         // trim 적용
         const val = e.target.value.trim();
 
@@ -166,7 +139,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
         }
       }
     },
-    [onBlur, blurValidate, value, onChange, check],
+    [onBlur, blurValidate, value, onChange, checkWithPattern],
   );
 
   // 클리어 버튼 클릭
@@ -187,40 +160,15 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   // 폼 초기화
   const resetForm = useCallback(() => {
     onChange?.('');
-    setMessage('');
-    setErrorTransition(false);
-  }, [onChange]);
+    resetValidate();
+  }, [onChange, resetValidate]);
 
-  // 유효성 상태 초기화
-  const resetValidate = useCallback(() => {
-    setMessage('');
-    setErrorTransition(false);
-  }, []);
-
-  // 외부 errorMessage 변경 시 상태 동기화
-  useEffect(() => {
-    if (errorMessage) {
-      setMessage(errorMessage);
-      setErrorTransition(true);
-    } else {
-      setMessage('');
-      setErrorTransition(false);
-    }
-  }, [errorMessage]);
-
-  // value 변경 시 validate 리셋 (해당 컴포넌트의 value만)
+  // value 변경 시 validate 리셋 (useValidation 훅에서 자동으로 처리되지 않으므로 필요)
   useEffect(() => {
     if (isMounted.current && !errorMessage) {
       resetValidate();
     }
   }, [value, errorMessage, resetValidate]);
-
-  // disabled 변경 시 validate 리셋
-  useEffect(() => {
-    if (!errorMessage) {
-      resetValidate();
-    }
-  }, [disabled, errorMessage, resetValidate]);
 
   // 마운트 시
   useEffect(() => {
@@ -239,11 +187,11 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   useImperativeHandle(
     ref,
     () => ({
-      check,
+      check: checkWithPattern,
       resetForm,
       resetValidate,
     }),
-    [check, resetForm, resetValidate],
+    [checkWithPattern, resetForm, resetValidate],
   );
 
   const IconComponent = icon;

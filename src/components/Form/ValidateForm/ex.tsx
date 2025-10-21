@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import type { RuleFunc } from '../types';
 import CheckButton from '../CheckButton/index';
-// import { DatePicker } from '../DatePicker/index';
+import DatePicker from '../DatePicker';
 import NumberFormat from '../NumberFormat/index';
 import SelectBox from '../SelectBox/index';
 import TextField from '../TextField/index';
-import { ValidateWrap } from '../ValidateWrap/index';
+import ValidateWrap from '../ValidateWrap';
 import { ValidateForm } from './index';
 import type { ValidateFormRef } from './types';
 import './ex.scss';
