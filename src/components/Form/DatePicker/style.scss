@@ -208,7 +208,17 @@ $_button-colors: _.getButtonColors();
       font-weight: 500;
     }
 
-    svg {
+    .clear-value {
+      margin-right: 0.75rem;
+      color: #adb5bd;
+      cursor: pointer;
+
+      &:hover {
+        color: #6c757d;
+      }
+    }
+
+    .date-picker-icon {
       margin-right: 0.75rem;
       color: #6c757d;
     }
@@ -233,7 +243,8 @@ $_button-colors: _.getButtonColors();
         cursor: not-allowed;
       }
 
-      svg {
+      .clear-value,
+      .date-picker-icon {
         color: #adb5bd;
       }
     }

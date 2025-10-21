@@ -63,6 +63,7 @@ const TextFieldExample: React.FC = () => {
                   value={basicText}
                   onChange={setBasicText}
                   placeholder="기본 텍스트 입력"
+                  clearable
                 />
                 <span className="example-label">기본 입력</span>
               </div>
@@ -73,6 +74,7 @@ const TextFieldExample: React.FC = () => {
                   onChange={setEmailText}
                   type="text"
                   placeholder="이메일 입력"
+                  clearable
                 />
                 <span className="example-label">이메일 입력</span>
               </div>
@@ -83,6 +85,7 @@ const TextFieldExample: React.FC = () => {
                   onChange={setPasswordText}
                   type="password"
                   placeholder="비밀번호 입력"
+                  clearable
                 />
                 <span className="example-label">비밀번호 입력</span>
               </div>

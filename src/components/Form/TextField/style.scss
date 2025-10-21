@@ -65,26 +65,16 @@
     }
   }
 
-  .btn-clear {
+  .clear-value {
     position: absolute;
     right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    color: #6c757d;
-    text-decoration: none;
-    border-radius: 50%;
-    transition:
-      color 0.15s ease-in-out,
-      background-color 0.15s ease-in-out;
+    color: #adb5bd;
+    cursor: pointer;
 
     &:hover {
-      color: #333;
-      background-color: rgba(0, 0, 0, 0.1);
+      color: #6c757d;
     }
 
     &.with-icon {

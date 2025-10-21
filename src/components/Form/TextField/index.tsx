@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Close as CloseIcon } from '@mui/icons-material';
+import { CancelRounded as ClearIcon } from '@mui/icons-material';
 import { textFieldType } from './const';
 import type { TextFieldModel, TextFieldProps } from './types';
 import './style.scss';
@@ -313,9 +313,9 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
             )}
             {/* 클리어 버튼 */}
             {clearButtonShow && (
-              <CloseIcon
+              <ClearIcon
                 sx={{ width: 20, height: 20 }}
-                className={['btn-clear', icon && !iconLeft ? 'with-icon' : ''].join(' ')}
+                className={['clear-value', icon && !iconLeft ? 'with-icon' : ''].join(' ')}
                 onClick={handleClear}
               />
             )}

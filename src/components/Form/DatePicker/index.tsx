@@ -18,6 +18,7 @@ import './style.scss';
 import { useComponentHelper } from '@/components/helper';
 import { transitionType } from '@/components/const';
 import type { LayerPositionType } from '@/components/types';
+import { CancelRounded as ClearIcon } from '@mui/icons-material';
 
 const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref) => {
   const {
@@ -36,6 +37,7 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     disabled = false,
     blurValidate = true,
     defaultDate = false,
+    clearable = false,
     value,
     onChange,
     onUpdateSet,
@@ -622,6 +624,28 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     [toggleCalendar],
   );
 
+  // 클리어 버튼 노출 여부
+  const clearButtonShow = useMemo(() => {
+    const valueIsEmpty = range ? !startDate && !endDate : !startDate;
+    return clearable && !valueIsEmpty && !disabled && !readonly;
+  }, [clearable, startDate, endDate, disabled, readonly]);
+
+  const onClickClear = useCallback(
+    (evt: React.MouseEvent<SVGSVGElement>) => {
+      evt.stopPropagation();
+
+      if (range) {
+        setStartDate('');
+        setEndDate('');
+        onChange?.(['', '']);
+      } else {
+        setStartDate('');
+        onChange?.('');
+      }
+    },
+    [onChange],
+  );
+
   useImperativeHandle(ref, () => ({
     check,
     resetForm,
@@ -668,7 +692,11 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
               </>
             )}
 
-            <DatePickerIcon sx={{ fontSize: 22 }} aria-hidden="true" />
+            {clearButtonShow && (
+              <ClearIcon sx={{ fontSize: 22 }} className="clear-value" onClick={onClickClear} />
+            )}
+
+            <DatePickerIcon className="date-picker-icon" sx={{ fontSize: 22 }} />
           </div>
 
           {/* 달력 표시 */}

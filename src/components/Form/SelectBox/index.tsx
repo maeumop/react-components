@@ -1,7 +1,10 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useMemo, useRef } from 'react';
 import { OptionList } from './optionList';
 import type { SelectBoxModel, SelectBoxProps } from './types';
-import { Close as CloseIcon, KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
+import {
+  CancelRounded as CloseIcon,
+  KeyboardArrowDown as ChevronDownIcon,
+} from '@mui/icons-material';
 import { useSelectBox } from './hook.ts';
 import { RenderSelectedText } from './renderLabelText.tsx';
 import './style.scss';
@@ -22,6 +25,7 @@ const SelectBox = React.memo(
       isShort = false,
       labelText = false,
       hideMessage = false,
+      clearable = false,
     } = props;
 
     const {
@@ -32,7 +36,7 @@ const SelectBox = React.memo(
       selectBoxRef,
       optionContainerRef,
       layerPositionStyle,
-      clearValue,
+      onClickClear,
       resetForm,
       check,
       resetValidate,
@@ -122,9 +126,11 @@ const SelectBox = React.memo(
 
           {/* 클리어 버튼 */}
           {clearButtonShow && (
-            <a href="#" className="btn-clear" onClick={clearValue}>
-              <CloseIcon sx={{ width: 20, height: 20 }} />
-            </a>
+            <CloseIcon
+              sx={{ width: 20, height: 20 }}
+              className="clear-value"
+              onClick={onClickClear}
+            />
           )}
 
           {/* 화살표 아이콘 */}

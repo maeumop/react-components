@@ -4,6 +4,8 @@ import type { DropdownStateType, SelectorProps } from '../types';
 import { useDatePickerStore } from '../store';
 import { KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
 import './style.scss';
+import { useComponentHelper } from '@/components/helper';
+import { layerPosition, transitionType } from '@/components/const';
 
 // 개별 아이템 컴포넌트
 const SelectorItem = React.memo<{
@@ -288,6 +290,15 @@ const SelectorBase = ({
     [month, year],
   );
 
+  const componentHelperRef = useRef(useComponentHelper());
+
+  const variants = useMemo(() => {
+    return componentHelperRef.current.getTransitionVariant(
+      transitionType.slide,
+      layerPosition.bottom,
+    );
+  }, []);
+
   return (
     <div
       ref={selectorRef}
@@ -306,13 +317,10 @@ const SelectorBase = ({
           <motion.div
             className={selectorBoxClassName}
             onClick={handleStopPropagation}
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{
-              duration: 0.15,
-              ease: [0.4, 0, 0.2, 1],
-            }}
+            initial={variants.initial}
+            animate={variants.animate}
+            exit={variants.exit}
+            transition={variants.transition}
           >
             <div className="selector-box-wrap">
               <ul ref={itemListRef} onClick={handleStopPropagation}>

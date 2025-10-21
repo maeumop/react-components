@@ -84,6 +84,7 @@ export interface DatePickerProps {
   blurValidate?: boolean;
   defaultDate?: boolean;
   value: string[] | string;
+  clearable?: boolean;
   onChange: (value: string[] | string) => void;
   onUpdateSet: (value: string[] | string) => void;
 }

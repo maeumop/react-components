@@ -167,6 +167,7 @@ const DatePickerExamples: React.FC = () => {
                   onChange={handleBasicDate1Change}
                   onUpdateSet={handleBasicDate1Change}
                   placeholder="날짜를 선택하세요"
+                  clearable={true}
                   block
                 />
                 <span className="example-label">단일 날짜 선택</span>
@@ -178,6 +179,7 @@ const DatePickerExamples: React.FC = () => {
                   onUpdateSet={handleRangeDate1Change}
                   range
                   placeholder={['시작일', '종료일']}
+                  clearable={true}
                   block
                 />
                 <span className="example-label">날짜 범위 선택</span>

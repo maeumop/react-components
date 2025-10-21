@@ -136,14 +136,8 @@ export const useSelectBox = (props: SelectBoxProps) => {
 
   // 클리어 버튼 표시 여부
   const clearButtonShow = useMemo<boolean>(() => {
-    if (!clearable || disabled || readonly) {
-      return false;
-    }
-
-    if (Array.isArray(value)) {
-      return value.length > 0;
-    }
-
+    if (!clearable || disabled || readonly) return false;
+    if (Array.isArray(value)) return value.length > 0;
     return !!value;
   }, [clearable, disabled, readonly, value]);
 
@@ -515,8 +509,8 @@ export const useSelectBox = (props: SelectBoxProps) => {
   }, []);
 
   // value 값 초기화
-  const clearValue = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>): void => {
+  const onClickClear = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>): void => {
       e.stopPropagation();
 
       // 값 초기화
@@ -791,7 +785,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     searchTextHandler,
     onEscapeKeyHandler,
     onArrowKeyHandler,
-    clearValue,
+    onClickClear,
     selectOption,
     selectAll,
     updateValue,

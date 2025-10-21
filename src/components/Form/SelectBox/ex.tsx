@@ -121,6 +121,7 @@ const LabelStyleExample = React.memo<{
             options={OPTIONS}
             label="카테고리"
             placeholder="카테고리를 선택하세요"
+            clearable
             required
             block
           />
@@ -134,6 +135,7 @@ const LabelStyleExample = React.memo<{
             isShort
             multiple
             placeholder="짧은 표시 모드"
+            clearable
             block
           />
           <span className="example-label">짧은 표시 모드</span>
