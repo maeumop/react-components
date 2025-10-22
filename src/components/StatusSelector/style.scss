@@ -2,8 +2,7 @@
 /* @/components/StatusSelector/_style.scss */
 @use 'sass:map';
 @use 'sass:selector';
-@use '@/assets/styles/components' as _;
-@use '@/assets/styles/components/keyframes';
+@use '../scss/index' as *;
 
 .status-selector {
   position: relative;
@@ -35,7 +34,7 @@
 
     &.readonly {
       padding: 0.4rem 0.8rem;
-      background-color: _.$gray-300;
+      background-color: $gray-300;
       cursor: default;
     }
 
@@ -197,27 +196,27 @@
 
     // 미리 정의된 색상 클래스
     &.primary {
-      background-color: _.$primary;
+      background-color: $primary;
     }
 
     &.secondary {
-      background-color: _.$secondary;
+      background-color: $secondary;
     }
 
     &.success {
-      background-color: _.$success;
+      background-color: $success;
     }
 
     &.warning {
-      background-color: _.$warning;
+      background-color: $warning;
     }
 
     &.error {
-      background-color: _.$error;
+      background-color: $error;
     }
 
     &.info {
-      background-color: _.$info;
+      background-color: $info;
     }
   }
 }

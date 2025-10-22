@@ -1,8 +1,7 @@
 @charset "UTF-8";
 
-@use './keyframes';
-@use '../variables' as *;
-@forward '../variables';
+@forward './keyframes';
 @forward './functions';
 @forward './mixins';
 @forward './variables';
+@forward './utilities';

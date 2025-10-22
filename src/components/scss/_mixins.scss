@@ -1,0 +1,170 @@
+@charset "UTF-8";
+/* @\components\styles\_mixins.scss */
+@use 'sass:map';
+@use 'sass:meta';
+@use 'sass:color';
+@use './variables' as *;
+@use './functions' as *;
+
+/// 지정된 색상으로 스타일 정의
+/// [CheckButton|SwitchButton|StyledButton|Badge]
+/// [default|disabled|hover|text] 기본 컬러 스타일
+/// @content
+/// @output
+@mixin buttonColorStyle {
+  /// 지역변수
+  /// 변경 할 수 있는 컬러 정의
+  /// 색마다 채도, 명도가 달라서 균일하게 색지정이 불가하니 미세 조정을 지정하는게 제일 좋을 것 같습니다.
+  $_button-colors: getButtonColors();
+
+  @each $key, $color in $_button-colors {
+    &.#{$key} {
+      @content ($color);
+    }
+  }
+}
+
+/// 지정된 색상으로 스타일 정의
+/// [Toast]
+/// [default|border] 기본 컬러 스타일
+/// @content
+/// @output
+@mixin toastColorStyle {
+  /// 지역변수
+  /// 변경 할 수 있는 컬러 정의
+  /// 색마다 채도, 명도가 달라서 균일하게 색지정이 불가하니 미세 조정을 지정하는게 제일 좋을 것 같습니다.
+  $_colors: (
+    info: (
+      default: $info,
+      border: #008ead,
+    ),
+
+    success: (
+      default: $success,
+      border: #389e0d,
+    ),
+
+    warning: (
+      default: $warning,
+      border: #f29e02,
+    ),
+
+    error: (
+      default: $error,
+      border: #cc2828,
+    ),
+  );
+
+  @each $key, $color in $_colors {
+    &.bg-#{$key} {
+      @content ($color);
+    }
+  }
+}
+
+/// 색상별 스타일 믹스인
+/// @param {string} $color - 색상명
+/// @param {string} $property - CSS 속성 (background-color, color, border-color 등)
+@mixin color-variant($color, $property: 'background-color') {
+  @if map.has-key($component-colors, $color) {
+    #{$property}: map.get($component-colors, $color);
+  } @else {
+    @error "색상 '#{$color}'이 정의되지 않았습니다.";
+  }
+}
+
+/// 호버 효과 믹스인
+/// @param {string} $color - 기본 색상
+/// @param {number} $darken-amount - 어둡게 할 정도 (기본값: 10%)
+@mixin hover-effect($color, $darken-amount: 10%) {
+  &:hover {
+    background-color: color.adjust($color, $lightness: -$darken-amount);
+  }
+}
+
+/// 그림자 믹스인
+/// @param {string} $level - 그림자 레벨 (sm, base, md, lg, xl)
+@mixin shadow($level: 'base') {
+  @if $level == 'sm' {
+    box-shadow: $shadow-sm;
+  } @else if $level == 'base' {
+    box-shadow: $shadow-base;
+  } @else if $level == 'md' {
+    box-shadow: $shadow-md;
+  } @else if $level == 'lg' {
+    box-shadow: $shadow-lg;
+  } @else if $level == 'xl' {
+    box-shadow: $shadow-xl;
+  }
+}
+
+/// 전환 효과 믹스인
+/// @param {string} $property - 전환할 속성 (기본값: all)
+/// @param {string} $duration - 지속시간 (기본값: $transition-base)
+@mixin transition($property: 'all', $duration: $transition-base) {
+  transition: #{$property} #{$duration};
+}
+
+/// 반응형 믹스인
+/// @param {string} $breakpoint - 브레이크포인트 (sm, md, lg, xl, 2xl)
+@mixin responsive($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint == '2xl' {
+    @media (min-width: $breakpoint-2xl) {
+      @content;
+    }
+  }
+}
+
+/// 플렉스 중앙 정렬 믹스인
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/// 플렉스 중앙 정렬 (세로) 믹스인
+@mixin flex-center-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/// 절대 위치 중앙 정렬 믹스인
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/// 텍스트 말줄임 믹스인
+/// @param {number} $lines - 줄 수 (기본값: 1)
+@mixin text-truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

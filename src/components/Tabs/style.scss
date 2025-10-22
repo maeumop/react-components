@@ -3,7 +3,7 @@
 
 @use 'sass:map';
 @use 'sass:meta';
-@use '@/assets/styles/variables' as vars;
+@use '../scss/index' as *;
 
 .tabs {
   width: 100%;
@@ -22,7 +22,7 @@
       li {
         padding: 1rem 1.75rem; // 좌우 여백을 넉넉히
         text-align: center;
-        color: var(--tab-text-color, vars.$gray-600);
+        color: var(--tab-text-color, $gray-600);
         background: var(--tab-bg, transparent);
         cursor: pointer;
         position: relative;
@@ -47,24 +47,24 @@
         }
 
         &:hover:not(.disabled) {
-          background: var(--tab-hover-bg, vars.$gray-100);
-          color: var(--tab-hover-color, vars.$primary);
+          background: var(--tab-hover-bg, $gray-100);
+          color: var(--tab-hover-color, $primary);
         }
 
         &.active {
-          color: var(--tab-active-color, vars.$primary);
+          color: var(--tab-active-color, $primary);
           font-weight: 700;
-          background: var(--tab-active-bg, vars.$white);
+          background: var(--tab-active-bg, $white);
           z-index: 2;
 
           &::after {
-            background-color: var(--tab-active-underline, vars.$primary);
+            background-color: var(--tab-active-underline, $primary);
           }
         }
 
         &.disabled {
-          color: var(--tab-disabled-color, vars.$gray-400);
-          background: var(--tab-disabled-bg, vars.$gray-100);
+          color: var(--tab-disabled-color, $gray-400);
+          background: var(--tab-disabled-bg, $gray-100);
           cursor: not-allowed;
           pointer-events: none;
           opacity: 0.6;
@@ -76,8 +76,8 @@
           margin-right: 0.5rem;
 
           &.active {
-            background: var(--tab-active-bg, vars.$primary);
-            color: var(--tab-active-color, vars.$white);
+            background: var(--tab-active-bg, $primary);
+            color: var(--tab-active-color, $white);
 
             &::after {
               background: none;
@@ -92,10 +92,10 @@
 
           &.active {
             background: none;
-            color: var(--tab-active-color, vars.$primary);
+            color: var(--tab-active-color, $primary);
 
             &::after {
-              background-color: var(--tab-active-underline, vars.$primary);
+              background-color: var(--tab-active-underline, $primary);
             }
           }
         }
@@ -106,9 +106,9 @@
   .tab-contents {
     width: 100%;
     padding: 1rem;
-    border: 1px solid vars.$gray-200;
+    border: 1px solid $gray-200;
     border-radius: 0 0 0.4rem 0.4rem;
-    background: vars.$white;
+    background: $white;
   }
 }
 

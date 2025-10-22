@@ -5,7 +5,7 @@
 @use 'sass:map';
 @use 'sass:meta';
 @use '../common' as *;
-@use '@/assets/styles/variables' as *;
+@use '../scss/variables' as *;
 
 /// 컴포넌트 size 스타일 정의
 /// @param {string} $size [default] - default|large

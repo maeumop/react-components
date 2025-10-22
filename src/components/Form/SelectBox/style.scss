@@ -1,9 +1,8 @@
 @charset "UTF-8";
 /* @/components/Form/SelectBox/_style.scss */
 @use 'sass:map';
-@use '@/assets/styles/components' as _;
-@use '../../common';
-@use '../common' as form-common;
+@use '../../scss/index' as *;
+@use '../common' as *;
 
 .select-box {
   display: inline-block;
@@ -46,7 +45,7 @@
       border-color 0.15s ease-in-out,
       box-shadow 0.15s ease-in-out;
     padding: 0.75rem;
-    font-size: form-common.$form-input-font-size;
+    font-size: $form-input-font-size;
     line-height: 1.5;
     color: #333;
     display: flex;
@@ -85,7 +84,7 @@
         background-color: #e9ecef;
         padding: 0.125rem 0.5rem;
         border-radius: 0.25rem;
-        font-size: form-common.$form-feedback-font-size;
+        font-size: $form-feedback-font-size;
         display: flex;
         align-items: center;
         gap: 0.25rem;
@@ -93,7 +92,7 @@
         .remove-icon {
           cursor: pointer;
           color: #6c757d;
-          font-size: form-common.$form-input-font-size;
+          font-size: $form-input-font-size;
 
           &:hover {
             color: #dc3545;
@@ -149,7 +148,7 @@
           border: 0;
           outline: none !important;
           box-shadow: none !important;
-          font-size: form-common.$form-input-font-size;
+          font-size: $form-input-font-size;
           flex: 1;
 
           &::placeholder {
@@ -173,7 +172,7 @@
       background-color: #fff;
       border-top: 1px solid #e9ecef;
       color: #333;
-      font-size: form-common.$form-input-font-size;
+      font-size: $form-input-font-size;
       text-decoration: none;
 
       &:hover {
@@ -197,7 +196,7 @@
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        font-size: form-common.$form-input-font-size;
+        font-size: $form-input-font-size;
         font-weight: 400;
         color: #333;
         cursor: pointer;
@@ -229,17 +228,17 @@
           }
 
           &.checked {
-            color: _.$primary;
+            color: $primary;
           }
         }
 
         &.key-selected {
-          color: _.$primary;
-          background-color: rgba(_.$primary, 0.1);
+          color: $primary;
+          background-color: rgba($primary, 0.1);
         }
 
         &.selected {
-          color: _.$primary;
+          color: $primary;
           font-weight: 500;
         }
       }

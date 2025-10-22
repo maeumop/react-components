@@ -2,24 +2,23 @@
 /* @/components/Form/DatePicker/_style.scss */
 
 @use 'sass:map';
-@use '@/assets/styles/components' as _;
-@use '../../common';
-@use '../common' as form-common;
+@use '../../scss/index' as *;
+@use '../common' as *;
 
 /// date-picker의 a 버튼 공통 스타일
 @mixin picker-button {
   display: inline-block;
   text-decoration: none;
-  border: 0.1rem solid _.$gray-300;
+  border: 0.1rem solid $gray-300;
   border-radius: 0.4rem;
   font-size: 0.8rem;
   padding: 0.3rem 0.7rem;
-  color: _.$text-default;
+  color: $text-default;
   cursor: pointer;
 }
 
 /// @access private
-$_button-colors: _.getButtonColors();
+$_button-colors: getButtonColors();
 
 .date-picker {
   position: relative;
@@ -53,7 +52,7 @@ $_button-colors: _.getButtonColors();
       z-index: 100;
 
       .pick-name-text {
-        border-bottom: 0.1rem solid _.$gray-300;
+        border-bottom: 0.1rem solid $gray-300;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -69,7 +68,7 @@ $_button-colors: _.getButtonColors();
           text-align: center;
 
           & + li {
-            border-left: 0.1rem solid _.$gray-300;
+            border-left: 0.1rem solid $gray-300;
           }
         }
       }
@@ -81,7 +80,7 @@ $_button-colors: _.getButtonColors();
           vertical-align: top;
 
           & + .calendar {
-            border-left: 0.1rem solid _.$gray-300;
+            border-left: 0.1rem solid $gray-300;
           }
         }
       }
@@ -90,7 +89,7 @@ $_button-colors: _.getButtonColors();
 
   .search-date {
     padding: 0.8rem;
-    border-bottom: 0.1rem solid _.$gray-300;
+    border-bottom: 0.1rem solid $gray-300;
     text-align: left;
 
     button {
@@ -102,9 +101,9 @@ $_button-colors: _.getButtonColors();
       }
 
       &:hover {
-        background: rgba(_.$primary, 0.1);
-        border-color: rgba(_.$primary, 0.3);
-        color: _.$primary;
+        background: rgba($primary, 0.1);
+        border-color: rgba($primary, 0.3);
+        color: $primary;
       }
 
       &.active {
@@ -127,14 +126,14 @@ $_button-colors: _.getButtonColors();
     align-items: center;
     justify-content: space-between;
     padding: 0.8rem;
-    border-top: 0.1rem solid _.$gray-300;
+    border-top: 0.1rem solid $gray-300;
 
     .select-date {
       font-size: 0.9em;
-      color: _.$text-default;
+      color: $text-default;
 
       &.selected-error {
-        color: _.$error;
+        color: $error;
       }
     }
 
@@ -186,8 +185,8 @@ $_button-colors: _.getButtonColors();
       width: 100%;
       text-align: center;
       background-color: transparent;
-      color: _.$text-default;
-      font-size: form-common.$form-input-font-size;
+      color: $text-default;
+      font-size: $form-input-font-size;
       line-height: 1.5;
       cursor: pointer;
 
@@ -196,15 +195,15 @@ $_button-colors: _.getButtonColors();
       }
 
       &::placeholder {
-        font-size: form-common.$form-input-font-size;
+        font-size: $form-input-font-size;
         font-weight: 400;
-        color: _.$text-placeholder;
+        color: $text-placeholder;
       }
     }
 
     .input-group-text {
       margin: 0 0.5rem;
-      color: _.$gray-600;
+      color: $gray-600;
       font-weight: 500;
     }
 
@@ -234,12 +233,12 @@ $_button-colors: _.getButtonColors();
     }
 
     &.disabled {
-      background-color: _.$gray-100;
-      color: _.$gray-500;
+      background-color: $gray-100;
+      color: $gray-500;
       cursor: not-allowed;
 
       input {
-        color: _.$gray-500;
+        color: $gray-500;
         cursor: not-allowed;
       }
 
@@ -250,7 +249,7 @@ $_button-colors: _.getButtonColors();
     }
 
     &.readonly {
-      background-color: _.$gray-100;
+      background-color: $gray-100;
       cursor: default;
     }
   }
@@ -278,7 +277,7 @@ $_button-colors: _.getButtonColors();
 
         & + .calendar {
           border-left: none;
-          border-top: 0.1rem solid _.$gray-300;
+          border-top: 0.1rem solid $gray-300;
         }
       }
     }

@@ -1,10 +1,10 @@
 import FloatingBackButton from '@/views/FloatingBackButton/index';
 import React, { useCallback, useState } from 'react';
 import { tooltipColor, tooltipPosition } from './const';
-import './ex.scss';
 import Tooltip from './index';
-import './style.scss';
 import type { TooltipColor, TooltipPosition } from './types';
+import './ex.scss';
+import './style.scss';
 
 const messageList = ['첫 번째 도움말 메시지', '두 번째 도움말 메시지', '세 번째 도움말 메시지'];
 

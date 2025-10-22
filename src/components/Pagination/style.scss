@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* @/components/Pagination/style.scss */
 @use 'sass:map';
-@use '@/assets/styles/components' as _;
+@use '../scss/index' as *;
 
 // CSS 변수 정의
 .pagination {

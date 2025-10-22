@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
-@use '@/assets/styles/components/variables' as *;
 @use 'sass:color';
+@use '../scss/index' as *;
 
 .toast-portal {
   position: fixed;

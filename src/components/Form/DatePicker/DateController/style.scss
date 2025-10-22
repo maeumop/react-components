@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* @/components/Form/DatePicker/DateController/_style.scss */
 @use 'sass:color';
-@use '@/assets/styles/components' as *;
+@use '../../../scss/index' as *;
 
 .select-month {
   display: flex;

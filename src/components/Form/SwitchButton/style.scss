@@ -2,9 +2,8 @@
 /* @/components/Form/SwitchButton/_style.scss */
 @use 'sass:map';
 @use 'sass:color';
-@use '@/assets/styles/components' as _;
-@use '../../common';
-@use '../common' as form-common;
+@use '../../scss/index' as *;
+@use '../common' as *;
 
 .switch-wrap {
   display: inline-block;
@@ -15,7 +14,7 @@
     box-sizing: initial;
   }
 
-  @include _.buttonColorStyle using ($color-map) {
+  @include buttonColorStyle using ($color-map) {
     .switch input[type='checkbox']:checked {
       & + span {
         background-color: map.get($color-map, default);
@@ -43,16 +42,16 @@
         width: 1.6rem;
         height: 1.6rem;
         margin-right: 0.3rem;
-        color: _.$gray-400;
+        color: $gray-400;
       }
 
       input[type='checkbox'] {
         &:not(:disabled, :checked) + svg:hover {
-          color: color.adjust(_.$gray-400, $lightness: -15%);
+          color: color.adjust($gray-400, $lightness: -15%);
         }
 
         &:disabled + svg {
-          color: _.$gray-300;
+          color: $gray-300;
         }
       }
     }
@@ -66,7 +65,7 @@
         align-items: center;
         width: 3rem;
         height: 1.6rem;
-        background: _.$gray-400;
+        background: $gray-400;
         border-radius: 0.8rem;
         margin-right: 0.4rem;
 
@@ -82,11 +81,11 @@
       }
 
       &:not(&:disabled) + span:hover {
-        background-color: color.adjust(_.$gray-400, $lightness: -15%);
+        background-color: color.adjust($gray-400, $lightness: -15%);
       }
 
       &:disabled + span {
-        background: _.$gray-300;
+        background: $gray-300;
       }
 
       &:checked + span > i {
@@ -98,7 +97,7 @@
       cursor: default;
 
       .label-text {
-        color: _.$text-disabled;
+        color: $text-disabled;
       }
     }
   }

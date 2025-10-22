@@ -2,8 +2,7 @@
 /* @/components/MessageBox/_style.scss */
 @use 'sass:map';
 @use 'sass:color';
-@use '@/assets/styles/variables' as vars;
-@use '@/assets/styles/components' as _;
+@use '../scss/index' as *;
 
 .msg-box-fade-enter,
 .msg-box-fade-appear {
@@ -247,7 +246,7 @@
         }
 
         &:focus {
-          outline: 2px solid vars.$primary;
+          outline: 2px solid $primary;
           outline-offset: 2px;
         }
       }
@@ -258,7 +257,7 @@
           animation: spinner 1s infinite;
         }
 
-        $_button-colors: _.getButtonColors();
+        $_button-colors: getButtonColors();
         @if map.has-key($_button-colors, primary) {
           color: #fff;
           background-color: map.get($_button-colors, primary, default);

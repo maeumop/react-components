@@ -3,7 +3,7 @@
 
 @use 'sass:map';
 @use 'sass:color';
-@use '@/assets/styles/components' as *;
+@use '../../../scss/index' as *;
 
 .select-calendar-wrap {
   width: 100%;

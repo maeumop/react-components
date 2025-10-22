@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-@use '../../assets/styles/variables' as *;
+@use '../scss/index' as *;
 
 .spinner-overlay {
   position: fixed;

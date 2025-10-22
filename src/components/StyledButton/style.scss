@@ -3,7 +3,7 @@
 
 @use 'sass:color';
 @use 'sass:map';
-@use '@/assets/styles/variables' as *;
+@use '../scss/index' as *;
 
 //================================================================================
 // 버튼 색상 팔레트
