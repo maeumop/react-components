@@ -1,7 +1,8 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
 import MessageBox from './component';
-import { messageBoxTransition, messageBoxType } from './const';
+import { messageBoxType } from './const';
 import type { MessageBoxContextType, MessageBoxOptions, MessageBoxProviderProps } from './types';
+import { transitionType } from '../const';
 
 // Context 생성
 const MessageBoxContext = createContext<MessageBoxContextType | undefined>(undefined);
@@ -13,7 +14,7 @@ const MessageBoxContext = createContext<MessageBoxContextType | undefined>(undef
 export const MessageBoxProvider = ({
   children,
   noScrollStyleClass = 'hide-scroll',
-  defaultTransition = messageBoxTransition.scale,
+  defaultTransition = transitionType.scale,
 }: React.PropsWithChildren<MessageBoxProviderProps>) => {
   // 현재 표시 중인 MessageBox 옵션
   const [box, setBox] = useState<MessageBoxOptions | null>(null);

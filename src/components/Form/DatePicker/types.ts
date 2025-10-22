@@ -82,9 +82,10 @@ export interface DatePickerProps {
   readonly?: boolean;
   disabled?: boolean;
   blurValidate?: boolean;
-  defaultDate?: boolean;
   value: string[] | string;
+  defaultDate?: boolean;
   clearable?: boolean;
+  className?: string;
   onChange: (value: string[] | string) => void;
 }
 

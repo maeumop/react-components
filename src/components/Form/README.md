@@ -139,8 +139,25 @@ Form/
 3. 반응형 디자인 고려
 4. 접근성 가이드라인 준수
 
+## 최근 업데이트
+
+### 2024.12 - 아이콘 라이브러리 변경
+
+- **@iconify/react**에서 **@mui/icons-material**로 아이콘 라이브러리 변경
+- 모든 Form 컴포넌트의 아이콘이 Material-UI 아이콘으로 통일
+- 아이콘 타입이 `string`에서 `IconComponent`로 변경
+
+### 변경된 컴포넌트들
+
+- **TextField**: 검색, 클리어 아이콘
+- **SelectBox**: 드롭다운, 클리어, 체크박스 아이콘
+- **SwitchButton**: 체크박스 아이콘
+- **CheckButton**: 체크박스, 라디오 아이콘
+- **NumberFormat**: 숫자 포맷 관련 아이콘
+
 ## 참고사항
 
 - Sass의 @use 방식을 사용하여 미래 호환성 확보
 - 네임스페이스 'form'을 사용하여 다른 모듈과의 충돌 방지
 - 공통 스타일은 Form 컴포넌트 전용이므로 다른 컴포넌트에서는 사용하지 않음
+- Material-UI 아이콘 사용 시 `sx` prop을 통한 스타일링 지원

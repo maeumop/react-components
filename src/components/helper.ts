@@ -87,7 +87,7 @@ class ComponentHelper {
    */
   public getTransitionVariant(
     transitionType: TransitionType,
-    position: LayerPositionType,
+    position: LayerPositionType = 'bottom',
   ): TransitionVariants {
     // position에 따른 방향 설정
     const directions = {
@@ -96,7 +96,6 @@ class ComponentHelper {
       left: { x: '1em', y: 0 },
       right: { x: '-1em', y: 0 },
     };
-
     const dir = directions[position];
     const duration = 0.2;
 
@@ -111,13 +110,15 @@ class ComponentHelper {
       flip: { duration, ease: [0.455, 0.03, 0.515, 0.955] },
     };
 
+    const transition = transitionConfigs[transitionType];
+
     switch (transitionType) {
       case 'slide':
         return {
-          initial: { opacity: 0, x: dir.x, y: dir.y },
+          initial: { opacity: 0, x: dir?.x ?? 0, y: dir?.y ?? 0 },
           animate: { opacity: 1, x: 0, y: 0 },
-          exit: { opacity: 0, x: dir.x, y: dir.y },
-          transition: transitionConfigs[transitionType],
+          exit: { opacity: 0, x: dir?.x ?? 0, y: dir?.y ?? 0 },
+          transition,
         };
 
       case 'fade':
@@ -125,7 +126,7 @@ class ComponentHelper {
           initial: { opacity: 0 },
           animate: { opacity: 1 },
           exit: { opacity: 0 },
-          transition: transitionConfigs[transitionType],
+          transition,
         };
 
       case 'scale':
@@ -133,71 +134,73 @@ class ComponentHelper {
           initial: { opacity: 0, scale: 0.7 },
           animate: { opacity: 1, scale: 1 },
           exit: { opacity: 0, scale: 0.7 },
-          transition: transitionConfigs[transitionType],
+          transition,
         };
 
       case 'bounce':
         return {
           initial: {
             opacity: 0,
-            x: dir.x !== 0 ? `${dir.x === '1em' ? '2em' : '-2em'}` : 0,
-            y: dir.y !== 0 ? `${dir.y === '1em' ? '2em' : '-2em'}` : 0,
+            x: dir.x !== 0 ? (dir.x === '1em' ? '2em' : '-2em') : 0,
+            y: dir.y !== 0 ? (dir.y === '1em' ? '2em' : '-2em') : 0,
             scale: 0.7,
           },
           animate: { opacity: 1, x: 0, y: 0, scale: 1 },
           exit: {
             opacity: 0,
-            x: dir.x !== 0 ? `${dir.x === '1em' ? '2em' : '-2em'}` : 0,
-            y: dir.y !== 0 ? `${dir.y === '1em' ? '2em' : '-2em'}` : 0,
+            x: dir.x !== 0 ? (dir.x === '1em' ? '2em' : '-2em') : 0,
+            y: dir.y !== 0 ? (dir.y === '1em' ? '2em' : '-2em') : 0,
             scale: 0.7,
           },
-          transition: transitionConfigs.bounce,
+          transition,
         };
 
       case 'flip':
         return {
           initial: {
             opacity: 0,
-            x: dir.x,
-            y: dir.y,
+            x: dir?.x ?? 0,
+            y: dir?.y ?? 0,
             rotateX: position === 'bottom' || position === 'top' ? -90 : 0,
             rotateY: position === 'left' || position === 'right' ? -90 : 0,
+            scale: 0.8,
           },
-          animate: { opacity: 1, x: 0, y: 0, rotateX: 0, rotateY: 0 },
+          animate: { opacity: 1, x: 0, y: 0, rotateX: 0, rotateY: 0, scale: 1 },
           exit: {
             opacity: 0,
-            x: dir.x,
-            y: dir.y,
+            x: dir?.x ?? 0,
+            y: dir?.y ?? 0,
             rotateX: position === 'bottom' || position === 'top' ? -90 : 0,
             rotateY: position === 'left' || position === 'right' ? -90 : 0,
+            scale: 0.8,
           },
-          transition: transitionConfigs.flip,
+          transition,
         };
 
       case 'elastic':
         return {
           initial: {
             opacity: 0,
-            x: dir.x !== 0 ? `${dir.x === '1em' ? '3em' : '-3em'}` : 0,
-            y: dir.y !== 0 ? `${dir.y === '1em' ? '3em' : '-3em'}` : 0,
+            x: dir.x !== 0 ? (dir.x === '1em' ? '3em' : '-3em') : 0,
+            y: dir.y !== 0 ? (dir.y === '1em' ? '3em' : '-3em') : 0,
             scale: 0.7,
           },
           animate: { opacity: 1, x: 0, y: 0, scale: 1 },
           exit: {
             opacity: 0,
-            x: dir.x !== 0 ? `${dir.x === '1em' ? '3em' : '-3em'}` : 0,
-            y: dir.y !== 0 ? `${dir.y === '1em' ? '3em' : '-3em'}` : 0,
+            x: dir.x !== 0 ? (dir.x === '1em' ? '3em' : '-3em') : 0,
+            y: dir.y !== 0 ? (dir.y === '1em' ? '3em' : '-3em') : 0,
             scale: 0.7,
           },
-          transition: transitionConfigs.elastic,
+          transition,
         };
 
       case 'swing':
         return {
           initial: {
             opacity: 0,
-            x: dir.x,
-            y: dir.y,
+            x: dir?.x ?? 0,
+            y: dir?.y ?? 0,
             rotate:
               position === 'right'
                 ? 15
@@ -210,8 +213,8 @@ class ComponentHelper {
           animate: { opacity: 1, x: 0, y: 0, rotate: 0 },
           exit: {
             opacity: 0,
-            x: dir.x,
-            y: dir.y,
+            x: dir?.x ?? 0,
+            y: dir?.y ?? 0,
             rotate:
               position === 'right'
                 ? 15
@@ -221,15 +224,7 @@ class ComponentHelper {
                     ? -15
                     : 15,
           },
-          transition: transitionConfigs.swing,
-        };
-
-      default:
-        return {
-          initial: { opacity: 0, x: dir.x, y: dir.y },
-          animate: { opacity: 1, x: 0, y: 0 },
-          exit: { opacity: 0, x: dir.x, y: dir.y },
-          transition: transitionConfigs[transitionType],
+          transition,
         };
     }
   }

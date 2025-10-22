@@ -15,7 +15,7 @@ React + TypeScript로 구현된 현대적이고 접근성 높은 모달 컴포�
 ## 📦 설치
 
 ```bash
-npm install @iconify/react react-transition-group
+npm install @mui/icons-material react-transition-group
 ```
 
 ## 🚀 기본 사용법
@@ -126,6 +126,13 @@ function Example() {
 ## 🔍 예제 (ex.tsx 참고)
 
 - 다양한 위치, 크기, 전체화면, 액션, 아이콘, FloatingBackButton 등 실제 예제는 ex.tsx 참고
+
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: 다양한 위치 지원 추가
+- **2023.12**: 접근성 개선
+- **2023.11**: 최초 작성
 
 ---
 

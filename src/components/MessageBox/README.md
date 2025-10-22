@@ -17,7 +17,7 @@ React + TypeScript로 개발된 모달 메시지 박스 컴포넌트입니다. P
 ## 설치
 
 ```bash
-npm install @iconify/react react-transition-group
+npm install @mui/icons-material react-transition-group
 ```
 
 ## 사용법
@@ -188,6 +188,13 @@ SCSS 변수로 스타일을 쉽게 커스터마이징할 수 있습니다.
 - 타입 안전성 보장
 
 ---
+
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: Provider/Hook 구조 도입
+- **2023.12**: 트랜지션 효과 추가
+- **2023.11**: 최초 작성
 
 ## 라이선스
 

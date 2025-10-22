@@ -103,6 +103,13 @@ export default function App() {
 - 여러 ToastProvider를 중첩하면 가장 가까운 Provider가 적용됩니다.
 - 마지막 토스트가 사라질 때 트랜지션이 안 보이면 TransitionGroup의 component 속성을 null로 설정하세요.
 
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: Provider/Hook 패턴 도입
+- **2023.12**: 다양한 테마 및 위치 지원 추가
+- **2023.11**: 최초 작성
+
 ## 라이선스
 
 MIT License

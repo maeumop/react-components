@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CSSTransition } from 'react-transition-group';
-import { messageBoxTransition } from './const';
-import './style.scss';
 import type { MessageBoxOptions } from './types';
 import { CircularProgress as LoadingIcon } from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useComponentHelper } from '../helper';
+import { transitionType } from '../const';
+import './style.scss';
 
 /**
  * MessageBox 컴포넌트
@@ -23,11 +24,12 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     escCancel = true,
     enterOkay = true,
     noScrollStyleClass = 'hide-scroll',
-    transition = messageBoxTransition.scale,
+    transition = transitionType.scale,
     onClose,
   } = props;
 
   const [isShow, setIsShow] = useState(true);
+  const [boxShow, setBoxShow] = useState(false);
   const [spinnerShow, setSpinnerShow] = useState(false);
   const msgBoxBgNodeRef = useRef<HTMLDivElement>(null);
   const msgBoxNodeRef = useRef<HTMLDivElement>(null);
@@ -111,13 +113,10 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     }
   }, [disableScroll, keyupEvent]);
 
-  // 닫기
-  const hide = useCallback(() => {
-    setIsShow(false);
-  }, []);
-
   // 트랜지션 종료 후
   const handleExited = useCallback(() => {
+    console.log('handleExited');
+    setIsShow(() => false);
     enableScroll();
     document.removeEventListener('keyup', keyupEvent);
 
@@ -125,12 +124,6 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
       onClose();
     }
   }, [enableScroll, keyupEvent, onClose]);
-
-  const handleEntered = useCallback(() => {
-    if (msgBoxNodeRef.current) {
-      msgBoxNodeRef.current.focus();
-    }
-  }, []);
 
   // 확인 클릭
   const clickOkay = useCallback(() => {
@@ -142,8 +135,8 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
       okay();
     }
 
-    hide();
-  }, [spinnerShow, okay, hide]);
+    setBoxShow(() => false);
+  }, [spinnerShow, okay]);
 
   // 비동기 확인 클릭
   const asyncClickOkay = useCallback(async () => {
@@ -160,9 +153,9 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     } catch (error) {
       console.error('MessageBox asyncOkay error:', error);
     } finally {
-      hide();
+      setBoxShow(() => false);
     }
-  }, [spinnerShow, asyncOkay, hide]);
+  }, [spinnerShow, asyncOkay]);
 
   // 취소 클릭
   const clickCancel = useCallback(() => {
@@ -171,9 +164,9 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
         cancel();
       }
 
-      hide();
+      setBoxShow(() => false);
     }
-  }, [spinnerShow, cancel, hide]);
+  }, [spinnerShow, cancel]);
 
   const onButtonClick = useCallback(() => {
     if (typeof asyncOkay === 'function') {
@@ -193,69 +186,68 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     };
   }, [setEvents, enableScroll, keyupEvent]);
 
+  const helperRef = useRef(useComponentHelper());
+  const variants = helperRef.current.getTransitionVariant(transition);
+
+  useEffect(() => {
+    setBoxShow(true);
+  }, [isShow]);
+
   return createPortal(
-    <CSSTransition
-      appear
-      in={isShow}
-      timeout={200}
-      classNames="msg-box-fade"
-      onExited={handleExited}
-      onEntered={handleEntered}
-      nodeRef={msgBoxBgNodeRef}
-    >
-      <div
-        ref={msgBoxBgNodeRef}
-        className="msg-box-bg"
-        tabIndex={0}
-        role="dialog"
-        aria-labelledby={titleId}
-        aria-describedby={contentId}
-        aria-modal="true"
-      >
-        <CSSTransition
-          appear
-          in={isShow}
-          timeout={200}
-          classNames={transition}
-          nodeRef={msgBoxNodeRef}
-        >
-          <div className="msg-box" style={{ width }} id={dialogId.current} ref={msgBoxNodeRef}>
-            {title && (
-              <h5 className="title" id={titleId}>
-                {title}
-              </h5>
-            )}
-            <div
-              className="contents"
-              id={contentId}
-              dangerouslySetInnerHTML={{ __html: message }}
-            />
-            <div className="actions">
-              <button
-                type="button"
-                className="btn-okay"
-                onClick={onButtonClick}
-                disabled={spinnerShow}
+    <>
+      {isShow && (
+        <div ref={msgBoxBgNodeRef} className="msg-box-bg" tabIndex={0}>
+          <AnimatePresence onExitComplete={handleExited}>
+            {boxShow && (
+              <motion.div
+                className="msg-box"
+                style={{ width }}
+                id={dialogId.current}
+                ref={msgBoxNodeRef}
+                initial={variants.initial}
+                animate={variants.animate}
+                exit={variants.exit}
+                transition={variants.transition}
               >
-                {spinnerShow ? <LoadingIcon size={16} className="loading" /> : btnOkayText}
-              </button>
-              {type === 'confirm' && (
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={clickCancel}
-                  disabled={spinnerShow}
-                >
-                  {btnCancelText}
-                </button>
-              )}
-            </div>
-          </div>
-        </CSSTransition>
-      </div>
-    </CSSTransition>,
+                {title && (
+                  <h5 className="title" id={titleId}>
+                    {title}
+                  </h5>
+                )}
+                <div
+                  className="contents"
+                  id={contentId}
+                  dangerouslySetInnerHTML={{ __html: message }}
+                />
+                <div className="actions">
+                  <button
+                    type="button"
+                    className="okay-button"
+                    onClick={onButtonClick}
+                    disabled={spinnerShow}
+                  >
+                    {spinnerShow ? <LoadingIcon size={18} className="loading" /> : btnOkayText}
+                  </button>
+                  {type === 'confirm' && (
+                    <button
+                      type="button"
+                      className="cancel-button"
+                      onClick={clickCancel}
+                      disabled={spinnerShow}
+                    >
+                      {btnCancelText}
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+    </>,
     document.body,
   );
 };
 
-export default MessageBox;
+MessageBox.displayName = 'MessageBox';
+export default React.memo(MessageBox);

@@ -33,7 +33,7 @@ React + TypeScript 기반의 유연하고 접근성 높은 툴팁 컴포넌트�
 ### 1. 설치
 
 ```bash
-npm install @iconify/react
+npm install @mui/icons-material
 ```
 
 ### 2. 컴포넌트 import
@@ -61,22 +61,22 @@ function App() {
 
 ## 📖 Props
 
-| Prop       | Type                                                                                   | Default             | Description                            |
-| ---------- | -------------------------------------------------------------------------------------- | ------------------- | -------------------------------------- |
-| `message`  | `string \| string[]`                                                                   | -                   | 툴팁 메시지 (배열 입력 시 리스트 형태) |
-| `title`    | `string`                                                                               | -                   | 툴팁 제목                              |
-| `position` | `'top' \| 'bottom' \| 'left' \| 'right'`                                               | `'bottom'`          | 툴팁 표시 위치                         |
-| `width`    | `number`                                                                               | -                   | 툴팁 최대 너비 (px)                    |
-| `hovering` | `boolean`                                                                              | `false`             | 호버링 모드 활성화                     |
-| `btnClose` | `boolean`                                                                              | `false`             | 닫기 버튼 표시                         |
-| `icon`     | `string`                                                                               | `'mdi:help-circle'` | 아이콘 이름 (Iconify 형식)             |
-| `iconSize` | `string`                                                                               | -                   | 아이콘 크기                            |
-| `dark`     | `boolean`                                                                              | `false`             | 다크 테마 적용                         |
-| `padding`  | `string`                                                                               | -                   | 패딩 스타일                            |
-| `block`    | `boolean`                                                                              | `false`             | 블록 레벨 요소로 표시                  |
-| `color`    | `'default' \| 'primary' \| 'secondary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `'default'`         | 색상 테마                              |
-| `content`  | `(props: { close: () => void }) => React.ReactNode`                                    | -                   | 툴팁 내용 커스텀 렌더링                |
-| `children` | `ReactNode`                                                                            | -                   | 툴팁을 표시할 대상 요소                |
+| Prop       | Type                                                                                   | Default     | Description                            |
+| ---------- | -------------------------------------------------------------------------------------- | ----------- | -------------------------------------- |
+| `message`  | `string \| string[]`                                                                   | -           | 툴팁 메시지 (배열 입력 시 리스트 형태) |
+| `title`    | `string`                                                                               | -           | 툴팁 제목                              |
+| `position` | `'top' \| 'bottom' \| 'left' \| 'right'`                                               | `'bottom'`  | 툴팁 표시 위치                         |
+| `width`    | `number`                                                                               | -           | 툴팁 최대 너비 (px)                    |
+| `hovering` | `boolean`                                                                              | `false`     | 호버링 모드 활성화                     |
+| `btnClose` | `boolean`                                                                              | `false`     | 닫기 버튼 표시                         |
+| `icon`     | `IconComponent`                                                                        | `HelpIcon`  | Material-UI 아이콘 컴포넌트            |
+| `iconSize` | `string`                                                                               | -           | 아이콘 크기                            |
+| `dark`     | `boolean`                                                                              | `false`     | 다크 테마 적용                         |
+| `padding`  | `string`                                                                               | -           | 패딩 스타일                            |
+| `block`    | `boolean`                                                                              | `false`     | 블록 레벨 요소로 표시                  |
+| `color`    | `'default' \| 'primary' \| 'secondary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `'default'` | 색상 테마                              |
+| `content`  | `(props: { close: () => void }) => React.ReactNode`                                    | -           | 툴팁 내용 커스텀 렌더링                |
+| `children` | `ReactNode`                                                                            | -           | 툴팁을 표시할 대상 요소                |
 
 ### Position 상수 사용
 
@@ -230,5 +230,12 @@ import { tooltipColor } from '@/components/Tooltip/const';
   <Tooltip color={tooltipColor.info} message="정보 메시지" />
 </div>;
 ```
+
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: 접근성 개선 및 키보드 네비게이션 추가
+- **2023.12**: 다양한 색상 테마 지원 추가
+- **2023.11**: 최초 작성
 
 ---

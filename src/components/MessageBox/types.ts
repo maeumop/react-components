@@ -1,4 +1,5 @@
-import type { messageBoxTransition, messageBoxType } from './const';
+import type { TransitionType } from '../types';
+import type { messageBoxType } from './const';
 
 export interface MessageBoxOptions {
   type?: MessageBoxType;
@@ -14,7 +15,7 @@ export interface MessageBoxOptions {
   escCancel?: boolean;
   enterOkay?: boolean;
   noScrollStyleClass?: string;
-  transition?: MessageBoxTransition;
+  transition?: TransitionType;
   key?: number;
 }
 
@@ -29,15 +30,14 @@ export interface MessageBoxContextType {
 }
 
 export type MessageBoxType = (typeof messageBoxType)[keyof typeof messageBoxType];
-export type MessageBoxTransition = (typeof messageBoxTransition)[keyof typeof messageBoxTransition];
 
 export interface MessageBoxProviderProps {
   noScrollStyleClass?: string;
-  defaultTransition?: MessageBoxTransition;
+  defaultTransition?: TransitionType;
 }
 
 // 플러그인 옵션 타입 추가
 export interface MessageBoxPluginOptions {
   noScrollStyleClass?: string;
-  defaultTransition?: MessageBoxTransition;
+  defaultTransition?: TransitionType;
 }

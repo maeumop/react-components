@@ -256,37 +256,3 @@ $_button-colors: getButtonColors();
 
   // feedback 스타일은 공통 스타일에서 상속
 }
-
-// 반응형 디자인
-@media (max-width: 768px) {
-  .date-picker {
-    .picker-popup {
-      position: fixed;
-      top: 50% !important;
-      left: 50% !important;
-      transform: translate(-50%, -50%);
-      width: 90vw;
-      max-width: 32rem;
-      min-width: 28rem;
-    }
-
-    .picker-wrap {
-      .calendar {
-        display: block;
-        width: 100%;
-
-        & + .calendar {
-          border-left: none;
-          border-top: 0.1rem solid $gray-300;
-        }
-      }
-    }
-
-    .search-date {
-      button {
-        font-size: 0.9rem;
-        padding: 0.6rem 0.8rem;
-      }
-    }
-  }
-}

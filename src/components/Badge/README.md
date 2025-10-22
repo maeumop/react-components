@@ -11,10 +11,10 @@
 
 ## 🚀 설치
 
-### 1. Iconify 설치 (필수)
+### 1. Material-UI 아이콘 설치 (필수)
 
 ```bash
-npm install @iconify/react
+npm install @mui/icons-material
 ```
 
 ### 2. 컴포넌트 import
@@ -40,17 +40,17 @@ function App() {
 
 ## 📝 Props
 
-| Prop           | Type                  | Default     | Description               |
-| -------------- | --------------------- | ----------- | ------------------------- |
-| `text`         | `string \| number`    | -           | 뱃지에 표시할 텍스트      |
-| `color`        | `string`              | `'primary'` | 뱃지 색상                 |
-| `size`         | `string`              | `'default'` | 뱃지 크기                 |
-| `position`     | `string`              | `'right'`   | 뱃지 위치                 |
-| `icon`         | `string`              | -           | Iconify 아이콘명          |
-| `wrapperClass` | `string`              | -           | 뱃지 래퍼 요소의 클래스명 |
-| `badgeClass`   | `string`              | -           | 뱃지 자체의 클래스명      |
-| `children`     | `ReactNode`           | -           | 뱃지가 표시될 자식 요소   |
-| `style`        | `React.CSSProperties` | -           | 인라인 스타일             |
+| Prop           | Type                  | Default     | Description                 |
+| -------------- | --------------------- | ----------- | --------------------------- |
+| `text`         | `string \| number`    | -           | 뱃지에 표시할 텍스트        |
+| `color`        | `string`              | `'primary'` | 뱃지 색상                   |
+| `size`         | `string`              | `'default'` | 뱃지 크기                   |
+| `position`     | `string`              | `'right'`   | 뱃지 위치                   |
+| `icon`         | `IconComponent`       | -           | Material-UI 아이콘 컴포넌트 |
+| `wrapperClass` | `string`              | -           | 뱃지 래퍼 요소의 클래스명   |
+| `badgeClass`   | `string`              | -           | 뱃지 자체의 클래스명        |
+| `children`     | `ReactNode`           | -           | 뱃지가 표시될 자식 요소     |
+| `style`        | `React.CSSProperties` | -           | 인라인 스타일               |
 
 ### 색상 옵션 예시
 
@@ -168,20 +168,20 @@ function App() {
 
 ## 🎯 아이콘 사용법
 
-Iconify를 사용하여 다양한 아이콘을 사용할 수 있습니다:
+Material-UI 아이콘을 사용하여 다양한 아이콘을 사용할 수 있습니다:
 
 ```tsx
-import { Icon } from '@iconify/react';
+import { Notifications as BellIcon, Person as UserIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 
-<Badge icon="mdi:bell" size="large">
+<Badge icon={BellIcon} size="large">
   <button>알림</button>
 </Badge>
 
-<Badge icon="heroicons:user" size="large">
+<Badge icon={UserIcon} size="large">
   <button>사용자</button>
 </Badge>
 
-<Badge icon="fa:github" size="large">
+<Badge icon={GitHubIcon} size="large">
   <button>GitHub</button>
 </Badge>
 ```
@@ -207,6 +207,7 @@ import { Icon } from '@iconify/react';
 
 **업데이트 히스토리**
 
+- 2024.12: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
 - 2024.01: size prop 도입, 색상 옵션 정리, 커스텀 클래스 지원 추가
 - 2023.05: x-small, large props 추가
 - 2023.04: 최초 작성

@@ -30,10 +30,16 @@ React + TypeScript로 개발된 접근성과 사용성을 고려한 드롭다운
 import DropMenu from './DropMenu';
 import type { DropMenuItem } from './DropMenu/types';
 
+import {
+  Person as AccountIcon,
+  Settings as CogIcon,
+  Logout as LogoutIcon,
+} from '@mui/icons-material';
+
 const menuItems: DropMenuItem[] = [
-  { text: '프로필 보기', action: () => console.log('프로필 보기'), icon: 'mdi:account' },
-  { text: '설정', action: () => console.log('설정'), icon: 'mdi:cog' },
-  { text: '로그아웃', action: () => console.log('로그아웃'), icon: 'mdi:logout' },
+  { text: '프로필 보기', action: () => console.log('프로필 보기'), icon: AccountIcon },
+  { text: '설정', action: () => console.log('설정'), icon: CogIcon },
+  { text: '로그아웃', action: () => console.log('로그아웃'), icon: LogoutIcon },
 ];
 
 <DropMenu items={menuItems}>
@@ -121,7 +127,7 @@ const handleItemClick = (item: DropMenuItem, index: number) => {
 interface DropMenuItem {
   text: string; // 메뉴 아이템 텍스트
   action: () => void; // 클릭 시 실행할 함수
-  icon?: string; // 아이콘 (Iconify 아이콘명)
+  icon?: IconComponent; // 아이콘 (Material-UI 아이콘 컴포넌트)
   disabled?: boolean; // 비활성화 여부
 }
 ```
@@ -187,6 +193,7 @@ type DropMenuColor =
 
 ## 업데이트 히스토리
 
+- **2024.12.XX**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
 - **2024.12.XX**: 트랜지션 효과 통일 (0.3초), zoom 효과 제거, 스크롤 이벤트 처리 개선
 - **2024.12.XX**: 새로운 트랜지션 효과 추가 (bounce, flip, elastic, swing), danger → error 색상 변경
 - **2024.12.XX**: 접근성 개선, 키보드 네비게이션 추가, 색상 테마 확장

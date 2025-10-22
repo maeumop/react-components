@@ -3,9 +3,9 @@ import { AnimatePresence, motion } from 'framer-motion';
 import type { DropdownStateType, SelectorProps } from '../types';
 import { useDatePickerStore } from '../store';
 import { KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
+import { useComponentHelper } from '../../../helper';
+import { layerPosition, transitionType } from '../../../const';
 import './style.scss';
-import { useComponentHelper } from '@/components/helper';
-import { layerPosition, transitionType } from '@/components/const';
 
 // 개별 아이템 컴포넌트
 const SelectorItem = React.memo<{

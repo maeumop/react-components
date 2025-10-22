@@ -15,7 +15,7 @@ React + TypeScript로 개발된 고성능 테이블 컴포넌트입니다. 체�
 ## 설치
 
 ```bash
-npm install @iconify/react
+npm install @mui/icons-material
 ```
 
 ## 기본 사용법
@@ -189,6 +189,13 @@ const disableFilter = (user: User, index: number) => user.role === '관리자';
 - Firefox 85+
 - Safari 14+
 - Edge 88+
+
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: 체크박스/라디오 선택 기능 추가
+- **2023.12**: 무한 스크롤 기능 추가
+- **2023.11**: 최초 작성
 
 ## 라이센스
 

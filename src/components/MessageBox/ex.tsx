@@ -1,22 +1,24 @@
 import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useState } from 'react';
 import './ex.scss';
-import { MessageBoxProvider, messageBoxTransition, useMessageBox } from './index';
+import { MessageBoxProvider, useMessageBox } from './index';
+import type { TransitionType } from '../types';
+import { transitionType } from '../const';
 
 const transitions = {
-  Scale: messageBoxTransition.scale,
-  Slide: messageBoxTransition.slide,
-  SlideUp: messageBoxTransition.slideUp,
-  Zoom: messageBoxTransition.zoom,
-  Bounce: messageBoxTransition.bounce,
-  Flip: messageBoxTransition.flip,
-  Elastic: messageBoxTransition.elastic,
+  Fade: transitionType.fade,
+  Scale: transitionType.scale,
+  Slide: transitionType.slide,
+  Bounce: transitionType.bounce,
+  Flip: transitionType.flip,
+  Elastic: transitionType.elastic,
+  Swing: transitionType.swing,
 };
 
 const MessageBoxExampleInner: React.FC = () => {
-  const [selectedTransition, setSelectedTransition] = useState<
-    import('./types').MessageBoxTransition
-  >(messageBoxTransition.scale);
+  const [selectedTransition, setSelectedTransition] = useState<TransitionType>(
+    transitionType.scale,
+  );
   const { alert, confirm } = useMessageBox();
 
   // Alert/Confirm 호출 함수들
@@ -38,60 +40,60 @@ const MessageBoxExampleInner: React.FC = () => {
       transition: selectedTransition,
     });
   };
+  const showFadeTransition = () => {
+    alert({
+      title: 'Fade 트랜지션',
+      message: '기본 스케일 효과가 적용된 메시지입니다.',
+      transition: transitionType.fade,
+    });
+  };
+  const showSwingTransition = () => {
+    alert({
+      title: 'Swing 트랜지션',
+      message: '기본 스케일 효과가 적용된 메시지입니다.',
+      transition: transitionType.swing,
+    });
+  };
   const showScaleTransition = () => {
     alert({
       title: 'Scale 트랜지션',
       message: '기본 스케일 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.scale,
+      transition: transitionType.scale,
     });
   };
   const showSlideTransition = () => {
     alert({
       title: 'Slide 트랜지션',
       message: '슬라이드 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.slide,
-    });
-  };
-  const showSlideUpTransition = () => {
-    alert({
-      title: 'Slide Up 트랜지션',
-      message: '위로 슬라이드되는 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.slideUp,
-    });
-  };
-  const showZoomTransition = () => {
-    alert({
-      title: 'Zoom 트랜지션',
-      message: '줌 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.zoom,
+      transition: transitionType.slide,
     });
   };
   const showBounceTransition = () => {
     alert({
       title: 'Bounce 트랜지션',
       message: '바운스 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.bounce,
+      transition: transitionType.bounce,
     });
   };
   const showFlipTransition = () => {
     alert({
       title: 'Flip 트랜지션',
       message: '플립 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.flip,
+      transition: transitionType.flip,
     });
   };
   const showElasticTransition = () => {
     alert({
       title: 'Elastic 트랜지션',
       message: '탄성 효과가 적용된 메시지입니다.',
-      transition: messageBoxTransition.elastic,
+      transition: transitionType.elastic,
     });
   };
   const showAsyncAlert = () => {
     alert({
       message: '비동기 처리가 포함된 Alert입니다.',
       asyncOkay: async () => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(rsv => setTimeout(rsv, 2000));
 
         console.log('Async alert completed');
       },
@@ -101,7 +103,7 @@ const MessageBoxExampleInner: React.FC = () => {
     confirm({
       message: '비동기 처리가 포함된 Confirm입니다.',
       asyncOkay: async () => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(rsv => setTimeout(rsv, 2000));
 
         console.log('Async confirm completed');
       },
@@ -116,7 +118,7 @@ const MessageBoxExampleInner: React.FC = () => {
       message: '제목과 커스텀 버튼 텍스트가 있는 Alert입니다.',
       btnOkayText: '알겠습니다',
       width: '400px',
-      transition: messageBoxTransition.bounce,
+      transition: transitionType.bounce,
     });
   };
   const showCustomConfirm = () => {
@@ -126,7 +128,7 @@ const MessageBoxExampleInner: React.FC = () => {
       btnOkayText: '네',
       btnCancelText: '아니오',
       width: '400px',
-      transition: messageBoxTransition.flip,
+      transition: transitionType.flip,
     });
   };
   const showHtmlMessage = () => {
@@ -192,9 +194,7 @@ const MessageBoxExampleInner: React.FC = () => {
                 id="transition-select"
                 className="transition-select"
                 value={selectedTransition}
-                onChange={e =>
-                  setSelectedTransition(e.target.value as import('./types').MessageBoxTransition)
-                }
+                onChange={e => setSelectedTransition(e.target.value as TransitionType)}
               >
                 {Object.entries(transitions).map(([key, value]) => (
                   <option key={key} value={value}>
@@ -223,28 +223,22 @@ const MessageBoxExampleInner: React.FC = () => {
             <h2>개별 트랜지션 테스트</h2>
             <div className="example-grid">
               <div className="example-item">
+                <button className="demo-button theme-secondary" onClick={showFadeTransition}>
+                  Fade
+                </button>
+                <span className="example-label">페이드 효과</span>
+              </div>
+              <div className="example-item">
                 <button className="demo-button theme-secondary" onClick={showScaleTransition}>
                   Scale
                 </button>
-                <span className="example-label">기본 스케일 효과</span>
+                <span className="example-label">스케일 효과</span>
               </div>
               <div className="example-item">
                 <button className="demo-button theme-secondary" onClick={showSlideTransition}>
                   Slide
                 </button>
                 <span className="example-label">슬라이드 효과</span>
-              </div>
-              <div className="example-item">
-                <button className="demo-button theme-secondary" onClick={showSlideUpTransition}>
-                  Slide Up
-                </button>
-                <span className="example-label">위로 슬라이드</span>
-              </div>
-              <div className="example-item">
-                <button className="demo-button theme-secondary" onClick={showZoomTransition}>
-                  Zoom
-                </button>
-                <span className="example-label">줌 효과</span>
               </div>
               <div className="example-item">
                 <button className="demo-button theme-secondary" onClick={showBounceTransition}>
@@ -263,6 +257,12 @@ const MessageBoxExampleInner: React.FC = () => {
                   Elastic
                 </button>
                 <span className="example-label">탄성 효과</span>
+              </div>
+              <div className="example-item">
+                <button className="demo-button theme-secondary" onClick={showSwingTransition}>
+                  Swing
+                </button>
+                <span className="example-label">스윙 효과</span>
               </div>
             </div>
           </section>

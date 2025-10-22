@@ -1,6 +1,6 @@
 # StyledButton Component
 
-Vue 3 + TypeScript로 개발된 다재다능한 버튼 컴포넌트입니다. 다양한 색상, 크기, 스타일을 지원하며 접근성을 고려하여 설계되었습니다.
+React + TypeScript로 개발된 다재다능한 버튼 컴포넌트입니다. 다양한 색상, 크기, 스타일을 지원하며 접근성을 고려하여 설계되었습니다.
 
 ## 📋 목차
 
@@ -19,28 +19,13 @@ Vue 3 + TypeScript로 개발된 다재다능한 버튼 컴포넌트입니다. �
 ### 1. 의존성 설치
 
 ```bash
-npm install @iconify/vue
+npm install @mui/icons-material
 ```
 
-### 2. 전역 등록 (선택사항)
+### 2. 컴포넌트 import
 
 ```typescript
-// main.ts
-import { createApp } from 'vue';
-import App from './App.vue';
 import StyledButton from '@/components/StyledButton';
-
-const app = createApp(App);
-app.component('StyledButton', StyledButton);
-app.mount('#app');
-```
-
-### 3. 개별 import 사용
-
-```vue
-<script setup lang="ts">
-import StyledButton from '@/components/StyledButton';
-</script>
 ```
 
 ---
@@ -49,48 +34,46 @@ import StyledButton from '@/components/StyledButton';
 
 ### 기본 버튼
 
-```vue
-<template>
-  <StyledButton>기본 버튼</StyledButton>
-  <StyledButton color="success">성공 버튼</StyledButton>
-  <StyledButton color="danger">위험 버튼</StyledButton>
-</template>
+```tsx
+import { Home as HomeIcon, ArrowForward as ArrowIcon, Menu as MenuIcon } from '@mui/icons-material';
+
+<StyledButton>기본 버튼</StyledButton>
+<StyledButton color="success">성공 버튼</StyledButton>
+<StyledButton color="danger">위험 버튼</StyledButton>
 ```
 
 ### 아이콘 버튼
 
-```vue
-<template>
-  <StyledButton icon="mdi:home">홈으로</StyledButton>
-  <StyledButton icon="mdi:arrow-right" iconRight>다음</StyledButton>
-  <StyledButton onlyIcon icon="mdi:menu" />
-</template>
+```tsx
+<StyledButton icon={HomeIcon}>홈으로</StyledButton>
+<StyledButton icon={ArrowIcon} iconRight>다음</StyledButton>
+<StyledButton onlyIcon icon={MenuIcon} />
 ```
 
 ---
 
 ## ⚙️ Props
 
-| Prop             | Type               | Default     | Description               |
-| ---------------- | ------------------ | ----------- | ------------------------- |
-| `color`          | `ButtonColors`     | `'primary'` | 버튼 색상                 |
-| `class`          | `string`           | `undefined` | 추가 CSS 클래스           |
-| `href`           | `string`           | `'#'`       | 링크 URL (tag가 'a'일 때) |
-| `target`         | `string`           | `'_blank'`  | 링크 타겟                 |
-| `icon`           | `string`           | `undefined` | Iconify 아이콘명          |
-| `iconRight`      | `boolean`          | `false`     | 아이콘을 오른쪽에 배치    |
-| `onlyIcon`       | `boolean`          | `false`     | 아이콘만 표시             |
-| `text`           | `boolean`          | `false`     | 텍스트 스타일 버튼        |
-| `outline`        | `boolean`          | `false`     | 아웃라인 스타일           |
-| `block`          | `boolean`          | `false`     | 전체 너비 버튼            |
-| `disabled`       | `boolean`          | `false`     | 비활성화 상태             |
-| `loading`        | `boolean`          | `false`     | 로딩 상태                 |
-| `large`          | `boolean`          | `false`     | 큰 크기                   |
-| `small`          | `boolean`          | `false`     | 작은 크기                 |
-| `xSmall`         | `boolean`          | `false`     | 매우 작은 크기            |
-| `tag`            | `string`           | `'a'`       | HTML 태그 ('a', 'button') |
-| `dropMenuToggle` | `boolean`          | `false`     | 드롭다운 토글 상태        |
-| `width`          | `string \| number` | `undefined` | 버튼 너비 (px, %, rem 등) |
+| Prop             | Type               | Default     | Description                 |
+| ---------------- | ------------------ | ----------- | --------------------------- |
+| `color`          | `ButtonColors`     | `'primary'` | 버튼 색상                   |
+| `class`          | `string`           | `undefined` | 추가 CSS 클래스             |
+| `href`           | `string`           | `'#'`       | 링크 URL (tag가 'a'일 때)   |
+| `target`         | `string`           | `'_blank'`  | 링크 타겟                   |
+| `icon`           | `IconComponent`    | `undefined` | Material-UI 아이콘 컴포넌트 |
+| `iconRight`      | `boolean`          | `false`     | 아이콘을 오른쪽에 배치      |
+| `onlyIcon`       | `boolean`          | `false`     | 아이콘만 표시               |
+| `text`           | `boolean`          | `false`     | 텍스트 스타일 버튼          |
+| `outline`        | `boolean`          | `false`     | 아웃라인 스타일             |
+| `block`          | `boolean`          | `false`     | 전체 너비 버튼              |
+| `disabled`       | `boolean`          | `false`     | 비활성화 상태               |
+| `loading`        | `boolean`          | `false`     | 로딩 상태                   |
+| `large`          | `boolean`          | `false`     | 큰 크기                     |
+| `small`          | `boolean`          | `false`     | 작은 크기                   |
+| `xSmall`         | `boolean`          | `false`     | 매우 작은 크기              |
+| `tag`            | `string`           | `'a'`       | HTML 태그 ('a', 'button')   |
+| `dropMenuToggle` | `boolean`          | `false`     | 드롭다운 토글 상태          |
+| `width`          | `string \| number` | `undefined` | 버튼 너비 (px, %, rem 등)   |
 
 ### ButtonColors 타입
 
@@ -114,16 +97,12 @@ type ButtonColors =
 | ------- | ------------ | ----------------- |
 | `click` | `MouseEvent` | 버튼 클릭 시 발생 |
 
-```vue
-<template>
-  <StyledButton @click="handleClick">클릭하세요</StyledButton>
-</template>
-
-<script setup lang="ts">
-const handleClick = (event: MouseEvent) => {
+```tsx
+const handleClick = (event: React.MouseEvent) => {
   console.log('버튼이 클릭되었습니다!', event);
 };
-</script>
+
+<StyledButton onClick={handleClick}>클릭하세요</StyledButton>;
 ```
 
 ---
@@ -132,61 +111,61 @@ const handleClick = (event: MouseEvent) => {
 
 ### 색상 변형
 
-```vue
-<template>
-  <StyledButton color="primary">Primary</StyledButton>
-  <StyledButton color="secondary">Secondary</StyledButton>
-  <StyledButton color="success">Success</StyledButton>
-  <StyledButton color="warning">Warning</StyledButton>
-  <StyledButton color="danger">Danger</StyledButton>
-  <StyledButton color="info">Info</StyledButton>
-  <StyledButton color="light">Light</StyledButton>
-  <StyledButton color="dark">Dark</StyledButton>
-</template>
+```tsx
+<StyledButton color="primary">Primary</StyledButton>
+<StyledButton color="secondary">Secondary</StyledButton>
+<StyledButton color="success">Success</StyledButton>
+<StyledButton color="warning">Warning</StyledButton>
+<StyledButton color="danger">Danger</StyledButton>
+<StyledButton color="info">Info</StyledButton>
+<StyledButton color="light">Light</StyledButton>
+<StyledButton color="dark">Dark</StyledButton>
 ```
 
 ### 크기 변형
 
-```vue
-<template>
-  <StyledButton xSmall>매우 작음</StyledButton>
-  <StyledButton small>작음</StyledButton>
-  <StyledButton>기본</StyledButton>
-  <StyledButton large>큼</StyledButton>
-</template>
+```tsx
+<StyledButton xSmall>매우 작음</StyledButton>
+<StyledButton small>작음</StyledButton>
+<StyledButton>기본</StyledButton>
+<StyledButton large>큼</StyledButton>
 ```
 
 ### 스타일 변형
 
-```vue
-<template>
-  <!-- 기본 버튼 -->
-  <StyledButton>기본</StyledButton>
+```tsx
+{
+  /* 기본 버튼 */
+}
+<StyledButton>기본</StyledButton>;
 
-  <!-- 텍스트 버튼 -->
-  <StyledButton text>텍스트</StyledButton>
+{
+  /* 텍스트 버튼 */
+}
+<StyledButton text>텍스트</StyledButton>;
 
-  <!-- 아웃라인 버튼 -->
-  <StyledButton outline>아웃라인</StyledButton>
+{
+  /* 아웃라인 버튼 */
+}
+<StyledButton outline>아웃라인</StyledButton>;
 
-  <!-- 아이콘 전용 버튼 -->
-  <StyledButton onlyIcon icon="mdi:home" />
-</template>
+{
+  /* 아이콘 전용 버튼 */
+}
+<StyledButton onlyIcon icon={HomeIcon} />;
 ```
 
 ### Width 설정
 
-```vue
-<template>
-  <!-- 숫자로 설정 (px 단위) -->
-  <StyledButton :width="120">120px</StyledButton>
+```tsx
+{/* 숫자로 설정 (px 단위) */}
+<StyledButton width={120}>120px</StyledButton>
 
-  <!-- 문자열로 설정 -->
-  <StyledButton width="200px">200px</StyledButton>
-  <StyledButton width="50%">50%</StyledButton>
-  <StyledButton width="10rem">10rem</StyledButton>
-  <StyledButton width="100%">전체 너비</StyledButton>
-</template>
+{/* 문자열로 설정 */}
+<StyledButton width="200px">200px</StyledButton>
+<StyledButton width="50%">50%</StyledButton>
+<StyledButton width="10rem">10rem</StyledButton>
+<StyledButton width="100%">전체 너비</StyledButton>
 ```
 
 ---
@@ -195,98 +174,99 @@ const handleClick = (event: MouseEvent) => {
 
 ### 기본 예제
 
-```vue
-<template>
-  <div class="button-examples">
-    <!-- 색상별 버튼 -->
-    <div class="row">
-      <StyledButton color="primary">Primary</StyledButton>
-      <StyledButton color="success">Success</StyledButton>
-      <StyledButton color="warning">Warning</StyledButton>
-      <StyledButton color="danger">Danger</StyledButton>
+```tsx
+import { Add as AddIcon, ArrowForward as ArrowIcon, Menu as MenuIcon } from '@mui/icons-material';
+
+const ButtonExamples = () => {
+  return (
+    <div className="button-examples">
+      {/* 색상별 버튼 */}
+      <div className="row">
+        <StyledButton color="primary">Primary</StyledButton>
+        <StyledButton color="success">Success</StyledButton>
+        <StyledButton color="warning">Warning</StyledButton>
+        <StyledButton color="danger">Danger</StyledButton>
+      </div>
+
+      {/* 크기별 버튼 */}
+      <div className="row">
+        <StyledButton small>Small</StyledButton>
+        <StyledButton>Default</StyledButton>
+        <StyledButton large>Large</StyledButton>
+      </div>
+
+      {/* 스타일별 버튼 */}
+      <div className="row">
+        <StyledButton>Filled</StyledButton>
+        <StyledButton text>Text</StyledButton>
+        <StyledButton outline>Outline</StyledButton>
+      </div>
+
+      {/* 아이콘 버튼 */}
+      <div className="row">
+        <StyledButton icon={AddIcon}>Add Item</StyledButton>
+        <StyledButton icon={ArrowIcon} iconRight>
+          Next
+        </StyledButton>
+        <StyledButton onlyIcon icon={MenuIcon} />
+      </div>
+
+      {/* 상태별 버튼 */}
+      <div className="row">
+        <StyledButton loading>Loading</StyledButton>
+        <StyledButton disabled>Disabled</StyledButton>
+        <StyledButton block>Full Width</StyledButton>
+      </div>
     </div>
-
-    <!-- 크기별 버튼 -->
-    <div class="row">
-      <StyledButton small>Small</StyledButton>
-      <StyledButton>Default</StyledButton>
-      <StyledButton large>Large</StyledButton>
-    </div>
-
-    <!-- 스타일별 버튼 -->
-    <div class="row">
-      <StyledButton>Filled</StyledButton>
-      <StyledButton text>Text</StyledButton>
-      <StyledButton outline>Outline</StyledButton>
-    </div>
-
-    <!-- 아이콘 버튼 -->
-    <div class="row">
-      <StyledButton icon="mdi:plus">Add Item</StyledButton>
-      <StyledButton icon="mdi:arrow-right" iconRight>Next</StyledButton>
-      <StyledButton onlyIcon icon="mdi:menu" />
-    </div>
-
-    <!-- 상태별 버튼 -->
-    <div class="row">
-      <StyledButton loading>Loading</StyledButton>
-      <StyledButton disabled>Disabled</StyledButton>
-      <StyledButton block>Full Width</StyledButton>
-    </div>
-  </div>
-</template>
-
-<style scoped>
-.button-examples {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-</style>
+  );
+};
 ```
 
 ### 폼 예제
 
-```vue
-<template>
-  <form @submit.prevent="handleSubmit">
-    <div class="form-group">
-      <label for="email">이메일</label>
-      <input id="email" type="email" v-model="email" required />
-    </div>
+```tsx
+import { useState } from 'react';
 
-    <div class="form-actions">
-      <StyledButton type="button" text @click="handleCancel"> 취소 </StyledButton>
-      <StyledButton type="submit" color="success" :loading="isSubmitting">
-        {{ isSubmitting ? '제출 중...' : '제출' }}
-      </StyledButton>
-    </div>
-  </form>
-</template>
+const FormExample = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-<script setup lang="ts">
-import { ref } from 'vue';
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // API 호출 로직
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsSubmitting(false);
+  };
 
-const email = ref('');
-const isSubmitting = ref(false);
+  const handleCancel = () => {
+    setEmail('');
+  };
 
-const handleSubmit = async () => {
-  isSubmitting.value = true;
-  // API 호출 로직
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  isSubmitting.value = false;
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label htmlFor="email">이메일</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="form-actions">
+        <StyledButton type="button" text onClick={handleCancel}>
+          취소
+        </StyledButton>
+        <StyledButton type="submit" color="success" loading={isSubmitting}>
+          {isSubmitting ? '제출 중...' : '제출'}
+        </StyledButton>
+      </div>
+    </form>
+  );
 };
-
-const handleCancel = () => {
-  email.value = '';
-};
-</script>
 ```
 
 ---
@@ -367,15 +347,14 @@ StyledButton 컴포넌트는 WCAG 2.1 AA 기준을 준수하도록 설계되었�
 
 ## 📚 추가 리소스
 
-- [Iconify 아이콘 검색](https://icones.js.org/)
-- [Material Design Icons](https://pictogrammers.com/library/mdi/)
-- [Heroicons](https://heroicons.com/)
-- [Font Awesome](https://fontawesome.com/)
+- [Material-UI Icons](https://mui.com/material-ui/material-icons/)
+- [Material Design Icons](https://fonts.google.com/icons)
 
 ---
 
 ## 📝 업데이트 히스토리
 
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경, Vue에서 React로 마이그레이션
 - **2024.01.XX**: Iconify 통합 및 디자인 시스템 개선
 - **2024.01.XX**: 접근성 개선 및 WCAG 2.1 AA 준수
 - **2024.01.XX**: TypeScript 타입 안전성 강화

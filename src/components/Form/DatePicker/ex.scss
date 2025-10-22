@@ -76,13 +76,3 @@
   font-weight: 500;
   text-align: center;
 }
-
-@media (max-width: 768px) {
-  .example-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .app-header h1 {
-    font-size: 2rem;
-  }
-}

@@ -93,6 +93,13 @@ export default function App() {
 - 반드시 SpinnerProvider로 감싸야 useSpinner 훅이 동작합니다.
 - 여러 SpinnerProvider를 중첩하면 가장 가까운 Provider가 적용됩니다.
 
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: Provider/Hook 패턴 도입
+- **2023.12**: 다양한 테마 지원 추가
+- **2023.11**: 최초 작성
+
 ## 라이선스
 
 MIT License

@@ -64,6 +64,13 @@ interface StatusSelectorItem {
 
 - style.scss, BEM 네이밍, SCSS 사용
 
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: 접근성 개선 및 키보드 네비게이션 추가
+- **2023.12**: 다양한 색상 및 크기 지원 추가
+- **2023.11**: 최초 작성
+
 ---
 
 문의: 프론트엔드팀

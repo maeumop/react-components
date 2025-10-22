@@ -46,6 +46,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     clearable = false,
     isLoading = false,
     className,
+    thin = false,
     onChange,
     onChangeIndex,
     onAfterChange,
@@ -166,6 +167,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
       readonly ? 'readonly' : '',
       message ? 'error' : '',
       isShowOption ? 'active' : '',
+      thin ? 'thin' : '',
     ]
       .join(' ')
       .trim();

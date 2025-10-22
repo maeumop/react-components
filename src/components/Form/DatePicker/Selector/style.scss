@@ -205,38 +205,3 @@
     }
   }
 }
-
-// 반응형 디자인
-@media (max-width: 768px) {
-  .selector-box {
-    min-width: 12rem;
-    padding: 0.8rem 0.5rem 0.8rem 0.8rem;
-
-    &.month {
-      min-width: 8rem;
-    }
-
-    .selector-box-wrap {
-      .search-input {
-        input {
-          font-size: 1rem;
-          padding: 0.6rem 0.8rem;
-        }
-      }
-
-      ul {
-        max-height: 18rem;
-
-        li {
-          padding: 0.6rem 0.8rem;
-          font-size: 1rem;
-        }
-      }
-
-      .no-results {
-        font-size: 1rem;
-        padding: 1.2rem 0.8rem;
-      }
-    }
-  }
-}

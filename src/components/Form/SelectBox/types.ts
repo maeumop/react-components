@@ -31,8 +31,7 @@ export interface SelectBoxProps {
   clearable?: boolean;
   isLoading?: boolean;
   className?: string;
-  // onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  // onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  thin?: boolean;
   onChange?: (value: string | string[]) => void;
   onChangeIndex?: (index: number) => void;
   onAfterChange?: (value: string | string[]) => void;

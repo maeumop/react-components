@@ -175,34 +175,3 @@
     }
   }
 }
-
-// 반응형 디자인
-@media (max-width: 768px) {
-  .select-calendar-wrap {
-    width: 100%;
-    padding: 1rem 1.5rem;
-
-    .select-calendar {
-      width: 100%;
-      max-width: 30rem;
-
-      ul {
-        font-size: 1.1rem;
-        border-spacing: 0.15rem;
-
-        li {
-          width: 3rem;
-          height: 3rem;
-          line-height: 2.8rem;
-          border-radius: 0.7rem;
-        }
-
-        &.header li {
-          font-size: 0.8rem;
-          height: 2.6rem;
-          line-height: 2.4rem;
-        }
-      }
-    }
-  }
-}

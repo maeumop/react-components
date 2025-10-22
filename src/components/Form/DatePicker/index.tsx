@@ -8,19 +8,19 @@ import React, {
   forwardRef,
 } from 'react';
 import { CalendarMonth as DatePickerIcon } from '@mui/icons-material';
+import { CancelRounded as ClearIcon } from '@mui/icons-material';
 import { Calendar } from './Calendar';
 import { DateController } from './DateController';
 import { useDatePickerHelper } from './helper';
 import { DatePickerStoreProvider, useDatePickerStore, useDatePickerStoreInstance } from './store';
 import type { DatePickerModel, DatePickerProps, ToggleButtonType } from './types';
 import { AnimatePresence, motion } from 'framer-motion';
-import './style.scss';
-import { useComponentHelper } from '@/components/helper';
-import { transitionType } from '@/components/const';
-import type { LayerPositionType } from '@/components/types';
-import { CancelRounded as ClearIcon } from '@mui/icons-material';
+import { useComponentHelper } from '../../helper';
+import { transitionType } from '../../const';
+import type { LayerPositionType } from '../../types';
 import { useAppendFormComponent, useValidation } from '../hooks';
 import { ErrorMessage } from '../ErrorMessage';
+import './style.scss';
 
 const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref) => {
   const {
@@ -41,6 +41,7 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     defaultDate = false,
     clearable = false,
     value,
+    className,
     onChange,
   } = props;
 
@@ -465,7 +466,7 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   }, []);
 
   const mainClassName = useMemo(() => {
-    return ['date-picker', block ? 'block' : ''].join(' ');
+    return ['date-picker', block ? 'block' : '', className].join(' ').trim();
   }, [block]);
 
   const onClickCancel = useCallback(() => {

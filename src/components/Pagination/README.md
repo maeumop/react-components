@@ -13,10 +13,10 @@ React + TypeScript로 개발된 고성능 페이지네이션 컴포넌트입니�
 
 ## 설치 및 설정
 
-### 1. Iconify 설치
+### 1. Material-UI 아이콘 설치
 
 ```bash
-npm install @iconify/react
+npm install @mui/icons-material
 ```
 
 ### 2. 컴포넌트 import
@@ -153,6 +153,13 @@ CSS 변수를 통해 스타일을 커스터마이징할 수 있습니다:
 
 - React.memo, useCallback, useMemo 등으로 불필요한 렌더링 방지
 - 타입 안전성 보장
+
+## 업데이트 히스토리
+
+- **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.01**: 접근성 개선 및 키보드 네비게이션 추가
+- **2023.12**: 반응형 디자인 지원
+- **2023.11**: 최초 작성
 
 ## 라이선스
 

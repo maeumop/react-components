@@ -1,4 +1,6 @@
-# Tabs Component
+# Tabs Component (React)
+
+React + TypeScript로 개발된 탭 컴포넌트입니다. 다양한 스타일과 트랜지션 효과를 지원합니다.
 
 ## 항목
 
@@ -12,40 +14,32 @@
 
 # 1. 사용방법
 
-## 1.1. 전역 선언
+## 1.1. 기본 사용법
 
-```typescript
+```tsx
 import Tabs from '@/components/Tabs';
-app.component('Tabs', Tabs);
-```
+import { useState } from 'react';
 
-## 1.2. v-model 사용 예제
-
-```vue
-<script setup lang="ts">
-import { ref } from 'vue';
 const tabItems = ['탭 1', '탭 2', '탭 3'];
-const activeTab = ref(0);
+const [activeTab, setActiveTab] = useState(0);
 const disabled = [false, true, false];
-</script>
 
-<template>
-  <Tabs
-    v-model:activeTab="activeTab"
-    :tab-items="tabItems"
-    :disabled="disabled"
-    variant="underline"
-    transition="fade"
-    in-box
-  >
-    <div>탭 1 내용</div>
-    <div>탭 2 내용</div>
-    <div>탭 3 내용</div>
-  </Tabs>
-</template>
+<Tabs
+  activeTab={activeTab}
+  onActiveTabChange={setActiveTab}
+  tabItems={tabItems}
+  disabled={disabled}
+  variant="underline"
+  transition="fade"
+  inBox
+>
+  <div>탭 1 내용</div>
+  <div>탭 2 내용</div>
+  <div>탭 3 내용</div>
+</Tabs>;
 ```
 
-- slot의 개수는 tabItems 배열의 길이와 일치해야 합니다.
+- children의 개수는 tabItems 배열의 길이와 일치해야 합니다.
 
 :arrow_up: [항목](#항목)
 
@@ -100,33 +94,41 @@ const disabled = [false, true, false];
 
 ## 5.2. 트랜지션 사용 예제
 
-```vue
-<template>
-  <!-- 기본 슬라이드 효과 -->
-  <Tabs :tab-items="tabItems" transition="slide">
-    <!-- 탭 콘텐츠 -->
-  </Tabs>
+```tsx
+{
+  /* 기본 슬라이드 효과 */
+}
+<Tabs tabItems={tabItems} transition="slide">
+  {/* 탭 콘텐츠 */}
+</Tabs>;
 
-  <!-- 페이드 효과 -->
-  <Tabs :tab-items="tabItems" transition="fade">
-    <!-- 탭 콘텐츠 -->
-  </Tabs>
+{
+  /* 페이드 효과 */
+}
+<Tabs tabItems={tabItems} transition="fade">
+  {/* 탭 콘텐츠 */}
+</Tabs>;
 
-  <!-- 스케일 효과 -->
-  <Tabs :tab-items="tabItems" transition="scale">
-    <!-- 탭 콘텐츠 -->
-  </Tabs>
+{
+  /* 스케일 효과 */
+}
+<Tabs tabItems={tabItems} transition="scale">
+  {/* 탭 콘텐츠 */}
+</Tabs>;
 
-  <!-- 플립 효과 -->
-  <Tabs :tab-items="tabItems" transition="flip">
-    <!-- 탭 콘텐츠 -->
-  </Tabs>
+{
+  /* 플립 효과 */
+}
+<Tabs tabItems={tabItems} transition="flip">
+  {/* 탭 콘텐츠 */}
+</Tabs>;
 
-  <!-- 바운스 효과 -->
-  <Tabs :tab-items="tabItems" transition="bounce">
-    <!-- 탭 콘텐츠 -->
-  </Tabs>
-</template>
+{
+  /* 바운스 효과 */
+}
+<Tabs tabItems={tabItems} transition="bounce">
+  {/* 탭 콘텐츠 */}
+</Tabs>;
 ```
 
 ## 5.3. 트랜지션 특징
@@ -165,8 +167,7 @@ const disabled = [false, true, false];
 
 # UPDATE HISTORY
 
-- 2023.03.08 최초 작성
-- 2024.06. 개선: v-model, disabled, variant, 접근성, 스타일 등 확장
-- 2024.12. 추가: 트랜지션 효과 5가지 추가 (slide, fade, scale, flip, bounce)
-
-:arrow_left: [컴포넌트 목록으로이동](https://github.com/dream-insight/ts-vue3/components)
+- **2024.12**: Vue에서 React로 마이그레이션, @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
+- **2024.06**: 개선: v-model, disabled, variant, 접근성, 스타일 등 확장
+- **2024.12**: 추가: 트랜지션 효과 5가지 추가 (slide, fade, scale, flip, bounce)
+- **2023.03.08**: 최초 작성

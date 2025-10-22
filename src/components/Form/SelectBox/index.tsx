@@ -5,14 +5,14 @@ import {
   CancelRounded as CloseIcon,
   KeyboardArrowDown as ChevronDownIcon,
 } from '@mui/icons-material';
-import { useSelectBox } from './hook.ts';
-import { RenderSelectedText } from './renderLabelText.tsx';
+import { useSelectBox } from './hook';
+import { RenderSelectedText } from './renderLabelText';
 import './style.scss';
 import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion';
-import { useComponentHelper } from '@/components/helper.ts';
-import type { LayerPositionType } from '@/components/types.ts';
-import { transitionType } from '@/components/const.ts';
-import { useAppendFormComponent } from '../hooks.ts';
+import { useComponentHelper } from '../../helper';
+import type { LayerPositionType } from '../../types';
+import { transitionType } from '../../const';
+import { useAppendFormComponent } from '../hooks';
 
 const SelectBox = React.memo(
   forwardRef<SelectBoxModel, SelectBoxProps>((props, ref) => {
