@@ -20,6 +20,7 @@ import { transitionType } from '@/components/const';
 import type { LayerPositionType } from '@/components/types';
 import { CancelRounded as ClearIcon } from '@mui/icons-material';
 import { useAppendFormComponent, useValidation } from '../hooks';
+import { ErrorMessage } from '../ErrorMessage';
 
 const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref) => {
   const {
@@ -68,7 +69,9 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   const [tempStartDate, setTempStartDate] = useState<string>('');
   const [tempEndDate, setTempEndDate] = useState<string>('');
 
-  const { message, errorTransition, check, resetValidate } = useValidation<string | string[]>({
+  const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
+    string | string[]
+  >({
     validate,
     disabled,
     value,
@@ -341,13 +344,14 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     init();
 
     setToggleDateButton(prev => prev.map(item => ({ ...item, checked: false })));
+    resetValidate();
 
     if (range) {
       onChange?.(['', '']);
     } else {
       onChange?.('');
     }
-  }, [range, onChange, init]);
+  }, [range, onChange, init, resetValidate]);
 
   // 스크롤 이벤트 처리 - 일반 함수로 변경
   const setScrollEvent = (el: HTMLElement): void => {
@@ -477,11 +481,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       check();
     }
   }, [blurValidate, check]);
-
-  const feedbackClassName = useMemo(
-    () => ['feedback', errorTransition ? 'error' : ''].filter(Boolean).join(' '),
-    [errorTransition],
-  );
 
   const pickerDateTextClassName = useMemo(
     () =>
@@ -735,9 +734,11 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
         </div>
 
         {message && !hideMessage && (
-          <div className={feedbackClassName} id="datepicker-error" role="alert" aria-live="polite">
-            {message}
-          </div>
+          <ErrorMessage
+            message={message}
+            errorTransition={errorTransition}
+            onAnimationEnd={() => setErrorTransition(false)}
+          />
         )}
       </div>
     </div>

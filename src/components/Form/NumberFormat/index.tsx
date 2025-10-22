@@ -10,6 +10,7 @@ import './style.scss';
 import type { NumberFormatModel, NumberFormatProps } from './types';
 import { useComponentHelper } from '@/components/helper';
 import { useAppendFormComponent, useValidation } from '../hooks';
+import { ErrorMessage } from '../ErrorMessage';
 
 const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
   (
@@ -59,10 +60,6 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
     const inputClass = useMemo(() => {
       return message ? 'error' : '';
     }, [message]);
-
-    const feedbackStatus = useMemo(() => {
-      return ['feedback', errorTransition ? 'error' : ''].join(' ').trim();
-    }, [errorTransition]);
 
     // 값 변경 핸들러
     const handleChange = useCallback(
@@ -204,11 +201,14 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
           defaultValue={numberFormat(value)}
           style={{ textAlign: 'right' }}
         />
+
         {/* 에러 메시지 트랜지션 */}
         {!hideMessage && message && (
-          <div className={feedbackStatus} onAnimationEnd={() => setErrorTransition(false)}>
-            {message}
-          </div>
+          <ErrorMessage
+            message={message}
+            errorTransition={errorTransition}
+            onAnimationEnd={() => setErrorTransition(false)}
+          />
         )}
       </div>
     );

@@ -4,6 +4,7 @@ import { useCheckButton } from './hook';
 import CheckBox from './checkBox';
 import './style.scss';
 import { useAppendFormComponent } from '../hooks';
+import { ErrorMessage } from '../ErrorMessage';
 
 const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) => {
   const {
@@ -36,7 +37,8 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
     processedItems,
     handleItemChange,
     message,
-    feedbackStatus,
+    errorTransition,
+    setErrorTransition,
     isItemSelected,
   } = useCheckButton({
     items,
@@ -148,7 +150,13 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
         })}
       </div>
 
-      {message && <div className={feedbackStatus}>{message}</div>}
+      {message && (
+        <ErrorMessage
+          message={message}
+          errorTransition={errorTransition}
+          onAnimationEnd={() => setErrorTransition(false)}
+        />
+      )}
     </div>
   );
 });

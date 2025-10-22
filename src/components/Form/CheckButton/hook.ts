@@ -113,8 +113,9 @@ export const useCheckButton = ({
   );
 
   const resetForm = useCallback(() => {
+    resetValidate();
     onChange(type === 'radio' ? '' : []);
-  }, [type]);
+  }, [type, onChange, resetValidate]);
 
   // 외부 value prop 변경 시 내부 상태 동기화
   useEffect(() => {
@@ -139,5 +140,7 @@ export const useCheckButton = ({
     isItemSelected,
     message,
     feedbackStatus,
+    errorTransition,
+    setErrorTransition,
   };
 };

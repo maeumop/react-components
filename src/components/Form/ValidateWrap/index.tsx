@@ -12,6 +12,7 @@ import { useValidation } from '../hooks';
 import type { ValidateWrapProps, ValidateWrapRef } from './types';
 import type { ValidateFormContext } from '../ValidateForm/types';
 import './style.scss';
+import { ErrorMessage } from '../ErrorMessage';
 
 const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
   (
@@ -79,10 +80,6 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
       () => `input-wrap ${errorTransition ? 'error' : ''}`,
       [errorTransition],
     );
-    const feedbackClassName = useMemo(
-      () => `feedback ${errorTransition ? 'error' : ''}`,
-      [errorTransition],
-    );
 
     // children에 전달할 props 메모이제이션
     const childProps = useMemo(() => ({ onBlur: childBlur }), [childBlur]);
@@ -132,9 +129,13 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
 
         <div className={inputWrapClassName}>{children(childProps)}</div>
 
-        <div className={feedbackClassName} onTransitionEnd={transitionEnd}>
-          {message}
-        </div>
+        {message && (
+          <ErrorMessage
+            message={message}
+            errorTransition={errorTransition}
+            onAnimationEnd={transitionEnd}
+          />
+        )}
       </div>
     );
   },

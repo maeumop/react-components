@@ -14,6 +14,7 @@ import {
   CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
 } from '@mui/icons-material';
 import { useAppendFormComponent, useValidation } from '../hooks';
+import { ErrorMessage } from '../ErrorMessage';
 
 const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
   (
@@ -82,12 +83,6 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
       }
     }, [errorTransition]);
 
-    // 트랜지션 클래스
-    const feedbackStatus = useMemo(
-      () => ['description', errorTransition ? 'error' : ''].join(' ').trim(),
-      [errorTransition],
-    );
-
     // 인라인 콜백 메모이제이션
     const handleErrorAnimationEnd = useCallback(() => {
       setErrorTransition(false);
@@ -155,9 +150,11 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
 
         {/* 에러 메시지 트랜지션 */}
         {message && (
-          <div className={feedbackStatus} onAnimationEnd={handleErrorAnimationEnd}>
-            {message}
-          </div>
+          <ErrorMessage
+            message={message}
+            errorTransition={errorTransition}
+            onAnimationEnd={handleErrorAnimationEnd}
+          />
         )}
       </div>
     );

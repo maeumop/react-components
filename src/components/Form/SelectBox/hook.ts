@@ -201,6 +201,8 @@ export const useSelectBox = (props: SelectBoxProps) => {
   );
 
   const resetForm = useCallback((): void => {
+    resetValidate();
+
     if (multiple) {
       setSelectedText([]);
       setSelectedValue([]);

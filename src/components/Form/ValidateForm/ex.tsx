@@ -10,6 +10,7 @@ import { ValidateForm } from './index';
 import type { ValidateFormRef } from './types';
 import './ex.scss';
 import FloatingBackButton from '@/views/FloatingBackButton';
+import StyledButton from '@/components/StyledButton';
 
 const ValidateFormExample: React.FC = () => {
   // 폼 데이터
@@ -165,6 +166,10 @@ const ValidateFormExample: React.FC = () => {
     validateFormRef.current?.resetForm();
   }, []);
 
+  const resetValidate = useCallback((): void => {
+    validateFormRef.current?.resetValidate();
+  }, []);
+
   // validate 배열들을 useMemo로 메모이제이션
   const nameValidate = useMemo(() => [requiredRule], [requiredRule]);
   const phoneValidate = useMemo(() => [requiredRule, phoneRule], [requiredRule, phoneRule]);
@@ -318,12 +323,15 @@ const ValidateFormExample: React.FC = () => {
 
               {/* 폼 액션 */}
               <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={resetForm}>
-                  취소
-                </button>
-                <button type="button" className="btn-primary" onClick={validateFormAction}>
+                <StyledButton large color="error" onClick={resetForm}>
+                  폼 전체 완전 초기화
+                </StyledButton>
+                <StyledButton large color="warning" onClick={resetValidate}>
+                  오류 초기화
+                </StyledButton>
+                <StyledButton large color="primary" onClick={validateFormAction}>
                   등록
-                </button>
+                </StyledButton>
               </div>
             </div>
           </section>

@@ -11,6 +11,7 @@ import { textFieldType } from './const';
 import type { TextFieldModel, TextFieldProps } from './types';
 import { useAppendFormComponent, useValidation } from '../hooks';
 import './style.scss';
+import { ErrorMessage } from '../ErrorMessage';
 
 const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   const {
@@ -83,10 +84,6 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   const clearButtonShow = useMemo(() => {
     return clearable && value !== '' && !disabled && !readonly;
   }, [clearable, value, disabled, readonly]);
-
-  const feedbackStatus = useMemo(() => {
-    return ['feedback', errorTransition ? 'error' : ''].join(' ').trim();
-  }, [errorTransition]);
 
   // 값 변경 핸들러
   const handleChange = useCallback(
@@ -279,9 +276,11 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
       )}
       {/* 에러 메시지 트랜지션 */}
       {!hideMessage && message && (
-        <div className={feedbackStatus} onAnimationEnd={() => setErrorTransition(false)}>
-          {message}
-        </div>
+        <ErrorMessage
+          message={message}
+          errorTransition={errorTransition}
+          onAnimationEnd={() => setErrorTransition(false)}
+        />
       )}
     </div>
   );
