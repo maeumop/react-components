@@ -12,26 +12,26 @@ export const createDatePickerStore = () => {
     startDate: '',
     endDate: '',
     curYear: date.getFullYear(),
-    curMonth: date.getMonth(),
+    curMonth: date.getMonth() + 1, // 1-12 범위로 통일
     curDay: date.getDate(),
     dateState: {
       start: {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1, // 1-12 범위로 통일
       },
       end: {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1, // 1-12 범위로 통일
       },
     },
     beforeState: {
       start: {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1, // 1-12 범위로 통일
       },
       end: {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1, // 1-12 범위로 통일
       },
     },
     selectedDate: {

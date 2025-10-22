@@ -107,6 +107,15 @@ export const useAppendFormComponent = ({
     resetValidate,
   });
 
+  // check, resetForm, resetValidate가 변경될 때마다 ref 업데이트
+  useEffect(() => {
+    componentRef.current = {
+      check,
+      resetForm,
+      resetValidate,
+    };
+  }, [check, resetForm, resetValidate]);
+
   useEffect(() => {
     if (vfContext) {
       vfContext.addComponent(componentRef.current, tagRef.current);
@@ -115,7 +124,7 @@ export const useAppendFormComponent = ({
         vfContext.removeComponent(componentRef.current);
       };
     }
-  }, []);
+  }, [vfContext]);
 
   return {
     motherRef: tagRef,

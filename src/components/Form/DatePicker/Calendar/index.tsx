@@ -11,23 +11,23 @@ const head: string[] = ['일', '월', '화', '수', '목', '금', '토'];
 // framer-motion transition variants
 const transitionVariants = {
   left: {
-    initial: { opacity: 0, x: '2rem', scale: 0.98, filter: 'blur(1px)' },
-    animate: { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' },
+    initial: { opacity: 0, x: '4rem' },
+    animate: { opacity: 1, x: 0 },
     exit: { opacity: 0 },
   },
   right: {
-    initial: { opacity: 0, x: '-2rem', scale: 0.98, filter: 'blur(1px)' },
-    animate: { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' },
+    initial: { opacity: 0, x: '-4rem' },
+    animate: { opacity: 1, x: 0 },
     exit: { opacity: 0 },
   },
   down: {
-    initial: { opacity: 0, y: '-2rem', scale: 0.98, filter: 'blur(1px)' },
-    animate: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' },
+    initial: { opacity: 0, y: '-4rem' },
+    animate: { opacity: 1, y: 0 },
     exit: { opacity: 0 },
   },
   up: {
-    initial: { opacity: 0, y: '2rem', scale: 0.98, filter: 'blur(1px)' },
-    animate: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' },
+    initial: { opacity: 0, y: '4rem' },
+    animate: { opacity: 1, y: 0 },
     exit: { opacity: 0 },
   },
 };
@@ -309,32 +309,16 @@ const CalendarBase = ({
     }
   }, [startDate, endDate, end, caseStartEnd, setSelected]);
 
+  // 년, 월 변경시 transition 설정
   useEffect(() => {
-    // 년도와 월 변경을 함께 확인하여 transition 방향 결정
-    const yearChanged = state.year !== before.year;
-    const monthChanged = state.month !== before.month;
-
-    if (yearChanged && !monthChanged) {
-      // 1. 년도만 변경된 경우
-      if (state.year > before.year) {
-        setTransitionName(transitionCase.down); // 년도 증가: 아래로
-      } else {
-        setTransitionName(transitionCase.up); // 년도 감소: 위로
-      }
-    } else if (!yearChanged && monthChanged) {
-      // 2. 월만 변경된 경우 (년도는 동일)
-      if (state.month > before.month) {
-        setTransitionName(transitionCase.left); // 월 증가: 왼쪽으로
-      } else {
-        setTransitionName(transitionCase.right); // 월 감소: 오른쪽으로
-      }
-    } else if (yearChanged && monthChanged) {
-      // 3. 년도와 월이 모두 변경된 경우 (예: 12월 → 다음해 1월)
-      if (state.year > before.year) {
-        setTransitionName(transitionCase.down); // 년도 증가: 아래로
-      } else {
-        setTransitionName(transitionCase.up); // 년도 감소: 위로
-      }
+    console.log('before', before);
+    console.log('state', state);
+    if (state.month > before.month || state.year > before.year) {
+      console.log('left');
+      setTransitionName(transitionCase.left); // 년, 월 증가: 왼쪽으로
+    } else {
+      console.log('right');
+      setTransitionName(transitionCase.right); // 년, 월 감소: 오른쪽으로
     }
 
     // key 변경으로 transition 트리거
@@ -371,11 +355,7 @@ const CalendarBase = ({
   const currentVariant = transitionVariants[transitionName];
 
   return (
-    <div
-      className="select-calendar-wrap"
-      role="grid"
-      aria-label={end ? '종료일 달력' : '시작일 달력'}
-    >
+    <div className="select-calendar-wrap">
       <AnimatePresence mode="wait">
         <motion.div
           key={calendarKey}

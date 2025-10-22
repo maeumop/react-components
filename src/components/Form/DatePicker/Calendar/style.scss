@@ -161,7 +161,6 @@
         }
 
         &:not(.selected, .date-range, .disabled, .today, .beforeMonth, .afterMonth):hover {
-          color: $text-default !important;
           background: rgba($gray-100, 0.8);
           border-color: rgba($gray-300, 0.5);
         }
