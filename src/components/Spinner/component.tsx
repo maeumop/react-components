@@ -1,45 +1,53 @@
-import React, { useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { CSSTransition } from 'react-transition-group';
+import type { SpinnerProps } from './types';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useComponentHelper } from '../helper';
+import { transitionType } from '../const';
 import './style.scss';
-import type { SpinnerColor } from './types';
 
-interface SpinnerProps {
-  show: boolean;
-  message?: string;
-  color?: SpinnerColor;
-  onExited?: () => void;
-}
+export const Spinner = ({ show, hide, message, color = 'default', onExited }: SpinnerProps) => {
+  const [isShow, setIsShow] = useState(false);
 
-export const Spinner: React.FC<SpinnerProps> = ({ show, message, color = 'default', onExited }) => {
   const overlayNodeRef = useRef<HTMLDivElement>(null);
   const boxNodeRef = useRef<HTMLDivElement>(null);
+  const helper = useComponentHelper();
+  const variants = helper.getTransitionVariant(transitionType.scale);
+
+  const onExitComplete = useCallback(() => {
+    onExited?.();
+  }, [onExited]);
+
+  useEffect(() => {
+    setIsShow(() => true);
+  }, [show]);
+
+  useEffect(() => {
+    setIsShow(() => !hide);
+  }, [hide]);
 
   return createPortal(
-    <CSSTransition
-      in={show}
-      timeout={200}
-      classNames="spinner-fade"
-      unmountOnExit
-      onExited={onExited}
-      appear
-      nodeRef={overlayNodeRef}
-    >
-      <div ref={overlayNodeRef} className="spinner-overlay">
-        <CSSTransition
-          in={show}
-          timeout={200}
-          classNames="spinner-scale"
-          appear
-          nodeRef={boxNodeRef}
-        >
-          <div className={`spinner-container ${color}`} ref={boxNodeRef}>
-            <span className="spinner-icon" />
-            <p className="spinner-text">{message || 'Loading...'}</p>
-          </div>
-        </CSSTransition>
-      </div>
-    </CSSTransition>,
+    <>
+      {show && (
+        <div ref={overlayNodeRef} className="spinner-overlay">
+          <AnimatePresence onExitComplete={onExitComplete}>
+            {isShow && (
+              <motion.div
+                initial={variants.initial}
+                animate={variants.animate}
+                exit={variants.exit}
+                transition={variants.transition}
+              >
+                <div className={`spinner-container ${color}`} ref={boxNodeRef}>
+                  <span className="spinner-icon" />
+                  <p className="spinner-text">{message || 'Loading...'}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+    </>,
     document.body,
   );
 };

@@ -11,3 +11,11 @@ export interface SpinnerContextType {
   spinnerHide: () => void;
   isLoading: boolean;
 }
+
+export interface SpinnerProps {
+  show: boolean;
+  hide: boolean;
+  message?: string;
+  color?: SpinnerColor;
+  onExited?: () => void;
+}

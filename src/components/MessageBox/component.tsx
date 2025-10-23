@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { MessageBoxOptions } from './types';
@@ -85,46 +87,6 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     }
   }, [noScrollStyleClass, removeScrollbarSpace]);
 
-  // 키보드 이벤트
-  const keyupEvent = useCallback(
-    (evt: KeyboardEvent) => {
-      if (evt.key === 'Enter' && enterOkay) {
-        if (typeof asyncOkay === 'function') {
-          asyncClickOkay();
-        } else {
-          clickOkay();
-        }
-      }
-
-      if (evt.key === 'Escape' && escCancel) {
-        clickCancel();
-      }
-    },
-    [enterOkay, escCancel, asyncOkay],
-  );
-
-  // 이벤트 주입
-  const setEvents = useCallback(() => {
-    disableScroll();
-    document.addEventListener('keyup', keyupEvent);
-
-    if (msgBoxBgNodeRef.current) {
-      msgBoxBgNodeRef.current.focus();
-    }
-  }, [disableScroll, keyupEvent]);
-
-  // 트랜지션 종료 후
-  const handleExited = useCallback(() => {
-    console.log('handleExited');
-    setIsShow(() => false);
-    enableScroll();
-    document.removeEventListener('keyup', keyupEvent);
-
-    if (typeof onClose === 'function') {
-      onClose();
-    }
-  }, [enableScroll, keyupEvent, onClose]);
-
   // 확인 클릭
   const clickOkay = useCallback(() => {
     if (spinnerShow) {
@@ -168,6 +130,36 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     }
   }, [spinnerShow, cancel]);
 
+  // 키보드 이벤트
+  const keyupEvent = useCallback(
+    (evt: KeyboardEvent) => {
+      if (evt.key === 'Enter' && enterOkay) {
+        if (typeof asyncOkay === 'function') {
+          asyncClickOkay();
+        } else {
+          clickOkay();
+        }
+      }
+
+      if (evt.key === 'Escape' && escCancel) {
+        clickCancel();
+      }
+    },
+    [enterOkay, escCancel, asyncOkay, clickOkay, asyncClickOkay, clickCancel],
+  );
+
+  // 트랜지션 종료 후
+  const handleExited = useCallback(() => {
+    console.log('handleExited');
+    setIsShow(() => false);
+    enableScroll();
+    document.removeEventListener('keyup', keyupEvent);
+
+    if (typeof onClose === 'function') {
+      onClose();
+    }
+  }, [enableScroll, keyupEvent, onClose]);
+
   const onButtonClick = useCallback(() => {
     if (typeof asyncOkay === 'function') {
       asyncClickOkay();
@@ -176,18 +168,24 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     }
   }, [asyncOkay, clickOkay, asyncClickOkay]);
 
+  // 트랜지션 variant 계산
+  const helper = useComponentHelper();
+  const variants = helper.getTransitionVariant(transition);
+
   // 마운트 시 이벤트 등록
   useEffect(() => {
-    setEvents();
+    disableScroll();
+    document.addEventListener('keyup', keyupEvent);
+
+    if (msgBoxBgNodeRef.current) {
+      msgBoxBgNodeRef.current.focus();
+    }
 
     return () => {
       enableScroll();
       document.removeEventListener('keyup', keyupEvent);
     };
-  }, [setEvents, enableScroll, keyupEvent]);
-
-  const helperRef = useRef(useComponentHelper());
-  const variants = helperRef.current.getTransitionVariant(transition);
+  }, []);
 
   useEffect(() => {
     setBoxShow(true);
