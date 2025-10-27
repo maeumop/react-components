@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import './style.scss';
 import type { TabsProps } from './types';
 
@@ -15,33 +15,16 @@ const Tabs = ({
 }: TabsProps) => {
   // 내부 상태 관리
   const [active, setActive] = useState<number>(activeTab);
-  const [currentTransition, setCurrentTransition] = useState<string>('tab-slide-left');
-  const transitionWrapperRef = useRef<HTMLDivElement>(null);
+  const [direction, setDirection] = useState<'left' | 'right'>('left');
 
   // 외부 activeTab prop 변화 감지
   useEffect(() => {
     if (typeof activeTab === 'number' && activeTab !== active) {
-      const direction = active < activeTab ? 'left' : 'right';
-      setCurrentTransition(getTransitionName(direction));
+      const dir = active < activeTab ? 'left' : 'right';
+      setDirection(dir);
       setActive(activeTab);
     }
-  }, [activeTab]);
-
-  // 트랜지션 이름 결정 함수
-  const getTransitionName = useCallback(
-    (direction: 'left' | 'right'): string => {
-      if (transition === 'slide') {
-        return direction === 'left' ? 'tab-slide-left' : 'tab-slide-right';
-      }
-
-      if (transition === 'flip') {
-        return direction === 'left' ? 'tab-flip-left' : 'tab-flip-right';
-      }
-
-      return `tab-${transition}`;
-    },
-    [transition],
-  );
+  }, [activeTab, active]);
 
   // 탭 클릭 핸들러
   const handleTabClick = useCallback(
@@ -49,8 +32,8 @@ const Tabs = ({
       if (disabled?.[index] || active === index) {
         return;
       }
-      const direction = active < index ? 'left' : 'right';
-      setCurrentTransition(getTransitionName(direction));
+      const dir = active < index ? 'left' : 'right';
+      setDirection(dir);
       setActive(index);
       if (rest.onChangeTab) {
         rest.onChangeTab(index);
@@ -59,7 +42,7 @@ const Tabs = ({
         rest.onUpdateActiveTab(index);
       }
     },
-    [active, disabled, getTransitionName, rest],
+    [active, disabled, rest],
   );
 
   // 렌더링할 children 필터링 (null, undefined, boolean 등 제외)
@@ -71,6 +54,104 @@ const Tabs = ({
   const activeContent = useMemo(() => {
     return validChildren[active];
   }, [active, validChildren]);
+
+  // framer-motion variants 생성
+  const variants = useMemo(() => {
+    const slideDistance = 30;
+
+    switch (transition) {
+      case 'slide':
+        return {
+          initial: {
+            opacity: 0,
+            x: direction === 'left' ? slideDistance : -slideDistance,
+          },
+          animate: {
+            opacity: 1,
+            x: 0,
+          },
+          exit: {
+            opacity: 0,
+            x: direction === 'left' ? -slideDistance : slideDistance,
+          },
+        };
+
+      case 'fade':
+        return {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          exit: { opacity: 0 },
+        };
+
+      case 'scale':
+        return {
+          initial: { opacity: 0, scale: 0.8 },
+          animate: { opacity: 1, scale: 1 },
+          exit: { opacity: 0, scale: 1.1 },
+        };
+
+      case 'flip':
+        return {
+          initial: {
+            opacity: 0,
+            rotateY: direction === 'left' ? -90 : 90,
+          },
+          animate: {
+            opacity: 1,
+            rotateY: 0,
+          },
+          exit: {
+            opacity: 0,
+            rotateY: direction === 'left' ? 90 : -90,
+          },
+        };
+
+      case 'bounce':
+        return {
+          initial: {
+            opacity: 0,
+            scale: 0.3,
+            y: -50,
+          },
+          animate: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+          },
+          exit: {
+            opacity: 0,
+            scale: 0.3,
+            y: 50,
+          },
+        };
+
+      default:
+        return {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          exit: { opacity: 0 },
+        };
+    }
+  }, [transition, direction]);
+
+  // transition 설정 메모이제이션
+  const transitionConfig = useMemo(() => {
+    const duration = 0.3;
+
+    switch (transition) {
+      case 'slide':
+      case 'scale':
+        return { duration, ease: [0.4, 0, 0.2, 1] as const };
+      case 'fade':
+        return { duration, ease: 'easeInOut' as const };
+      case 'flip':
+        return { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const };
+      case 'bounce':
+        return { duration: 0.5, ease: [0.68, -0.55, 0.265, 1.55] as const };
+      default:
+        return { duration };
+    }
+  }, [transition]);
 
   return (
     <div className="tabs" data-variant={variant}>
@@ -97,18 +178,19 @@ const Tabs = ({
       </div>
       <div className="tab-contents">
         <div className="transition-wrapper">
-          <SwitchTransition mode="out-in">
-            <CSSTransition
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
               key={`tab-content-${active}`}
-              classNames={currentTransition}
-              timeout={300}
-              nodeRef={transitionWrapperRef}
+              className="tab-panel"
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={variants}
+              transition={transitionConfig}
             >
-              <div ref={transitionWrapperRef} className="tab-panel">
-                {activeContent}
-              </div>
-            </CSSTransition>
-          </SwitchTransition>
+              {activeContent}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
