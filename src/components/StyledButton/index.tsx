@@ -15,10 +15,10 @@ const StyledButton = ({
   disabled = false,
   iconRight = false,
   small = false,
-  default: isDefault = false,
   large = false,
   outline = false,
-  tag = 'a',
+  rounded = false,
+  tag = 'button',
   dropMenuToggle = false,
   width,
   icon,
@@ -30,6 +30,7 @@ const StyledButton = ({
   // 클래스명 계산
   const buttonClass = useMemo(() => {
     const classes = ['btn'];
+
     if (onlyIcon) {
       classes.push('icon');
     } else if (btnStyle === 'text') {
@@ -40,8 +41,6 @@ const StyledButton = ({
 
     if (large) {
       classes.push('large');
-    } else if (isDefault) {
-      classes.push('default');
     } else if (small) {
       classes.push('small');
     } else {
@@ -49,6 +48,8 @@ const StyledButton = ({
     }
 
     if (btnStyle === 'outline' || outline) classes.push('outline');
+
+    if (rounded) classes.push('rounded');
 
     if (block) classes.push('block');
 
@@ -62,9 +63,9 @@ const StyledButton = ({
     btnStyle,
     color,
     large,
-    isDefault,
     small,
     outline,
+    rounded,
     block,
     disabled,
     loading,
@@ -85,7 +86,7 @@ const StyledButton = ({
   }, [width]);
 
   // 아이콘 크기 계산
-  const iconSize = useMemo(() => (large ? 24 : small ? 18 : 20), [large, small]);
+  const iconSize = useMemo(() => (large ? 30 : small ? 16 : 24), [large, small]);
 
   // 클릭 이벤트 핸들러
   const handleClick = useCallback(
@@ -102,7 +103,7 @@ const StyledButton = ({
   );
 
   // 렌더링 태그 결정
-  const Tag = tag === 'button' ? 'button' : 'a';
+  const Tag = tag as 'a' | 'button';
   const Icon = icon;
 
   return (
@@ -116,9 +117,9 @@ const StyledButton = ({
       onClick={handleClick}
       {...rest}
     >
-      <div className="btn-wrap">
-        {!onlyIcon ? (
-          <>
+      {!onlyIcon ? (
+        <>
+          <div className="btn-wrap">
             {loading ? (
               <LoadingIcon size={iconSize} className="loading" />
             ) : (
@@ -128,7 +129,7 @@ const StyledButton = ({
                     className={dropMenuToggle ? 'rotate' : ''}
                     style={{ width: iconSize, height: iconSize }}
                   >
-                    <Icon sx={{ width: iconSize, height: iconSize }} />
+                    <Icon sx={{ fontSize: iconSize }} />
                   </div>
                 )}
                 {children}
@@ -137,18 +138,16 @@ const StyledButton = ({
                     className={dropMenuToggle ? 'rotate' : ''}
                     style={{ width: iconSize, height: iconSize }}
                   >
-                    <Icon sx={{ width: iconSize, height: iconSize }} />
+                    <Icon sx={{ fontSize: iconSize }} />
                   </div>
                 )}
               </>
             )}
-          </>
-        ) : (
-          <div className="only-icon">
-            {Icon && <Icon sx={{ width: iconSize, height: iconSize }} />}
           </div>
-        )}
-      </div>
+        </>
+      ) : (
+        Icon && <Icon sx={{ fontSize: iconSize }} />
+      )}
     </Tag>
   );
 };

@@ -110,9 +110,9 @@
   }
 
   .spinner {
-    display: inline-block;
-    margin: 0 auto;
-    animation: spin 1s ease-out infinite;
+    display: block;
+    // transform-origin: center center;
+    // animation: spin 1s ease-out infinite;
   }
 }
 

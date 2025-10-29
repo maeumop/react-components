@@ -145,9 +145,9 @@ const Tabs = ({
       case 'fade':
         return { duration, ease: 'easeInOut' as const };
       case 'flip':
-        return { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const };
+        return { duration, ease: [0.4, 0, 0.2, 1] as const };
       case 'bounce':
-        return { duration: 0.5, ease: [0.68, -0.55, 0.265, 1.55] as const };
+        return { duration, ease: [0.68, -0.55, 0.265, 1.55] as const };
       default:
         return { duration };
     }
@@ -165,9 +165,6 @@ const Tabs = ({
                 disabled && disabled[index] ? 'disabled' : '',
                 variant,
               ].join(' ')}
-              role="tab"
-              aria-selected={index === active}
-              aria-disabled={disabled && disabled[index] ? 'true' : 'false'}
               tabIndex={disabled && disabled[index] ? -1 : 0}
               onClick={() => handleTabClick(index)}
             >

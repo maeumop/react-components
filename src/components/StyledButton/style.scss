@@ -64,25 +64,19 @@ $button-colors: (
 //================================================================================
 $button-sizes: (
   small: (
-    padding-x: $spacing-xs,
-    padding-y: $spacing-xs,
-    height: 2rem,
+    padding-x: $spacing-sm,
+    height: 1.8rem,
     font-size: $font-size-xs,
-    icon-size: 16,
   ),
   default: (
-    padding-x: $spacing-sm,
-    padding-y: $spacing-xs,
+    padding-x: $spacing-md,
     height: 2.4rem,
     font-size: $font-size-sm,
-    icon-size: 18,
   ),
   large: (
-    padding-x: $spacing-md,
-    padding-y: $spacing-sm,
+    padding-x: $spacing-lg,
     height: 3.2rem,
     font-size: $font-size-base,
-    icon-size: 20,
   ),
 );
 
@@ -178,6 +172,43 @@ $button-sizes: (
   }
 }
 
+// 아이콘 전용 버튼 색상 믹스인
+@mixin icon-button-color($color-name) {
+  $color-map: map.get($button-colors, $color-name);
+
+  @if $color-map {
+    // 아이콘 색상 설정
+    color: map.get($color-map, default);
+    background-color: transparent;
+    border: transparent;
+
+    // 아이콘 내부 SVG 색상도 동일하게 설정
+    svg {
+      color: inherit;
+      fill: currentColor;
+    }
+
+    // 호버 시 아이콘 색상은 유지하고 배경만 변경
+    &:not(.disabled):hover {
+      color: map.get($color-map, default); // 아이콘 색상 유지
+      background-color: $gray-100; // 배경은 회색으로
+    }
+
+    // 포커스 시에도 동일
+    &:not(.disabled):focus {
+      color: map.get($color-map, default);
+      background-color: $gray-100;
+    }
+
+    // 비활성화 상태
+    &.disabled {
+      color: map.get($color-map, disabled);
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
 //================================================================================
 // 기본 버튼 스타일
 //================================================================================
@@ -196,7 +227,7 @@ $button-sizes: (
   gap: $spacing-sm;
 
   // 기본 크기
-  @include button-size(small);
+  @include button-size(default);
 
   // 기본 색상 (primary)
   @include button-color(primary);
@@ -258,16 +289,55 @@ $button-sizes: (
 
   // 아이콘 전용 버튼
   &.icon {
-    width: 4rem;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: transparent !important;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
 
-    .only-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
+    // 기본 크기
+    width: 2.2rem;
+    height: 2.2rem;
+
+    // 작은 크기
+    &.small {
+      width: 1.8rem;
+      height: 1.8rem;
     }
+
+    // 큰 크기
+    &.large {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+
+    // 호버 효과 - 완전히 둥근 회색 배경
+    &:not(.disabled):hover {
+      background-color: $gray-100;
+    }
+
+    // 포커스 효과
+    &:not(.disabled):focus {
+      background-color: $gray-100;
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+    }
+
+    // 비활성화 상태
+    &.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    // 아이콘 색상은 color prop에 따라 결정됨 (각 색상별 클래스에서 처리)
+  }
+
+  // rounded 버튼 (완전히 둥근 모서리)
+  &.rounded {
+    border-radius: 999px;
   }
 
   // 아웃라인 버튼
@@ -307,6 +377,11 @@ $button-sizes: (
 
     &.outline {
       @include outline-button-color($color-name);
+    }
+
+    // 아이콘 전용 버튼 색상
+    &.icon {
+      @include icon-button-color($color-name);
     }
   }
 }

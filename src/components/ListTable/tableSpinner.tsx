@@ -3,6 +3,7 @@ import { CircularProgress } from '@mui/material';
 
 /**
  * TableSpinner 컴포넌트 (로딩 스피너)
+ * 자동 회전하는 아이콘
  */
 const TableSpinner: React.FC = () => {
   return (

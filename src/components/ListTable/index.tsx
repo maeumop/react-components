@@ -11,9 +11,9 @@ import React, {
 } from 'react';
 import { listTableDefaultOptions } from './const';
 import ListTableCheck from './listCheck';
-import './style.scss';
 import TableSpinner from './tableSpinner';
 import type { ListTableExpose, ListTableProps } from './types';
+import './style.scss';
 
 /**
  * ListTable 컴포넌트 (메인 테이블)

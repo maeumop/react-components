@@ -1,4 +1,3 @@
-import '@/assets/styles/ex.scss';
 import FloatingButton from '@/views/FloatingBackButton';
 import React, { useCallback } from 'react';
 import { toastColor, toastPosition } from './const';

@@ -1,7 +1,6 @@
-import type { toastColor, toastIcon, toastPosition } from './const';
+import type { toastColor, toastPosition } from './const';
 
 export type ToastColor = (typeof toastColor)[keyof typeof toastColor];
-export type ToastIcon = (typeof toastIcon)[keyof typeof toastIcon];
 export type ToastPosition = (typeof toastPosition)[keyof typeof toastPosition];
 
 export interface ToastOptions {

@@ -9,6 +9,7 @@ React + TypeScript로 개발된 다재다능한 버튼 컴포넌트입니다. �
 - [Props](#props)
 - [이벤트](#이벤트)
 - [스타일 변형](#스타일-변형)
+- [아이콘 전용 버튼](#아이콘-전용-버튼)
 - [예제](#예제)
 - [접근성](#접근성)
 
@@ -48,6 +49,19 @@ import { Home as HomeIcon, ArrowForward as ArrowIcon, Menu as MenuIcon } from '@
 <StyledButton icon={HomeIcon}>홈으로</StyledButton>
 <StyledButton icon={ArrowIcon} iconRight>다음</StyledButton>
 <StyledButton onlyIcon icon={MenuIcon} />
+```
+
+### 아이콘 전용 버튼
+
+```tsx
+// 기본 크기
+<StyledButton onlyIcon icon={HomeIcon} color="primary" />
+
+// 작은 크기
+<StyledButton onlyIcon icon={SearchIcon} color="success" small />
+
+// 큰 크기
+<StyledButton onlyIcon icon={SettingsIcon} color="warning" large />
 ```
 
 ---
@@ -170,6 +184,60 @@ const handleClick = (event: React.MouseEvent) => {
 
 ---
 
+## 🎨 아이콘 전용 버튼
+
+아이콘 전용 버튼은 텍스트 없이 아이콘만 표시하는 완전히 둥근 버튼입니다.
+
+### 특징
+
+- **완전히 둥근 모양**: `border-radius: 50%`
+- **색상별 아이콘**: `color` prop에 따라 아이콘 색상 결정
+- **호버 효과**: 호버 시 회색 배경 표시
+- **3가지 크기**: 작음, 기본, 큼
+
+### 크기별 스펙
+
+| 크기 | 너비/높이 | 사용법                                        |
+| ---- | --------- | --------------------------------------------- |
+| 작음 | 1.8rem    | `<StyledButton onlyIcon icon={Icon} small />` |
+| 기본 | 2.2rem    | `<StyledButton onlyIcon icon={Icon} />`       |
+| 큼   | 2.6rem    | `<StyledButton onlyIcon icon={Icon} large />` |
+
+### 색상별 예제
+
+```tsx
+import {
+  Home as HomeIcon,
+  Search as SearchIcon,
+  Settings as SettingsIcon,
+  Favorite as HeartIcon,
+  Star as StarIcon,
+  Email as EmailIcon
+} from '@mui/icons-material';
+
+// 기본 크기 - 다양한 색상
+<StyledButton onlyIcon icon={HomeIcon} color="primary" />
+<StyledButton onlyIcon icon={SearchIcon} color="success" />
+<StyledButton onlyIcon icon={SettingsIcon} color="warning" />
+<StyledButton onlyIcon icon={HeartIcon} color="error" />
+<StyledButton onlyIcon icon={StarIcon} color="info" />
+<StyledButton onlyIcon icon={EmailIcon} color="secondary" />
+
+// 크기별 예제
+<StyledButton onlyIcon icon={HomeIcon} color="primary" small />
+<StyledButton onlyIcon icon={SearchIcon} color="success" />
+<StyledButton onlyIcon icon={SettingsIcon} color="warning" large />
+```
+
+### 스타일 특징
+
+- **호버 효과**: 호버 시 `background-color: $gray-100` 적용
+- **포커스 효과**: 포커스 시 outline과 배경 표시
+- **부드러운 전환**: `transition: background-color 0.2s ease`
+- **비활성화**: `opacity: 0.5`와 `cursor: not-allowed`
+
+---
+
 ## 📝 예제
 
 ### 기본 예제
@@ -216,6 +284,16 @@ const ButtonExamples = () => {
         <StyledButton loading>Loading</StyledButton>
         <StyledButton disabled>Disabled</StyledButton>
         <StyledButton block>Full Width</StyledButton>
+      </div>
+
+      {/* 아이콘 전용 버튼 */}
+      <div className="row">
+        <StyledButton onlyIcon icon={HomeIcon} color="primary" />
+        <StyledButton onlyIcon icon={SearchIcon} color="success" small />
+        <StyledButton onlyIcon icon={SettingsIcon} color="warning" large />
+        <StyledButton onlyIcon icon={HeartIcon} color="error" />
+        <StyledButton onlyIcon icon={StarIcon} color="info" small />
+        <StyledButton onlyIcon icon={EmailIcon} color="secondary" large />
       </div>
     </div>
   );
@@ -286,6 +364,7 @@ StyledButton 컴포넌트는 WCAG 2.1 AA 기준을 준수하도록 설계되었�
 - 적절한 `role` 속성
 - `aria-label` 지원 (아이콘 전용 버튼)
 - 로딩 상태 시 `aria-busy` 속성
+- 아이콘 전용 버튼은 `aria-label`로 접근성 보장
 
 ### 색상 대비
 
@@ -354,6 +433,7 @@ StyledButton 컴포넌트는 WCAG 2.1 AA 기준을 준수하도록 설계되었�
 
 ## 📝 업데이트 히스토리
 
+- **2024.12**: 아이콘 전용 버튼 기능 추가 (완전히 둥근 모양, 색상별 아이콘, 크기별 지원)
 - **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경, Vue에서 React로 마이그레이션
 - **2024.01.XX**: Iconify 통합 및 디자인 시스템 개선
 - **2024.01.XX**: 접근성 개선 및 WCAG 2.1 AA 준수

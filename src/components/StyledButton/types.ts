@@ -12,9 +12,9 @@ export interface StyledButtonProps {
   disabled?: boolean;
   iconRight?: boolean;
   small?: boolean;
-  default?: boolean;
   large?: boolean;
   outline?: boolean;
+  rounded?: boolean;
   tag?: string;
   dropMenuToggle?: boolean;
   width?: string | number;

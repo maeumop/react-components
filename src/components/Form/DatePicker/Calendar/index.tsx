@@ -262,38 +262,6 @@ const CalendarBase = ({
     setFocusedDateIndex({ row, col });
   }, []);
 
-  // 날짜 셀의 ARIA 라벨 생성
-  const getAriaLabel = useCallback((cell: DateCellType): string => {
-    const { day, type } = cell;
-
-    if (type === 'beforeMonth' || type === 'afterMonth') {
-      return `${day}일 (다른 달)`;
-    }
-
-    if (type === 'disabled') {
-      return `${day}일 (선택 불가)`;
-    }
-
-    if (type === 'today') {
-      return `${day}일 (오늘)`;
-    }
-
-    if (type === 'selected') {
-      return `${day}일 (선택됨)`;
-    }
-
-    if (type === 'date-range') {
-      return `${day}일 (범위 내)`;
-    }
-
-    return `${day}일`;
-  }, []);
-
-  // 날짜 셀의 선택 가능 여부 확인
-  const isSelectable = useCallback((type: string): boolean => {
-    return ['current', 'today', 'date-range'].includes(type);
-  }, []);
-
   // 날짜 셀의 포커스 가능 여부 확인
   const isFocusable = useCallback((type: string): boolean => {
     return !['beforeMonth', 'afterMonth', 'disabled'].includes(type);
@@ -311,13 +279,12 @@ const CalendarBase = ({
 
   // 년, 월 변경시 transition 설정
   useEffect(() => {
-    console.log('before', before);
-    console.log('state', state);
-    if (state.month > before.month || state.year > before.year) {
-      console.log('left');
+    const beforeDate = new Date(before.year, before.month - 1, 1).getTime();
+    const stateDate = new Date(state.year, state.month - 1, 1).getTime();
+
+    if (stateDate > beforeDate) {
       setTransitionName(transitionCase.left); // 년, 월 증가: 왼쪽으로
     } else {
-      console.log('right');
       setTransitionName(transitionCase.right); // 년, 월 감소: 오른쪽으로
     }
 
@@ -356,7 +323,7 @@ const CalendarBase = ({
 
   return (
     <div className="select-calendar-wrap">
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={calendarKey}
           className="select-calendar"
@@ -369,12 +336,7 @@ const CalendarBase = ({
         >
           <ul className="header" role="row">
             {head.map((name, i) => (
-              <li
-                key={`start-head-${name}`}
-                className={getHeaderClassName(i)}
-                role="columnheader"
-                aria-label={`${name}요일`}
-              >
+              <li key={`start-head-${name}`} className={getHeaderClassName(i)}>
                 {name}
               </li>
             ))}
@@ -389,10 +351,6 @@ const CalendarBase = ({
                   onKeyDown={e => handleKeydown(e, i, j)}
                   onFocus={() => setFocus(i, j)}
                   tabIndex={isFocusable(item.type) ? 0 : -1}
-                  aria-label={getAriaLabel(item)}
-                  aria-selected={item.type === 'selected'}
-                  aria-disabled={!isSelectable(item.type)}
-                  role="gridcell"
                 >
                   {item.day}
                 </li>

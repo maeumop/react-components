@@ -152,7 +152,7 @@ const StyledButtonExample: React.FC = () => {
 
           {/* 아이콘 버튼 */}
           <section className="example-section">
-            <h2>아이콘 버튼</h2>
+            <h2>아이콘이 추가된 버튼</h2>
             <div className="example-grid">
               <div className="example-item">
                 <StyledButton icon={PlusIcon} color="success">
@@ -187,27 +187,101 @@ const StyledButtonExample: React.FC = () => {
             <div className="example-grid">
               <div className="example-item">
                 <StyledButton onlyIcon icon={MenuIcon} color="primary" />
-                <span className="example-label">메뉴</span>
+                <span className="example-label">메뉴 (기본)</span>
               </div>
               <div className="example-item">
                 <StyledButton onlyIcon icon={SearchIcon} color="secondary" />
-                <span className="example-label">검색</span>
+                <span className="example-label">검색 (기본)</span>
               </div>
               <div className="example-item">
                 <StyledButton onlyIcon icon={HeartIcon} color="error" />
-                <span className="example-label">하트 아이콘</span>
+                <span className="example-label">하트 (기본)</span>
               </div>
               <div className="example-item">
                 <StyledButton onlyIcon icon={StarIcon} color="warning" />
-                <span className="example-label">즐겨찾기</span>
+                <span className="example-label">즐겨찾기 (기본)</span>
               </div>
               <div className="example-item">
                 <StyledButton onlyIcon icon={EmailIcon} color="info" />
-                <span className="example-label">메일</span>
+                <span className="example-label">메일 (기본)</span>
               </div>
               <div className="example-item">
                 <StyledButton onlyIcon icon={SettingsIcon} color="dark" />
-                <span className="example-label">설정</span>
+                <span className="example-label">설정 (기본)</span>
+              </div>
+            </div>
+          </section>
+
+          {/* 아이콘 전용 버튼 - 크기별 */}
+          <section className="example-section">
+            <h2>아이콘 전용 버튼 - 크기별</h2>
+            <div className="example-grid">
+              <div className="example-item">
+                <StyledButton onlyIcon icon={HomeIcon} color="primary" small />
+                <span className="example-label">작은 크기 (Primary)</span>
+              </div>
+              <div className="example-item">
+                <StyledButton onlyIcon icon={SearchIcon} color="success" />
+                <span className="example-label">기본 크기 (Success)</span>
+              </div>
+              <div className="example-item">
+                <StyledButton onlyIcon icon={SettingsIcon} color="warning" large />
+                <span className="example-label">큰 크기 (Warning)</span>
+              </div>
+              <div className="example-item">
+                <StyledButton onlyIcon icon={HeartIcon} color="error" small />
+                <span className="example-label">작은 크기 (Error)</span>
+              </div>
+              <div className="example-item">
+                <StyledButton onlyIcon icon={StarIcon} color="info" />
+                <span className="example-label">기본 크기 (Info)</span>
+              </div>
+              <div className="example-item">
+                <StyledButton onlyIcon icon={EmailIcon} color="secondary" large />
+                <span className="example-label">큰 크기 (Secondary)</span>
+              </div>
+            </div>
+          </section>
+
+          {/* Rounded 버튼 */}
+          <section className="example-section">
+            <h2>Rounded 버튼 (완전히 둥근 모서리)</h2>
+            <div className="example-grid">
+              <div className="example-item">
+                <StyledButton rounded color="primary">
+                  Primary
+                </StyledButton>
+                <span className="example-label">Primary Rounded</span>
+              </div>
+              <div className="example-item">
+                <StyledButton rounded color="success">
+                  Success
+                </StyledButton>
+                <span className="example-label">Success Rounded</span>
+              </div>
+              <div className="example-item">
+                <StyledButton rounded color="warning">
+                  Warning
+                </StyledButton>
+                <span className="example-label">Warning Rounded</span>
+              </div>
+              <div className="example-item">
+                <StyledButton rounded btnStyle="outline" color="primary">
+                  Outline
+                </StyledButton>
+                <span className="example-label">Outline Rounded</span>
+              </div>
+              <div className="example-item">
+                <StyledButton rounded icon={PlusIcon} color="primary">
+                  Add
+                </StyledButton>
+                <span className="example-label">Icon + Rounded</span>
+              </div>
+              <div className="example-item">
+                <StyledButton rounded large color="info">
+                  Large
+                </StyledButton>
+                <span className="example-label">Large Rounded</span>
               </div>
             </div>
           </section>
