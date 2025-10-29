@@ -10,9 +10,12 @@ export const ToastProvider = ({ children }: React.PropsWithChildren) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
 
-  const remove = useCallback((id: string) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  }, []);
+  const remove = useCallback(
+    (id: string) => {
+      setToasts(prev => prev.filter(t => t.id !== id));
+    },
+    [setToasts],
+  );
 
   const toast = useCallback(
     (message: string, options?: ToastOptions) => {
@@ -36,7 +39,7 @@ export const ToastProvider = ({ children }: React.PropsWithChildren) => {
         }
       }, newToast.duration);
     },
-    [remove, idRef],
+    [remove, setToasts, remove, idRef],
   );
 
   return (

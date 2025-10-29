@@ -9,6 +9,7 @@ import {
   Info as InfoIcon,
   Close as CloseIcon,
 } from '@mui/icons-material';
+import { toastPosition } from './const';
 
 // position별로 그룹핑하는 함수
 function groupByPosition(toasts: ToastItem[]) {
@@ -20,44 +21,44 @@ function groupByPosition(toasts: ToastItem[]) {
     'bottom-right': [],
     'bottom-left': [],
   };
+
   toasts.forEach(toast => {
     positions[toast.position]?.push(toast);
   });
+
   return positions;
 }
 
 // position별 animation variants
 const getTransitionVariants = (position: string) => {
+  // layout 애니메이션을 위한 transition 설정
   const transition = {
     duration: 0.2,
     ease: 'easeInOut' as const,
   };
 
-  if (position === 'top') {
+  if (position === toastPosition.top) {
     return {
       initial: { opacity: 0, y: '-50%' },
       animate: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: '-50%' },
       transition,
     };
-  }
-  if (position === 'bottom') {
+  } else if (position === toastPosition.bottom) {
     return {
       initial: { opacity: 0, y: '50%' },
       animate: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: '50%' },
       transition,
     };
-  }
-  if (position === 'top-left' || position === 'bottom-left') {
+  } else if (position === toastPosition.topLeft || position === toastPosition.bottomLeft) {
     return {
       initial: { opacity: 0, x: '-50%' },
       animate: { opacity: 1, x: 0 },
       exit: { opacity: 0, x: '-50%' },
       transition,
     };
-  }
-  if (position === 'top-right' || position === 'bottom-right') {
+  } else if (position === toastPosition.topRight || position === toastPosition.bottomRight) {
     return {
       initial: { opacity: 0, x: '50%' },
       animate: { opacity: 1, x: 0 },
@@ -65,6 +66,7 @@ const getTransitionVariants = (position: string) => {
       transition,
     };
   }
+
   return {
     initial: { opacity: 0, y: '-50%' },
     animate: { opacity: 1, y: 0 },

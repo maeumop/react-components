@@ -1,10 +1,56 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { CSSTransition } from 'react-transition-group';
-import { modalTransition } from './const';
-import './style.scss';
-import type { ModalProps } from './types';
+import { AnimatePresence, motion } from 'framer-motion';
+import { modalPosition } from './const';
+import type { ModalProps, ModalPosition } from './types';
 import { Close as CloseIcon } from '@mui/icons-material';
+import './style.scss';
+
+// position별 animation variants
+const getModalVariants = (position: ModalPosition) => {
+  const transition = {
+    duration: 0.2,
+    ease: [0.4, 0, 0.2, 1] as const,
+  };
+
+  switch (position) {
+    case modalPosition.popup:
+      return {
+        initial: { opacity: 0, scale: 0.95, y: -10 },
+        animate: { opacity: 1, scale: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.95, y: -10 },
+        transition,
+      };
+    case modalPosition.right:
+      return {
+        initial: { opacity: 0, x: '100%', scale: 0.98 },
+        animate: { opacity: 1, x: 0, scale: 1 },
+        exit: { opacity: 0, x: '100%', scale: 0.98 },
+        transition,
+      };
+    case modalPosition.left:
+      return {
+        initial: { opacity: 0, x: '-100%', scale: 0.98 },
+        animate: { opacity: 1, x: 0, scale: 1 },
+        exit: { opacity: 0, x: '-100%', scale: 0.98 },
+        transition,
+      };
+    case modalPosition.bottom:
+      return {
+        initial: { opacity: 0, y: '100%', scale: 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: '100%', scale: 0.98 },
+        transition,
+      };
+    default:
+      return {
+        initial: { opacity: 0, scale: 0.95, y: -10 },
+        animate: { opacity: 1, scale: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.95, y: -10 },
+        transition,
+      };
+  }
+};
 
 const Modal = ({
   open,
@@ -21,7 +67,6 @@ const Modal = ({
   action,
 }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
 
   // ESC 키 닫기
   useEffect(() => {
@@ -45,6 +90,7 @@ const Modal = ({
     } else {
       document.body.classList.remove('no-scroll');
     }
+
     return () => {
       document.body.classList.remove('no-scroll');
     };
@@ -56,9 +102,6 @@ const Modal = ({
       modalRef.current.focus();
     }
   }, [open]);
-
-  // 트랜지션 이름
-  const transitionName = modalTransition[position] || 'modal-scale';
 
   // 스타일
   const boxStyle: React.CSSProperties = fullscreen
@@ -72,36 +115,25 @@ const Modal = ({
     onClose();
   }, [onClose]);
 
+  // animation variants
+  const variants = getModalVariants(position);
+
   // 포탈 렌더링
   return createPortal(
-    <CSSTransition
-      appear
-      in={open}
-      timeout={200}
-      classNames="modal-fade"
-      unmountOnExit
-      nodeRef={modalRef}
-    >
-      <div
-        ref={modalRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={title ? 'modal-title' : undefined}
-        className={`modal-bg${fullscreen ? ' fullscreen-bg' : ''}`}
-      >
-        <CSSTransition
-          appear
-          in={open}
-          timeout={200}
-          classNames={transitionName}
-          unmountOnExit
-          nodeRef={boxRef}
+    <AnimatePresence>
+      {open && (
+        <div
+          ref={modalRef}
+          tabIndex={-1}
+          className={`modal-bg${fullscreen ? ' fullscreen-bg' : ''}`}
         >
-          <div
-            ref={boxRef}
+          <motion.div
             className={`modal-box ${position}${fullscreen ? ' fullscreen' : ''}${screenCover ? ' screen-cover' : ''}`}
             style={boxStyle}
+            initial={variants.initial}
+            animate={variants.animate}
+            exit={variants.exit}
+            transition={variants.transition}
           >
             <div className="modal-header">
               <div className="title-text" id={title ? 'modal-title' : undefined}>
@@ -116,10 +148,10 @@ const Modal = ({
               {children}
             </div>
             {action && <div className="modal-action">{action(handleClose)}</div>}
-          </div>
-        </CSSTransition>
-      </div>
-    </CSSTransition>,
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>,
     document.body,
   );
 };

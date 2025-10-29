@@ -8,12 +8,12 @@ export const toastColor = {
 } as const;
 
 export const toastPosition = {
-  top: 'top',
-  bottom: 'bottom',
-  topRight: 'top-right',
   topLeft: 'top-left',
-  bottomRight: 'bottom-right',
+  top: 'top',
+  topRight: 'top-right',
   bottomLeft: 'bottom-left',
+  bottom: 'bottom',
+  bottomRight: 'bottom-right',
 } as const;
 
 export const toastDefaultOptions = {
