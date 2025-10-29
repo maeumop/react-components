@@ -2,8 +2,8 @@ import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import { useValidation } from '../hooks';
 import type { OptionItem, SelectBoxProps } from './types';
 import type { RuleFunc } from '../types';
-import { useComponentHelper } from '@/components/helper';
-import { layerPosition } from '@/components/const';
+import { useComponentHelper } from '../../helper';
+import { layerPosition } from '../../const';
 
 // 스크롤 가능한 상위 요소들을 찾기
 const findScrollableParents = (element: HTMLElement): HTMLElement[] => {
@@ -173,7 +173,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
       .trim();
   }, [disabled, readonly, message, isShowOption]);
 
-  const setDefaultModelValue = useCallback((): void => {
+  const setDefaultValue = useCallback((): void => {
     if (multiple) {
       setSelectedText([]);
     } else {
@@ -649,9 +649,11 @@ export const useSelectBox = (props: SelectBoxProps) => {
   // useEffect
   useEffect(() => {
     if (errorMessage) {
-      setMessage(errorMessage);
+      setErrorTransition(true);
     }
-  }, [errorMessage]);
+
+    setMessage(errorMessage);
+  }, [errorMessage, setMessage, setErrorTransition]);
 
   const prevValidate = useRef<RuleFunc[]>(validate);
 
@@ -674,25 +676,26 @@ export const useSelectBox = (props: SelectBoxProps) => {
     // 값이 실제로 변경된 경우에만 처리
     if (value !== prevValue.current) {
       prevValue.current = value;
-      setDefaultModelValue();
+      setDefaultValue();
 
       // 값이 변경된 경우 유효성 검사 실행
       check();
     }
-  }, [value, setDefaultModelValue, check]);
+  }, [value, setDefaultValue, check]);
 
   const prevOptions = useRef<OptionItem[]>(options);
 
   useEffect(() => {
     // 옵션이 실제로 변경된 경우에만 처리
     if (options !== prevOptions.current) {
+      console.log('options, setDefaultValue, check');
       prevOptions.current = options;
-      setDefaultModelValue();
+      setDefaultValue();
 
       // 옵션이 변경된 경우 유효성 검사 실행
       check();
     }
-  }, [options, setDefaultModelValue, check]);
+  }, [options, setDefaultValue, check]);
 
   const prevDisabled = useRef<boolean>(disabled);
 
@@ -704,7 +707,11 @@ export const useSelectBox = (props: SelectBoxProps) => {
     }
   }, [disabled, resetValidate]);
 
+  const prevIsShowOption = useRef<boolean>(isShowOption);
+
   useEffect(() => {
+    const isShowOptionChanged = isShowOption !== prevIsShowOption.current;
+
     if (isShowOption) {
       // 옵션 레이어가 완전히 렌더링된 후에 이벤트 리스너 등록
       setTimeout(() => {
@@ -717,10 +724,13 @@ export const useSelectBox = (props: SelectBoxProps) => {
       document.addEventListener('keydown', onArrowKeyHandler);
     } else {
       // 옵션 목록이 닫히면서 유효성 검사를 실행
-      if (isMounted.current && blurValidate) {
+      // errorMessage 변경시 check를 무한 반복하는 현상을 해결하기 위해 isShowOptionChanged 추가
+      if (isShowOptionChanged && isMounted.current && blurValidate) {
         check();
       }
     }
+
+    prevIsShowOption.current = isShowOption;
 
     return () => {
       setSearchText('');

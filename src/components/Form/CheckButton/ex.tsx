@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import CheckButton from './index';
 import type { CheckButtonItem, CheckButtonModel } from './types';
 import './ex.scss';
+import TextField from '../TextField';
+import StyledButton from '@/components/StyledButton';
 
 const hobbyItems: CheckButtonItem[] = [
   { text: '독서', value: 'reading' },
@@ -100,6 +102,14 @@ const CheckButtonExample: React.FC = () => {
   useEffect(() => {
     console.log('main reload');
   }, []);
+
+  const [errorTest, setErrorTest] = useState('');
+  const [errorMessageText, setErrorMessageText] = useState('');
+
+  const setMessage = () => {
+    setErrorMessageText(() => errorTest);
+    setErrorTest('');
+  };
 
   return (
     <div id="app">
@@ -316,6 +326,33 @@ const CheckButtonExample: React.FC = () => {
                 label="블록 모드"
               />
               <div className="result">선택된 값: {JSON.stringify(selectedBlock)}</div>
+            </div>
+          </section>
+
+          {/* 에러메시지 주입 */}
+          <section className="example-section">
+            <h2>사용자 에러 메시지 주입</h2>
+            <div className="example-grid">
+              <CheckButton
+                value={selectedLineLimit}
+                onChange={setSelectedLineLimit}
+                items={lineLimitItems}
+                name="linelimit"
+                lineLimit={3}
+                label="라인 제한"
+                errorMessage={errorMessageText}
+              />
+            </div>
+            <div className="example-grid">
+              <div className="example-item error-message-inject">
+                <TextField
+                  value={errorTest}
+                  onChange={setErrorTest}
+                  placeholder="여기 입력된 메시지를 위의 CheckButton에 주입합니다."
+                  block
+                />
+                <StyledButton onClick={setMessage}>에러 메시지 주입</StyledButton>
+              </div>
             </div>
           </section>
         </div>

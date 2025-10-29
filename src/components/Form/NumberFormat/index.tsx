@@ -51,7 +51,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
 
     // wrapper 스타일
     const wrapperClass = useMemo(() => {
-      return ['input-wrap', label ? 'with-label' : '', block ? 'block' : '', className]
+      return ['number-format-wrap', label ? 'with-label' : '', block ? 'block' : '', className]
         .join(' ')
         .trim();
     }, [label, block, className]);
@@ -118,13 +118,11 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
     // 외부 errorMessage 변경 시 상태 동기화
     useEffect(() => {
       if (errorMessage) {
-        setMessage(errorMessage);
         setErrorTransition(true);
-      } else {
-        setMessage('');
-        setErrorTransition(false);
       }
-    }, [errorMessage]);
+
+      setMessage(errorMessage);
+    }, [errorMessage, setMessage, setErrorTransition]);
 
     // value 변경 시 validate 리셋 및 포맷 적용
     useEffect(() => {

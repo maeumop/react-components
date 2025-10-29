@@ -2,6 +2,8 @@ import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useRef, useState } from 'react';
 import SwitchButton from './index';
 import type { SwitchButtonModel } from './types';
+import TextField from '../TextField';
+import StyledButton from '@/components/StyledButton';
 
 const SwitchButtonExample: React.FC = () => {
   // 상태 정의
@@ -35,6 +37,14 @@ const SwitchButtonExample: React.FC = () => {
     if (validateRef.current) {
       validateRef.current.check();
     }
+  };
+
+  const [errorTest, setErrorTest] = useState('');
+  const [errorMessageText, setErrorMessageText] = useState('');
+
+  const setMessage = () => {
+    setErrorMessageText(() => errorTest);
+    setErrorTest('');
   };
 
   return (
@@ -231,6 +241,33 @@ const SwitchButtonExample: React.FC = () => {
                   }}
                 />
                 <span className="example-label">small</span>
+              </div>
+            </div>
+          </section>
+
+          {/* 에러메시지 주입 */}
+          <section className="example-section">
+            <h2>사용자 에러 메시지 주입</h2>
+            <div className="example-grid">
+              <div className="example-item">
+                <SwitchButton
+                  value={basic}
+                  errorMessage={errorMessageText}
+                  onChange={v => {
+                    if (typeof v === 'boolean') setBasic(v);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="example-grid">
+              <div className="example-item error-message-inject">
+                <TextField
+                  value={errorTest}
+                  onChange={setErrorTest}
+                  placeholder="여기 입력된 메시지를 위의 SwitchButton에 주입합니다."
+                  block
+                />
+                <StyledButton onClick={setMessage}>에러 메시지 주입</StyledButton>
               </div>
             </div>
           </section>

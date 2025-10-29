@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './ex.scss';
 import TextField from './index';
 import { Search as SearchIcon, Person as PersonIcon } from '@mui/icons-material';
+import StyledButton from '@/components/StyledButton';
 
 const validateEmailFn = (value: unknown): string | boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +38,15 @@ const TextFieldExample: React.FC = () => {
   const [iconLeftText, setIconLeftText] = useState('');
   const [textareaText, setTextareaText] = useState('');
   const [countingText, setCountingText] = useState('');
+
+  const [tmp, setTmp] = useState('');
+  const [errorTest, setErrorTest] = useState('');
+  const [errorMessageText, setErrorMessageText] = useState('');
+
+  const setMessage = () => {
+    setErrorMessageText(() => errorTest);
+    setErrorTest('');
+  };
 
   // 아이콘 클릭 핸들러
   const handleIconClick = () => {
@@ -147,6 +157,7 @@ const TextFieldExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* textarea */}
           <section className="example-section">
             <h2>Textarea</h2>
@@ -165,6 +176,7 @@ const TextFieldExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 글자 수 카운팅 */}
           <section className="example-section">
             <h2>글자 수 카운팅</h2>
@@ -180,6 +192,33 @@ const TextFieldExample: React.FC = () => {
                   block
                 />
                 <span className="example-label">글자 수 카운팅</span>
+              </div>
+            </div>
+          </section>
+
+          {/* 에러메시지 주입 */}
+          <section className="example-section">
+            <h2>사용자 에러 메시지 주입</h2>
+            <div className="example-grid">
+              <div className="example-item">
+                <TextField
+                  value={tmp}
+                  onChange={setTmp}
+                  errorMessage={errorMessageText}
+                  placeholder="이 TextField에 에러 메시지가 주입됩니다."
+                  block
+                />
+              </div>
+            </div>
+            <div className="example-grid">
+              <div className="example-item error-message-inject">
+                <TextField
+                  value={errorTest}
+                  onChange={setErrorTest}
+                  placeholder="여기 입력된 메시지를 위의 TextField에 주입합니다."
+                  block
+                />
+                <StyledButton onClick={setMessage}>에러 메시지 주입</StyledButton>
               </div>
             </div>
           </section>

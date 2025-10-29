@@ -155,18 +155,18 @@ const formComponents = [
     icon: DatePickerIcon,
   },
   {
-    name: 'ValidateForm',
-    path: '/components/validateform',
-    description: '폼 검증 컴포넌트',
-    color: 'info',
-    icon: ValidateFormIcon,
-  },
-  {
     name: 'ValidateWrap',
     path: '/components/validatewrap',
     description: '검증 래퍼 컴포넌트',
     color: 'success',
     icon: ValidateWrapIcon,
+  },
+  {
+    name: 'ValidateForm',
+    path: '/components/validateform',
+    description: '폼 검증 컴포넌트',
+    color: 'info',
+    icon: ValidateFormIcon,
   },
 ];
 

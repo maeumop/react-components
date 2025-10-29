@@ -42,6 +42,7 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     clearable = false,
     value,
     className,
+    errorMessage = '',
     onChange,
   } = props;
 
@@ -70,13 +71,12 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   const [tempStartDate, setTempStartDate] = useState<string>('');
   const [tempEndDate, setTempEndDate] = useState<string>('');
 
-  const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
-    string | string[]
-  >({
-    validate,
-    disabled,
-    value,
-  });
+  const { message, setMessage, errorTransition, check, resetValidate, setErrorTransition } =
+    useValidation<string | string[]>({
+      validate,
+      disabled,
+      value,
+    });
 
   // 스크롤 이벤트 리스너 배열 (여러 요소에 등록할 수 있도록)
   const scrollEventListenersRef = useRef<
@@ -610,6 +610,14 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
 
     resetValidate();
   }, [range, isReset, onChange, resetValidate]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setErrorTransition(true);
+    }
+
+    setMessage(errorMessage);
+  }, [errorMessage, setMessage, setErrorTransition]);
 
   useAppendFormComponent({
     check,

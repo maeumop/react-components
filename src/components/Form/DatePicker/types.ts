@@ -86,6 +86,7 @@ export interface DatePickerProps {
   defaultDate?: boolean;
   clearable?: boolean;
   className?: string;
+  errorMessage?: string;
   onChange: (value: string[] | string) => void;
 }
 

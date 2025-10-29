@@ -14,6 +14,7 @@ export interface SwitchButtonProps {
   color?: SwitchButtonColor;
   disabled?: boolean;
   validate?: RuleFunc[];
+  errorMessage?: string;
 }
 
 export interface SwitchButtonModel {

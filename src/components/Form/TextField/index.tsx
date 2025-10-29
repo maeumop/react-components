@@ -147,7 +147,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   // 아이콘 클릭
   const handleIconClick = useCallback(
     (e: React.MouseEvent) => {
-      if (iconAction) {
+      if (typeof iconAction === 'function') {
         iconAction(e);
       }
     },
@@ -162,10 +162,19 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
 
   // value 변경 시 validate 리셋 (useValidation 훅에서 자동으로 처리되지 않으므로 필요)
   useEffect(() => {
-    if (isMounted.current && !errorMessage) {
+    if (isMounted.current) {
       resetValidate();
     }
-  }, [value, errorMessage, resetValidate]);
+  }, [value, resetValidate]);
+
+  // errorMessage 변경 시 오류 메시지 처리
+  useEffect(() => {
+    if (errorMessage) {
+      setErrorTransition(true);
+    }
+
+    setMessage(errorMessage);
+  }, [errorMessage, setMessage, setErrorTransition]);
 
   // 마운트 시
   useEffect(() => {

@@ -65,17 +65,17 @@ $button-colors: (
 $button-sizes: (
   small: (
     padding-x: $spacing-sm,
-    height: 1.8rem,
+    height: 38px,
     font-size: $font-size-xs,
   ),
   default: (
     padding-x: $spacing-md,
-    height: 2.4rem,
+    height: 47px,
     font-size: $font-size-sm,
   ),
   large: (
     padding-x: $spacing-lg,
-    height: 3.2rem,
+    height: 56px,
     font-size: $font-size-base,
   ),
 );

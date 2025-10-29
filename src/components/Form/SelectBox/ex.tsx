@@ -3,6 +3,8 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import './ex.scss';
 import SelectBox from './index';
 import type { OptionItem, SelectBoxModel } from './types';
+import TextField from '../TextField';
+import StyledButton from '@/components/StyledButton';
 
 // 상수 분리
 const OPTIONS: OptionItem[] = [
@@ -346,6 +348,15 @@ const SelectBoxExample: React.FC = () => {
   // ref 예시 (expose 메서드)
   const validateRef = useRef<SelectBoxModel | null>(null);
 
+  const [tmp, setTmp] = useState<string | string[]>('');
+  const [errorTest, setErrorTest] = useState('');
+  const [errorMessageText, setErrorMessageText] = useState('');
+
+  const setMessage = () => {
+    setErrorMessageText(() => errorTest);
+    setErrorTest('');
+  };
+
   return (
     <div id="app">
       <header className="app-header">
@@ -379,6 +390,34 @@ const SelectBoxExample: React.FC = () => {
             setMultipleSelect={setMultipleSelect}
           />
           <StateExample basicSelect={basicSelect} setBasicSelect={setBasicSelect} />
+
+          {/* 에러메시지 주입 */}
+          <section className="example-section">
+            <h2>사용자 에러 메시지 주입</h2>
+            <div className="example-grid">
+              <div className="example-item">
+                <SelectBox
+                  value={tmp}
+                  onChange={setTmp}
+                  errorMessage={errorMessageText}
+                  options={OPTIONS}
+                  placeholder="이 SelectBox에 에러 메시지가 주입됩니다."
+                  block
+                />
+              </div>
+            </div>
+            <div className="example-grid">
+              <div className="example-item error-message-inject">
+                <TextField
+                  value={errorTest}
+                  onChange={setErrorTest}
+                  placeholder="여기 입력된 메시지를 위의 TextField에 주입합니다."
+                  block
+                />
+                <StyledButton onClick={setMessage}>에러 메시지 주입</StyledButton>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
 

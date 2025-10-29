@@ -56,8 +56,12 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
 
     // errorMessage prop 변경 감지
     useEffect(() => {
+      if (errorMessage) {
+        setErrorTransition(true);
+      }
+
       setMessage(errorMessage);
-    }, [errorMessage, setMessage]);
+    }, [errorMessage, setMessage, setErrorTransition]);
 
     // errorTransition 타이머
     useEffect(() => {

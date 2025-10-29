@@ -3,6 +3,8 @@ import DatePicker from './index';
 import FloatingBackButton from '@/views/FloatingBackButton';
 import type { RuleFunc } from '../types';
 import './ex.scss';
+import TextField from '../TextField';
+import StyledButton from '@/components/StyledButton';
 
 const DatePickerExamples: React.FC = () => {
   // 기본 선택 섹션
@@ -143,6 +145,14 @@ const DatePickerExamples: React.FC = () => {
       }
     }
     return true;
+  };
+
+  const [errorTest, setErrorTest] = useState('');
+  const [errorMessageText, setErrorMessageText] = useState('');
+
+  const setMessage = () => {
+    setErrorMessageText(() => errorTest);
+    setErrorTest('');
   };
 
   return (
@@ -322,6 +332,34 @@ const DatePickerExamples: React.FC = () => {
                   block
                 />
                 <span className="example-label">점(.) 구분자</span>
+              </div>
+            </div>
+          </section>
+
+          {/* 에러메시지 주입 */}
+          <section className="example-section">
+            <h2>사용자 에러 메시지 주입</h2>
+            <div className="example-grid">
+              <div className="example-item">
+                <DatePicker
+                  value={separatorDate2}
+                  onChange={handleSeparatorDate2Change}
+                  separator="."
+                  placeholder="점 구분자"
+                  errorMessage={errorMessageText}
+                  block
+                />
+              </div>
+            </div>
+            <div className="example-grid">
+              <div className="example-item error-message-inject">
+                <TextField
+                  value={errorTest}
+                  onChange={setErrorTest}
+                  placeholder="여기 입력된 메시지를 위의 TextField에 주입합니다."
+                  block
+                />
+                <StyledButton onClick={setMessage}>에러 메시지 주입</StyledButton>
               </div>
             </div>
           </section>

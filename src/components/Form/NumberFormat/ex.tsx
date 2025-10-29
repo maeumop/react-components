@@ -1,6 +1,8 @@
 import FloatingBackButton from '@/views/FloatingBackButton';
 import React, { useState } from 'react';
 import NumberFormat from './index';
+import TextField from '../TextField';
+import StyledButton from '@/components/StyledButton';
 
 const validateRequired = (value: unknown): string | boolean => {
   if (typeof value !== 'number' || value === 0) {
@@ -30,6 +32,14 @@ const NumberFormatExample: React.FC = () => {
   const [validateNumber, setValidateNumber] = useState<number>(0);
   const [rangeNumber, setRangeNumber] = useState<number>(0);
   const [errorNumber, setErrorNumber] = useState<number>(0);
+
+  const [errorTest, setErrorTest] = useState('');
+  const [errorMessageText, setErrorMessageText] = useState('');
+
+  const setMessage = () => {
+    setErrorMessageText(() => errorTest);
+    setErrorTest('');
+  };
 
   return (
     <div id="app">
@@ -145,19 +155,30 @@ const NumberFormatExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 에러 메시지 */}
           <section className="example-section">
-            <h2>에러 메시지</h2>
+            <h2>사용자 에러 메시지 주입</h2>
             <div className="example-grid">
               <div className="example-item">
                 <NumberFormat
                   value={errorNumber}
                   onChange={setErrorNumber}
-                  errorMessage="사용할 수 없는 숫자입니다."
+                  errorMessage={errorMessageText}
                   placeholder="에러 메시지 표시"
                   block
                 />
-                <span className="example-label">에러 메시지</span>
+              </div>
+            </div>
+            <div className="example-grid">
+              <div className="example-item error-message-inject">
+                <TextField
+                  value={errorTest}
+                  onChange={setErrorTest}
+                  placeholder="여기 입력된 메시지를 위의 TextField에 주입합니다."
+                  block
+                />
+                <StyledButton onClick={setMessage}>에러 메시지 주입</StyledButton>
               </div>
             </div>
           </section>

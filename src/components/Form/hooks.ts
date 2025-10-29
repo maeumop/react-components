@@ -12,6 +12,9 @@ export const useValidation = <T = unknown>({
   const [message, setMessage] = useState<string>('');
   const [errorTransition, setErrorTransition] = useState<boolean>(false);
 
+  // errorMessage 변경시 check를 무한 반복하는 현상을 해결하기 위해 prevErrorMessage 추가
+  const prevErrorMessage = useRef<string>(errorMessage);
+
   const check = useCallback(
     (silence: boolean = false): boolean => {
       // disabled 상태인 경우 유효성 검사 무시
@@ -20,17 +23,24 @@ export const useValidation = <T = unknown>({
       if (errorMessage) {
         if (!silence) {
           setMessage(() => errorMessage);
-          setErrorTransition(() => true);
+
+          if (errorMessage !== prevErrorMessage.current) {
+            setErrorTransition(true);
+            prevErrorMessage.current = errorMessage;
+          }
+
           onValidationChange?.(false, errorMessage);
         }
 
         return false;
       }
 
+      prevErrorMessage.current = '';
+
       if (!validate?.length) {
         if (!silence) {
-          setMessage(() => '');
-          setErrorTransition(() => false);
+          setMessage('');
+          setErrorTransition(false);
           onValidationChange?.(true, '');
         }
 
@@ -45,7 +55,7 @@ export const useValidation = <T = unknown>({
         if (typeof result === 'string') {
           if (!silence) {
             setMessage(() => result);
-            setErrorTransition(() => true);
+            setErrorTransition(true);
             onValidationChange?.(false, result);
           }
 
@@ -54,8 +64,8 @@ export const useValidation = <T = unknown>({
       }
 
       if (!silence) {
-        setMessage(() => '');
-        setErrorTransition(() => false);
+        setMessage('');
+        setErrorTransition(false);
         onValidationChange?.(true, '');
       }
 
@@ -72,8 +82,8 @@ export const useValidation = <T = unknown>({
   }, [check]);
 
   const resetValidate = useCallback((): void => {
-    setMessage(() => '');
-    setErrorTransition(() => false);
+    setMessage('');
+    setErrorTransition(false);
     onValidationChange?.(true, '');
   }, [onValidationChange]);
 
