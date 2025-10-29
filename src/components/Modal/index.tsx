@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { modalPosition } from './const';
 import type { ModalProps, ModalPosition } from './types';
-import { Close as CloseIcon } from '@mui/icons-material';
+import { CloseRounded as CloseIcon } from '@mui/icons-material';
 import './style.scss';
 
 // position별 animation variants
@@ -139,9 +139,7 @@ const Modal = ({
               <div className="title-text" id={title ? 'modal-title' : undefined}>
                 <span className="text">{title}</span>
               </div>
-              {!hideClose && (
-                <CloseIcon className="close" aria-label="모달 닫기" onClick={handleClose} />
-              )}
+              {!hideClose && <CloseIcon className="close" onClick={handleClose} />}
             </div>
             <div className="modal-body" id={body ? 'modal-body' : undefined}>
               {body}

@@ -1,10 +1,21 @@
 import type { CSSProperties } from 'react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { AnimatePresence, motion } from 'framer-motion';
 import { tooltipColor, tooltipPosition } from './const';
 import './style.scss';
 import type { TooltipPosition, TooltipProps } from './types';
 import { Close as CloseIcon } from '@mui/icons-material';
+
+// Animation variants (기존 CSS transition과 동일한 효과)
+const tooltipVariants = {
+  initial: { opacity: 0, scale: 0.9 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.9 },
+  transition: {
+    duration: 0.1,
+    ease: 'easeIn' as const,
+  },
+};
 
 const Tooltip = ({
   message,
@@ -129,6 +140,13 @@ const Tooltip = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [isShow, calculatePosition]);
 
+  // 툴팁 표시 시 위치 계산 (onEnter, onEntered 대체)
+  useEffect(() => {
+    if (isShow) {
+      calculatePosition();
+    }
+  }, [isShow, calculatePosition]);
+
   // position, hovering prop 변경 감지
   useEffect(() => setCurrentPosition(position), [position]);
   useEffect(() => setIsShow(false), [hovering]);
@@ -143,6 +161,14 @@ const Tooltip = ({
   // 닫기 함수
   const close = useCallback(() => hideTooltip(), [hideTooltip]);
 
+  const onClickClose = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      hideTooltip();
+    },
+    [hideTooltip],
+  );
+
   return (
     <div
       ref={containerRef}
@@ -152,55 +178,43 @@ const Tooltip = ({
       onClick={onClick}
     >
       {children}
-      <CSSTransition
-        in={isShow}
-        timeout={200}
-        classNames="tooltip-fade"
-        unmountOnExit
-        nodeRef={tooltipRef}
-        onEnter={calculatePosition}
-        onEntered={calculatePosition}
-      >
-        <div
-          ref={tooltipRef}
-          style={bindingStyle}
-          className={tooltipClass}
-          role="tooltip"
-          aria-label={Array.isArray(message) ? message.join(', ') : message}
-        >
-          {content ? (
-            content({ close })
-          ) : Array.isArray(message) ? (
-            <>
-              {(title || btnClose) && (
-                <div className="title">
-                  {title && <h5>{title}</h5>}
-                  {btnClose && (
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        hideTooltip();
-                      }}
-                      className="close-btn"
-                      type="button"
-                      aria-label="툴팁 닫기"
-                    >
-                      <CloseIcon className="close" sx={{ width: 14, height: 14 }} />
-                    </button>
-                  )}
-                </div>
-              )}
-              <ul className="message-list">
-                {message.map((msg, idx) => (
-                  <li key={`tooltip-message-${idx}`}>{msg}</li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <div className="single-message">{message}</div>
-          )}
-        </div>
-      </CSSTransition>
+      <AnimatePresence>
+        {isShow && (
+          <motion.div
+            ref={tooltipRef}
+            style={bindingStyle}
+            className={tooltipClass}
+            initial={tooltipVariants.initial}
+            animate={tooltipVariants.animate}
+            exit={tooltipVariants.exit}
+            transition={tooltipVariants.transition}
+          >
+            {content ? (
+              content({ close })
+            ) : Array.isArray(message) ? (
+              <>
+                {(title || btnClose) && (
+                  <div className="title">
+                    {title && <h5>{title}</h5>}
+                    {btnClose && (
+                      <button onClick={onClickClose} className="close-btn" type="button">
+                        <CloseIcon className="close" sx={{ width: 14, height: 14 }} />
+                      </button>
+                    )}
+                  </div>
+                )}
+                <ul className="message-list">
+                  {message.map((msg, idx) => (
+                    <li key={`tooltip-message-${idx}`}>{msg}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <div className="single-message">{message}</div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

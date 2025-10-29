@@ -94,45 +94,6 @@
   }
 }
 
-// 트랜지션 클래스 (CSSTransition용)
-.spinner-fade-appear,
-.spinner-fade-enter {
-  opacity: 0;
-}
-.spinner-fade-appear-active,
-.spinner-fade-enter-active {
-  opacity: 1;
-  transition: opacity 0.2s ease-in;
-}
-.spinner-fade-exit {
-  opacity: 1;
-}
-.spinner-fade-exit-active {
-  opacity: 0;
-  transition: opacity 0.2s ease-in;
-}
-
-.spinner-scale-appear,
-.spinner-scale-enter {
-  transform: scale(0.5);
-  opacity: 0;
-}
-.spinner-scale-appear-active,
-.spinner-scale-enter-active {
-  transform: scale(1);
-  opacity: 1;
-  transition: all 0.2s ease-in;
-}
-.spinner-scale-exit {
-  transform: scale(1);
-  opacity: 1;
-}
-.spinner-scale-exit-active {
-  transform: scale(0.5);
-  opacity: 0;
-  transition: all 0.2s ease-in;
-}
-
 // 반응형
 @media (max-width: 480px) {
   .spinner-container {

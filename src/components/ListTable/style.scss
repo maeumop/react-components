@@ -85,20 +85,20 @@
     justify-content: center;
   }
 
-  .checkbox-wrap input + .iconify {
+  .checkbox-wrap input + svg {
     color: #9ca3af;
   }
 
-  .checkbox-wrap input:disabled + .iconify {
+  .checkbox-wrap input:disabled + svg {
     color: #d1d5db;
   }
 
-  .checkbox-wrap input:not(:disabled):hover + .iconify,
-  .checkbox-wrap input:not(:disabled):checked + .iconify {
+  .checkbox-wrap input:not(:disabled):hover + svg,
+  .checkbox-wrap input:not(:disabled):checked + svg {
     color: #2563eb;
   }
 
-  .checkbox-wrap input:disabled:checked + .iconify {
+  .checkbox-wrap input:disabled:checked + svg {
     color: #d1d5db;
   }
 

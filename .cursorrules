@@ -89,12 +89,6 @@ Vue.js에서 React로 마이그레이션된 프로젝트로, React 모범 사례
 - Vue watch → React useEffect
 - Vue의 양방향 바인딩 → React의 단방향 데이터 흐름
 
-### 9. CSSTransition 사용 규칙
-- timeout prop은 CSS transition duration과 일치시킬 것
-- nodeRef 사용 필수 (findDOMNode 경고 방지)
-- unmountOnExit 사용 권장 (DOM에서 제거)
-- 클래스명은 kebab-case로 일관성 유지
-
 ### 10. 문서화 규칙
 - 각 컴포넌트에 README.md 작성
 - 모든 사용 옵션 문서화 (props, 이벤트 등)

@@ -171,27 +171,12 @@
         color: #64748b;
         cursor: pointer;
         border: none;
-        font-size: 1.5rem;
         outline: none;
+        font-size: 2.2rem;
 
-        &:hover {
-          color: #ef4444;
-          transform: scale(1.08);
-        }
-
+        &:hover,
         &:focus {
-          outline: 2px solid #3b82f6;
-          outline-offset: 2px;
-        }
-
-        &:active {
-          transform: scale(0.95);
-        }
-
-        svg {
-          width: 1.5em;
-          height: 1.5em;
-          display: block;
+          color: #ef4444;
         }
       }
     }

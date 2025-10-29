@@ -253,45 +253,6 @@
       }
     }
   }
-
-  // React CSSTransition 클래스들
-  .options-view-enter {
-    opacity: 0;
-    transform: translateY(-0.5rem);
-  }
-  .options-view-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 0.2s ease;
-  }
-  .options-view-exit {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .options-view-exit-active {
-    opacity: 0;
-    transform: translateY(-0.5rem);
-    transition: all 0.2s ease;
-  }
-
-  .options-view-bottom-enter {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-  .options-view-bottom-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 0.2s ease;
-  }
-  .options-view-bottom-exit {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .options-view-bottom-exit-active {
-    opacity: 0;
-    transform: translateY(0.5rem);
-    transition: all 0.2s ease;
-  }
 }
 
 @keyframes spin {
@@ -301,41 +262,4 @@
   100% {
     transform: rotate(360deg);
   }
-}
-
-@keyframes errorShake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-0.25rem);
-  }
-  75% {
-    transform: translateX(0.25rem);
-  }
-}
-
-// 에러 메시지 트랜지션 (React CSSTransition용)
-.error-message-enter {
-  opacity: 0;
-  transform: translateY(-0.5rem);
-}
-.error-message-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.3s ease-in-out;
-}
-.error-message-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-.error-message-exit-active {
-  opacity: 0;
-  transform: translateY(-0.5rem);
-  transition: all 0.3s ease-in-out;
-}
-
-.feedback.error {
-  animation: errorShake 0.3s ease-in-out;
 }
