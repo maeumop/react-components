@@ -1,8 +1,8 @@
 import FloatingBackButton from '@/views/FloatingBackButton/index';
 import React, { useCallback, useState } from 'react';
-import './ex.scss';
 import StatusSelector from './index';
 import type { StatusSelectorItem } from './types';
+import './ex.scss';
 
 // 예제 데이터
 const statusOptions: StatusSelectorItem[] = [
@@ -69,6 +69,7 @@ const StatusSelectorExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 사이즈 변형 */}
           <section className="example-section">
             <h2>사이즈 변형</h2>
@@ -102,6 +103,7 @@ const StatusSelectorExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 사이즈 + 원형 표시기 */}
           <section className="example-section">
             <h2>사이즈 + 원형 표시기</h2>
@@ -138,6 +140,7 @@ const StatusSelectorExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 커스텀 색상 */}
           <section className="example-section">
             <h2>커스텀 색상</h2>
@@ -161,6 +164,7 @@ const StatusSelectorExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 읽기 전용 모드 */}
           <section className="example-section">
             <h2>읽기 전용 모드</h2>
@@ -175,6 +179,7 @@ const StatusSelectorExample: React.FC = () => {
               </div>
             </div>
           </section>
+
           {/* 접근성 테스트 */}
           <section className="example-section">
             <h2>접근성 테스트</h2>

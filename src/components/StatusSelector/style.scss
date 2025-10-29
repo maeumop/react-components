@@ -220,22 +220,3 @@
     }
   }
 }
-
-.fade-enter {
-  opacity: 0;
-  transform: translateY(-0.5rem);
-}
-.fade-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.2s ease;
-}
-.fade-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fade-exit-active {
-  opacity: 0;
-  transform: translateY(-0.5rem);
-  transition: all 0.2s ease;
-}

@@ -1,9 +1,81 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { statusSelectorColor, statusSelectorDefaultOptions } from './const';
-import './style.scss';
-import type { StatusSelectorProps } from './types';
+import type { StatusSelectorProps, StatusSelectorItem } from './types';
 import { KeyboardArrowDown as ChevronDownIcon } from '@mui/icons-material';
+import './style.scss';
+
+// Animation variants
+const dropdownVariants = {
+  initial: { opacity: 0, y: -8 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+  transition: { duration: 0.2, ease: 'easeInOut' as const },
+};
+
+// 미리 정의된 색상 목록 (컴포넌트 외부로 이동)
+const predefinedColors = Object.values(statusSelectorColor) as string[];
+
+// 옵션 아이템 컴포넌트
+const OptionItem = React.memo<{
+  item: StatusSelectorItem;
+  index: number;
+  isSelected: boolean;
+  circle: boolean;
+  getColorClass: (color: string) => string;
+  onSelect: (index: number) => void;
+}>(({ item, index, isSelected, circle, getColorClass, onSelect }) => {
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onSelect(index);
+    },
+    [index, onSelect],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        onSelect(index);
+      }
+    },
+    [index, onSelect],
+  );
+
+  const colorClass = useMemo(() => getColorClass(item.color), [item.color, getColorClass]);
+
+  const circleClassName = useMemo(
+    () => ['circle', colorClass].filter(Boolean).join(' '),
+    [colorClass],
+  );
+
+  const circleStyle = useMemo(
+    () => (colorClass ? {} : { backgroundColor: item.color }),
+    [colorClass, item.color],
+  );
+
+  const textStyle = useMemo(
+    () => (colorClass ? {} : { color: item.color }),
+    [colorClass, item.color],
+  );
+
+  return (
+    <li
+      className={isSelected ? 'selected' : ''}
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      aria-selected={isSelected}
+    >
+      <div className="selector-wrap">
+        {circle && <span className={circleClassName} style={circleStyle} aria-hidden="true" />}
+        <span style={textStyle}>{item.text}</span>
+      </div>
+    </li>
+  );
+});
+
+OptionItem.displayName = 'OptionItem';
 
 // StatusSelector 컴포넌트
 const StatusSelector: React.FC<StatusSelectorProps> = ({
@@ -21,15 +93,19 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const selectorRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
-  const ulTransitionRef = useRef<HTMLUListElement>(null); // 트랜지션용 ref
 
-  // 현재 선택된 옵션
-  const selectedOption = options.find(option => option.value === value);
-  const currentText = selectedOption?.text ?? '선택해주세요';
-  const currentColor = selectedOption?.color ?? 'grey';
+  // 현재 선택된 옵션 (메모이제이션)
+  const selectedOption = useMemo(
+    () => options.find(option => option.value === value),
+    [options, value],
+  );
 
-  // 스타일
-  const wrapStyle = { backgroundColor: bgColor };
+  const currentText = useMemo(() => selectedOption?.text ?? '선택해주세요', [selectedOption]);
+
+  const currentColor = useMemo(() => selectedOption?.color ?? 'grey', [selectedOption]);
+
+  // 스타일 (메모이제이션)
+  const wrapStyle = useMemo(() => ({ backgroundColor: bgColor }), [bgColor]);
 
   // 옵션 유효성 검사
   useEffect(() => {
@@ -60,18 +136,17 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
     };
   }, []);
 
-  // 색상 클래스 계산
-  const getColorClass = (color: string): string => {
-    const predefinedColors = Object.values(statusSelectorColor) as string[];
+  // 색상 클래스 계산 (메모이제이션)
+  const getColorClass = useCallback((color: string): string => {
     return predefinedColors.includes(color) ? color : '';
-  };
+  }, []);
 
   // 토글 함수
   const toggle = useCallback(() => {
-    if (readOnly) {
-      return;
-    }
+    if (readOnly) return;
+
     setIsShow(prev => !prev);
+
     if (!isShow) {
       setTimeout(() => {
         if (selectedIndex >= 0) {
@@ -148,34 +223,29 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
   // 키보드 이벤트 핸들러
   const handleKeydown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (readOnly) {
-        return;
-      }
+      if (readOnly) return;
+
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        if (isShow) {
-          if (focusedIndex >= 0 && focusedIndex < options.length) {
-            selectOption(focusedIndex);
-          }
+
+        if (isShow && focusedIndex >= 0 && focusedIndex < options.length) {
+          selectOption(focusedIndex);
         } else {
           toggle();
         }
-      } else if (event.key === 'Escape') {
-        if (isShow) {
-          close();
-        }
+      } else if (event.key === 'Escape' && isShow) {
+        close();
       } else if (event.key === 'ArrowDown') {
         event.preventDefault();
+
         if (isShow) {
           focusNextItem();
         } else {
           toggle();
         }
-      } else if (event.key === 'ArrowUp') {
+      } else if (event.key === 'ArrowUp' && isShow) {
         event.preventDefault();
-        if (isShow) {
-          focusPreviousItem();
-        }
+        focusPreviousItem();
       }
     },
     [
@@ -191,10 +261,40 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
     ],
   );
 
+  // 메모이제이션된 className들
+  const selectorClassName = useMemo(
+    () => ['status-selector', `size-${size}`, readOnly ? 'readonly' : ''].join(' '),
+    [size, readOnly],
+  );
+
+  const wrapClassName = useMemo(() => ['wrap', readOnly ? 'readonly' : ''].join(' '), [readOnly]);
+
+  const currentColorClass = useMemo(
+    () => getColorClass(currentColor),
+    [currentColor, getColorClass],
+  );
+
+  const circleClassName = useMemo(
+    () => ['circle', currentColorClass].filter(Boolean).join(' '),
+    [currentColorClass],
+  );
+
+  const circleStyle = useMemo(
+    () => (currentColorClass ? {} : { backgroundColor: currentColor }),
+    [currentColorClass, currentColor],
+  );
+
+  const textStyle = useMemo(
+    () => (currentColorClass ? {} : { color: currentColor }),
+    [currentColorClass, currentColor],
+  );
+
+  const iconClassName = useMemo(() => (isShow ? 'rotate' : ''), [isShow]);
+
   return (
     <div
       ref={selectorRef}
-      className={['status-selector', `size-${size}`, readOnly ? 'readonly' : ''].join(' ')}
+      className={selectorClassName}
       onClick={toggle}
       onKeyDown={handleKeydown}
       role="combobox"
@@ -203,73 +303,43 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
       aria-disabled={readOnly}
       tabIndex={0}
     >
-      <div className={['wrap', readOnly ? 'readonly' : ''].join(' ')} style={wrapStyle}>
-        {circle && (
-          <span
-            className={['circle', getColorClass(currentColor)].join(' ')}
-            style={getColorClass(currentColor) ? {} : { backgroundColor: currentColor }}
-            aria-hidden="true"
-          />
-        )}
-        <span style={getColorClass(currentColor) ? {} : { color: currentColor }}>
-          {currentText}
-        </span>
+      <div className={wrapClassName} style={wrapStyle}>
+        {circle && <span className={circleClassName} style={circleStyle} aria-hidden="true" />}
+        <span style={textStyle}>{currentText}</span>
         {!readOnly && (
           <ChevronDownIcon
             sx={{ width: 12, height: 12 }}
-            className={isShow ? 'rotate' : ''}
+            className={iconClassName}
             aria-hidden="true"
           />
         )}
       </div>
       {/* 옵션 목록 트랜지션 */}
-      <CSSTransition
-        in={isShow}
-        timeout={200}
-        classNames="fade"
-        unmountOnExit
-        nodeRef={ulTransitionRef}
-      >
-        <ul
-          ref={el => {
-            listRef.current = el;
-            ulTransitionRef.current = el;
-          }}
-          role="listbox"
-          aria-label="상태 선택 옵션"
-        >
-          {options.map((item, index) => (
-            <li
-              key={`selector-${index}`}
-              className={index === selectedIndex ? 'selected' : ''}
-              tabIndex={0}
-              onClick={e => {
-                e.stopPropagation();
-                selectOption(index);
-              }}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  selectOption(index);
-                }
-              }}
-              aria-selected={index === selectedIndex}
-            >
-              <div className="selector-wrap">
-                {circle && (
-                  <span
-                    className={['circle', getColorClass(item.color)].join(' ')}
-                    style={getColorClass(item.color) ? {} : { backgroundColor: item.color }}
-                    aria-hidden="true"
-                  />
-                )}
-                <span style={getColorClass(item.color) ? {} : { color: item.color }}>
-                  {item.text}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </CSSTransition>
+      <AnimatePresence>
+        {isShow && (
+          <motion.ul
+            ref={listRef}
+            role="listbox"
+            aria-label="상태 선택 옵션"
+            initial={dropdownVariants.initial}
+            animate={dropdownVariants.animate}
+            exit={dropdownVariants.exit}
+            transition={dropdownVariants.transition}
+          >
+            {options.map((item, index) => (
+              <OptionItem
+                key={`selector-${item.value}-${index}`}
+                item={item}
+                index={index}
+                isSelected={index === selectedIndex}
+                circle={circle}
+                getColorClass={getColorClass}
+                onSelect={selectOption}
+              />
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
