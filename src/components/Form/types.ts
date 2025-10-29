@@ -8,10 +8,12 @@ export interface UseValidationProps<T = unknown> {
   disabled?: boolean;
   value?: T;
   onValidationChange?: (isValid: boolean, message: string) => void;
+  onMounted?: (callback?: () => void) => void;
 }
 
 export interface UseValidationReturn {
   message: string;
+  isMounted: boolean;
   errorTransition: boolean;
   check: (silence?: boolean) => boolean;
   resetValidate: () => void;

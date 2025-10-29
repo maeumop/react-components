@@ -35,12 +35,14 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
   ) => {
     // 내부 상태
 
-    const { message, setMessage, errorTransition, check, resetValidate, setErrorTransition } =
-      useValidation<string | boolean>({
-        validate,
-        disabled,
-        value,
-      });
+    const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
+      string | boolean
+    >({
+      validate,
+      errorMessage,
+      disabled,
+      value,
+    });
 
     const inputId = useMemo(() => `switch-btn-${Math.random().toString(36).slice(2, 10)}`, []);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -104,14 +106,6 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
 
       return <CheckBoxOutlineBlankIcon />;
     }, [value, trueValue]);
-
-    useEffect(() => {
-      if (errorMessage) {
-        setErrorTransition(true);
-      }
-
-      setMessage(errorMessage);
-    }, [errorMessage, setMessage, setErrorTransition]);
 
     const { motherRef } = useAppendFormComponent({
       check,

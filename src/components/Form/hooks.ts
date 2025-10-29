@@ -8,6 +8,7 @@ export const useValidation = <T = unknown>({
   disabled = false,
   value,
   onValidationChange,
+  onMounted,
 }: UseValidationProps<T>): UseValidationReturn => {
   const [message, setMessage] = useState<string>('');
   const [errorTransition, setErrorTransition] = useState<boolean>(false);
@@ -87,7 +88,28 @@ export const useValidation = <T = unknown>({
     onValidationChange?.(true, '');
   }, [onValidationChange]);
 
+  // errorMessage 변경 시 오류 메시지 처리
+  useEffect(() => {
+    if (errorMessage) {
+      setErrorTransition(true);
+    }
+
+    setMessage(() => errorMessage);
+  }, [errorMessage]);
+
+  // component mounted 처리
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    if (isMounted.current) return;
+
+    isMounted.current = true;
+
+    onMounted?.();
+  }, []);
+
   return {
+    isMounted: isMounted.current,
     message,
     errorTransition,
     check,

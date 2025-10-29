@@ -21,13 +21,14 @@ export const useCheckButton = ({
   className,
   lineLimit = 0,
 }: Omit<CheckButtonProps, 'name' | 'label' | 'required'>) => {
-  const { message, setMessage, errorTransition, check, resetValidate, setErrorTransition } =
-    useValidation<string | string[]>({
-      validate,
-      errorMessage,
-      disabled,
-      value,
-    });
+  const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
+    string | string[]
+  >({
+    validate,
+    errorMessage,
+    disabled,
+    value,
+  });
 
   // 전체 선택 기능
   const processedItems = useMemo<CheckButtonItem[]>(() => {
@@ -120,14 +121,6 @@ export const useCheckButton = ({
   useEffect(() => {
     onChange(value ?? (type === 'radio' ? '' : []));
   }, [value, type, onChange]);
-
-  useEffect(() => {
-    if (errorMessage) {
-      setErrorTransition(true);
-    }
-
-    setMessage(errorMessage);
-  }, [errorMessage, setMessage, setErrorTransition]);
 
   // 에러 트랜지션 자동 해제
   useEffect(() => {

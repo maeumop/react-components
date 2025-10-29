@@ -51,7 +51,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
     onChangeIndex,
     onAfterChange,
   } = props;
-  const isMounted = useRef<boolean>(false);
 
   // 반응형 상태
   const [isShowOption, setIsShowOption] = useState<boolean>(false);
@@ -63,6 +62,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
   // 유효성 검사 훅 사용
   const {
     message,
+    isMounted,
     errorTransition,
     check,
     resetValidate,
@@ -725,7 +725,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     } else {
       // 옵션 목록이 닫히면서 유효성 검사를 실행
       // errorMessage 변경시 check를 무한 반복하는 현상을 해결하기 위해 isShowOptionChanged 추가
-      if (isShowOptionChanged && isMounted.current && blurValidate) {
+      if (isShowOptionChanged && isMounted && blurValidate) {
         check();
       }
     }
@@ -770,14 +770,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
       }
     };
   }, [isShowOption, blurValidate, selectedValue, outSideClickEvent, onArrowKeyHandler, check]);
-
-  useEffect(() => {
-    isMounted.current = true;
-
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   // OptionList에 전달할 props를 하나의 객체로 묶기
   const optionListProps = {

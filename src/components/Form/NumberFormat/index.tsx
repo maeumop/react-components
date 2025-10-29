@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import './style.scss';
 import type { NumberFormatModel, NumberFormatProps } from './types';
-import { useComponentHelper } from '@/components/helper';
+import { useComponentHelper } from '../../helper';
 import { useAppendFormComponent, useValidation } from '../hooks';
 import { ErrorMessage } from '../ErrorMessage';
 
@@ -37,17 +37,33 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
   ) => {
     // 내부 상태
     const inputRef = useRef<HTMLInputElement>(null);
-    const isMounted = useRef(false);
 
+    const {
+      message,
+      isMounted,
+      errorTransition,
+      check,
+      resetValidate,
+      setMessage,
+      setErrorTransition,
+    } = useValidation<number | string>({
+      validate,
+      errorMessage,
+      disabled,
+      value,
+      onMounted: () => {
+        if (inputRef.current) {
+          if (autofocus) {
+            inputRef.current.focus();
+          }
+
+          if (value) {
+            inputRef.current.value = numberFormat(value);
+          }
+        }
+      },
+    });
     const { numberFormat, commaStringToNumber } = useComponentHelper();
-
-    const { message, errorTransition, check, resetValidate, setMessage, setErrorTransition } =
-      useValidation<number | string>({
-        validate,
-        errorMessage,
-        disabled,
-        value,
-      });
 
     // wrapper 스타일
     const wrapperClass = useMemo(() => {
@@ -115,18 +131,9 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
       onChange?.(0);
     }, [onChange]);
 
-    // 외부 errorMessage 변경 시 상태 동기화
-    useEffect(() => {
-      if (errorMessage) {
-        setErrorTransition(true);
-      }
-
-      setMessage(errorMessage);
-    }, [errorMessage, setMessage, setErrorTransition]);
-
     // value 변경 시 validate 리셋 및 포맷 적용
     useEffect(() => {
-      if (isMounted.current && !errorMessage) {
+      if (isMounted && !errorMessage) {
         setMessage('');
         setErrorTransition(false);
 
@@ -142,22 +149,7 @@ const NumberFormat = forwardRef<NumberFormatModel, NumberFormatProps>(
         setMessage('');
         setErrorTransition(false);
       }
-    }, [disabled, errorMessage]);
-
-    // 마운트 시
-    useEffect(() => {
-      isMounted.current = true;
-
-      if (inputRef.current) {
-        if (autofocus) {
-          inputRef.current.focus();
-        }
-
-        if (value) {
-          inputRef.current.value = numberFormat(value);
-        }
-      }
-    }, [autofocus, value]);
+    }, [disabled]);
 
     const { motherRef } = useAppendFormComponent({
       check,

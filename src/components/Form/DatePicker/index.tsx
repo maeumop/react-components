@@ -46,6 +46,23 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     onChange,
   } = props;
 
+  // value 변경 시 유효성 검사
+  const initCount = useRef<number>(0);
+
+  const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
+    string | string[]
+  >({
+    validate,
+    disabled,
+    value,
+    errorMessage,
+    onMounted: () => {
+      if (initCount.current < 2) {
+        initCount.current++;
+      }
+    },
+  });
+
   const helper = useDatePickerHelper();
   const store = useDatePickerStore();
   const storeInstance = useDatePickerStoreInstance(); // getState()를 사용하기 위한 인스턴스
@@ -70,13 +87,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   // 범위 선택 모드에서 임시 저장용 변수
   const [tempStartDate, setTempStartDate] = useState<string>('');
   const [tempEndDate, setTempEndDate] = useState<string>('');
-
-  const { message, setMessage, errorTransition, check, resetValidate, setErrorTransition } =
-    useValidation<string | string[]>({
-      validate,
-      disabled,
-      value,
-    });
 
   // 스크롤 이벤트 리스너 배열 (여러 요소에 등록할 수 있도록)
   const scrollEventListenersRef = useRef<
@@ -567,9 +577,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     [onChange],
   );
 
-  // value 변경 시 유효성 검사
-  const initCount = useRef<number>(0);
-
   // resetForm 상태
   const isReset = useRef<boolean>(false);
 
@@ -585,12 +592,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
 
     check();
   }, [value]);
-
-  useEffect(() => {
-    if (initCount.current < 2) {
-      initCount.current++;
-    }
-  }, []);
 
   /**
    * 폼 초기화 처리
@@ -610,14 +611,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
 
     resetValidate();
   }, [range, isReset, onChange, resetValidate]);
-
-  useEffect(() => {
-    if (errorMessage) {
-      setErrorTransition(true);
-    }
-
-    setMessage(errorMessage);
-  }, [errorMessage, setMessage, setErrorTransition]);
 
   useAppendFormComponent({
     check,

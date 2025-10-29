@@ -45,18 +45,33 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
   } = props;
 
   // useValidation 훅 사용
-  const { message, errorTransition, check, resetValidate, setMessage, setErrorTransition } =
-    useValidation<string>({
-      validate,
-      errorMessage,
-      disabled,
-      value,
-    });
+  const {
+    message,
+    isMounted,
+    errorTransition,
+    check,
+    resetValidate,
+    setMessage,
+    setErrorTransition,
+  } = useValidation<string>({
+    validate,
+    errorMessage,
+    disabled,
+    value,
+    onMounted: () => {
+      if (autofocus) {
+        if (multiline) {
+          textareaRef.current?.focus();
+        } else {
+          inputRef.current?.focus();
+        }
+      }
+    },
+  });
 
   // 내부 ref
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const isMounted = useRef(false);
 
   // wrapper 스타일
   const wrapperClass = useMemo(() => {
@@ -162,32 +177,11 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
 
   // value 변경 시 validate 리셋 (useValidation 훅에서 자동으로 처리되지 않으므로 필요)
   useEffect(() => {
-    if (isMounted.current) {
+    if (isMounted) {
+      setMessage('');
       resetValidate();
     }
   }, [value, resetValidate]);
-
-  // errorMessage 변경 시 오류 메시지 처리
-  useEffect(() => {
-    if (errorMessage) {
-      setErrorTransition(true);
-    }
-
-    setMessage(errorMessage);
-  }, [errorMessage, setMessage, setErrorTransition]);
-
-  // 마운트 시
-  useEffect(() => {
-    isMounted.current = true;
-
-    if (autofocus) {
-      if (multiline) {
-        textareaRef.current?.focus();
-      } else {
-        inputRef.current?.focus();
-      }
-    }
-  }, [autofocus, multiline]);
 
   const { motherRef } = useAppendFormComponent({
     check: checkWithPattern,
