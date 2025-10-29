@@ -202,20 +202,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
     [onChange, onChangeIndex, onAfterChange, validateValue],
   );
 
-  const resetForm = useCallback((): void => {
-    resetValidate();
-
-    if (multiple) {
-      setSelectedText([]);
-      setSelectedValue([]);
-      onChange?.([]);
-    } else {
-      setSelectedText('');
-      setSelectedValue('');
-      onChange?.('');
-    }
-  }, [multiple, onChange]);
-
   const selectOption = useCallback(
     (v: string, index: number, e: React.MouseEvent<HTMLLIElement> | null = null): void => {
       if (e !== null) {
@@ -512,6 +498,24 @@ export const useSelectBox = (props: SelectBoxProps) => {
     }
   }, []);
 
+  const isReset = useRef<boolean>(false);
+
+  const resetForm = useCallback((): void => {
+    isReset.current = true;
+
+    if (multiple) {
+      setSelectedText([]);
+      setSelectedValue([]);
+      onChange?.([]);
+    } else {
+      setSelectedText('');
+      setSelectedValue('');
+      onChange?.('');
+    }
+
+    resetValidate();
+  }, [multiple, isReset, onChange, resetValidate]);
+
   // value 값 초기화
   const onClickClear = useCallback(
     (e: React.MouseEvent<SVGSVGElement>): void => {
@@ -662,6 +666,11 @@ export const useSelectBox = (props: SelectBoxProps) => {
   const prevValue = useRef<string | string[]>(value);
 
   useEffect(() => {
+    if (isReset.current) {
+      isReset.current = false;
+      return;
+    }
+
     // 값이 실제로 변경된 경우에만 처리
     if (value !== prevValue.current) {
       prevValue.current = value;

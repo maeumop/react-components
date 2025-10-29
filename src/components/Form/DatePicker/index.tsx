@@ -338,22 +338,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     setDateState,
   ]);
 
-  /**
-   * 폼 초기화 처리
-   */
-  const resetForm = useCallback((): void => {
-    init();
-
-    setToggleDateButton(prev => prev.map(item => ({ ...item, checked: false })));
-    resetValidate();
-
-    if (range) {
-      onChange?.(['', '']);
-    } else {
-      onChange?.('');
-    }
-  }, [range, onChange, init, resetValidate]);
-
   // 스크롤 이벤트 처리 - 일반 함수로 변경
   const setScrollEvent = (el: HTMLElement): void => {
     const parent = el.parentElement as HTMLElement;
@@ -586,7 +570,15 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   // value 변경 시 유효성 검사
   const initCount = useRef<number>(0);
 
+  // resetForm 상태
+  const isReset = useRef<boolean>(false);
+
   useEffect(() => {
+    if (isReset.current) {
+      isReset.current = false;
+      return;
+    }
+
     if (process.env.NODE_ENV === 'development' && initCount.current < 2) {
       return;
     }
@@ -599,6 +591,25 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       initCount.current++;
     }
   }, []);
+
+  /**
+   * 폼 초기화 처리
+   */
+  const resetForm = useCallback((): void => {
+    isReset.current = true;
+    setToggleDateButton(prev => prev.map(item => ({ ...item, checked: false })));
+
+    if (range) {
+      setStartDate('');
+      setEndDate('');
+      onChange?.(['', '']);
+    } else {
+      setStartDate('');
+      onChange?.('');
+    }
+
+    resetValidate();
+  }, [range, isReset, onChange, resetValidate]);
 
   useAppendFormComponent({
     check,
