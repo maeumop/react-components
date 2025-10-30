@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { RuleFunc } from '../types';
 
 export interface ValidateWrapProps {
-  checkValue: string | string[] | number | number[];
+  value: string | string[] | number | number[];
   validate?: RuleFunc[];
   errorMessage?: string;
   label?: string;

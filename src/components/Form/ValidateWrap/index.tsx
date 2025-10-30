@@ -17,7 +17,7 @@ import { ErrorMessage } from '../ErrorMessage';
 const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
   (
     {
-      checkValue,
+      value,
       validate = [],
       errorMessage = '',
       label,
@@ -37,7 +37,7 @@ const ValidateWrapBase = forwardRef<ValidateWrapRef, ValidateWrapProps>(
         validate,
         errorMessage,
         disabled,
-        value: checkValue,
+        value,
       });
 
     const transitionEnd = useCallback((): void => {
@@ -141,7 +141,7 @@ ValidateWrapBase.displayName = 'ValidateWrap';
 // React.memo 비교 함수 - props가 실제로 변경되었을 때만 리렌더링
 export default React.memo(ValidateWrapBase, (prevProps, nextProps) => {
   // checkValue가 변경되면 리렌더링 필요
-  if (prevProps.checkValue !== nextProps.checkValue) {
+  if (prevProps.value !== nextProps.value) {
     return false;
   }
 

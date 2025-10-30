@@ -296,9 +296,10 @@ const ValidateFormExample: React.FC = () => {
                   {/* 취미 */}
                   <div className="form-row">
                     <ValidateWrap
-                      checkValue={hobbiesCheckValue}
+                      value={hobbiesCheckValue}
                       validate={hobbiesValidate}
                       label="취미 (2~4개 선택)"
+                      resetValue={() => setHobbies([])}
                       required
                     >
                       {({ onBlur }) => (
