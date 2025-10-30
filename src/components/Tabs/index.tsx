@@ -156,7 +156,7 @@ const Tabs = ({
   return (
     <div className="tabs" data-variant={variant}>
       <div className="tab-item-wrap">
-        <ul className="tab-items" role="tablist">
+        <ul className="tab-items">
           {tabItems.map((item, index) => (
             <li
               key={`tabs-${index}`}

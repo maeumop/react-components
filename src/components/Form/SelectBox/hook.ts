@@ -461,17 +461,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
     scrollObserverRef.current.observe(optionListRef.current);
   }, []);
 
-  // Resize Observer를 사용한 레이아웃 변경 감지
-  const setupResizeObserver = useCallback((): void => {
-    if (!mainRef.current) {
-      return;
-    }
-
-    // ResizeObserver를 사용하지 않음 - 불필요한 리렌더링 방지
-    // option list가 열릴 때 한 번만 위치를 계산하는 것으로 충분
-    // 만약 레이아웃 변경 시 위치 재계산이 필요하면 window resize 이벤트 사용 고려
-  }, []);
-
   // 최적화된 스크롤 이벤트 설정 (Intersection Observer 우선 사용)
   const setupOptimizedScrollEvents = useCallback((): void => {
     // window 스크롤 이벤트 등록 (Intersection Observer 보조 역할)
@@ -716,7 +705,6 @@ export const useSelectBox = (props: SelectBoxProps) => {
       // 옵션 레이어가 완전히 렌더링된 후에 이벤트 리스너 등록
       setTimeout(() => {
         setupIntersectionObserver();
-        setupResizeObserver();
         setupOptimizedScrollEvents();
       }, 100);
 

@@ -114,12 +114,7 @@ const ToastList: React.FC<ToastListProps> = ({ toasts, remove }) => {
                 >
                   {renderIcon(toast.color)}
                   <span className="toast-message">{toast.message}</span>
-                  <CloseIcon
-                    className="toast-close"
-                    onClick={() => remove(toast.id)}
-                    aria-label="닫기"
-                    role="button"
-                  />
+                  <CloseIcon className="toast-close" onClick={() => remove(toast.id)} />
                 </motion.div>
               ))}
             </AnimatePresence>

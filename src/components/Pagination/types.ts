@@ -10,8 +10,6 @@ export interface PaginationProps {
   total?: number;
   /** 비활성화 상태 */
   disabled?: boolean;
-  /** 접근성 라벨 */
-  ariaLabel?: string;
   /** 페이지 크기 옵션 */
   pageSizeOptions?: number[];
   /** 페이지 변경 핸들러 */

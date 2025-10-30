@@ -17,7 +17,9 @@ const DropMenu = ({
   disabled = false,
   disableAutoClose = false,
   children,
-  ...rest
+  onOpen,
+  onClose,
+  onItemClick,
 }: React.PropsWithChildren<DropMenuProps>) => {
   // 내부 상태
   const [isOpen, setIsOpen] = useState(false);
@@ -49,10 +51,10 @@ const DropMenu = ({
     if (disabled) return;
 
     setLayerPosition();
-    setIsOpen(() => true);
+    setIsOpen(true);
 
-    if (rest.onOpen) {
-      rest.onOpen();
+    if (typeof onOpen === 'function') {
+      onOpen();
     }
 
     setTimeout(() => {
@@ -64,16 +66,16 @@ const DropMenu = ({
         }
       }
     }, 0);
-  }, [disabled, rest]);
+  }, [disabled, onOpen]);
 
   // 메뉴 닫기
   const closeMenu = useCallback(() => {
     setIsOpen(false);
 
-    if (rest.onClose) {
-      rest.onClose();
+    if (typeof onClose === 'function') {
+      onClose();
     }
-  }, [rest]);
+  }, [onClose]);
 
   // 토글
   const toggle = useCallback(() => {
@@ -91,12 +93,13 @@ const DropMenu = ({
     const handleClick = (e: MouseEvent) => {
       if (disableAutoClose) return;
 
-      if (
+      const isClickOutside =
         dropMenuRef.current &&
         !dropMenuRef.current.contains(e.target as Node) &&
         menuRef.current &&
-        !menuRef.current.contains(e.target as Node)
-      ) {
+        !menuRef.current.contains(e.target as Node);
+
+      if (isClickOutside) {
         closeMenu();
       }
     };
@@ -108,9 +111,7 @@ const DropMenu = ({
 
   // 스크롤 시 닫기
   useEffect(() => {
-    if (!isOpen || disableAutoClose) {
-      return;
-    }
+    if (!isOpen || disableAutoClose) return;
 
     const handleScroll = () => closeMenu();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -119,47 +120,35 @@ const DropMenu = ({
   }, [isOpen, disableAutoClose, closeMenu]);
 
   // 키보드 내비게이션
-  const focusNextItem = useCallback(() => {
-    if (!menuRef.current) {
-      return;
+  const focusOptionItem = useCallback((key: KeyboardEvent['key']) => {
+    if (!menuRef.current) return;
+
+    let focusable = menuRef.current.querySelectorAll<HTMLElement>('a, button:not([disabled])');
+    let current = Array.from(focusable).findIndex(el => el === document.activeElement);
+    let pos = current <= 0 ? focusable.length - 1 : current - 1;
+
+    if (key === 'ArrowDown') {
+      focusable = menuRef.current.querySelectorAll<HTMLElement>('a, button:not([disabled])');
+      current = Array.from(focusable).findIndex(el => el === document.activeElement);
+      pos = (current + 1) % focusable.length;
     }
 
-    const focusable = menuRef.current.querySelectorAll('a, button:not([disabled])');
-    const current = Array.from(focusable).findIndex(el => el === document.activeElement);
-    const next = (current + 1) % focusable.length;
-
-    (focusable[next] as HTMLElement)?.focus();
-  }, []);
-
-  const focusPrevItem = useCallback(() => {
-    if (!menuRef.current) {
-      return;
-    }
-
-    const focusable = menuRef.current.querySelectorAll('a, button:not([disabled])');
-    const current = Array.from(focusable).findIndex(el => el === document.activeElement);
-    const prev = current <= 0 ? focusable.length - 1 : current - 1;
-
-    (focusable[prev] as HTMLElement)?.focus();
+    (focusable[pos] as HTMLElement)?.focus();
   }, []);
 
   const handleKeydown = useCallback(
     (event: React.KeyboardEvent) => {
       event.preventDefault();
 
-      if (!isOpen) {
-        return;
-      }
+      if (!isOpen) return;
 
       if (event.key === 'Escape') {
         closeMenu();
-      } else if (event.key === 'ArrowDown') {
-        focusNextItem();
-      } else if (event.key === 'ArrowUp') {
-        focusPrevItem();
+      } else if (['ArrowDown', 'ArrowUp'].includes(event.key)) {
+        focusOptionItem(event.key);
       }
     },
-    [isOpen, closeMenu, focusNextItem, focusPrevItem],
+    [isOpen, closeMenu, focusOptionItem],
   );
 
   // 아이템 클릭
@@ -167,24 +156,21 @@ const DropMenu = ({
     (item: DropMenuItem, index: number, e: React.MouseEvent | React.KeyboardEvent) => {
       e.preventDefault();
 
-      if (item.disabled) {
-        return;
-      }
+      if (item.disabled) return;
 
       try {
         item.action();
-        if (rest.onItemClick) {
-          rest.onItemClick(item, index);
+
+        if (typeof onItemClick === 'function') {
+          onItemClick(item, index);
         }
       } catch (err) {
         console.error('DropMenu item action error:', err);
       }
 
-      if (!disableAutoClose) {
-        closeMenu();
-      }
+      if (!disableAutoClose) closeMenu();
     },
-    [rest, closeMenu, disableAutoClose],
+    [onItemClick, closeMenu, disableAutoClose],
   );
 
   // 트리거 버튼(슬롯) 클릭/키다운
@@ -244,7 +230,7 @@ const DropMenu = ({
             transition={variants.transition}
           >
             {items.map((item, idx) => (
-              <li key={`menu-item-${idx}`} role="none">
+              <li key={`menu-item-${idx}`}>
                 <a
                   href="#"
                   className={item.disabled ? 'disabled' : ''}

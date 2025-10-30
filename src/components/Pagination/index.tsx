@@ -20,7 +20,6 @@ const Pagination: React.FC<PaginationProps> = ({
   block = paginationDefaultOptions.block,
   total = paginationDefaultOptions.total,
   disabled = paginationDefaultOptions.disabled,
-  ariaLabel = paginationDefaultOptions.ariaLabel,
   pageSizeOptions = [...paginationDefaultOptions.pageSizeOptions],
   onChange,
   onPageSizeChange,
@@ -171,7 +170,7 @@ const Pagination: React.FC<PaginationProps> = ({
   }, []);
 
   return (
-    <nav className="pagination" aria-label={ariaLabel} role="navigation">
+    <nav className="pagination">
       {/* 페이지 정보 표시 */}
       {total > 0 && (
         <div className="pagination-info">
@@ -181,14 +180,13 @@ const Pagination: React.FC<PaginationProps> = ({
         </div>
       )}
       {/* 페이지네이션 컨트롤 */}
-      <ul className="pagination-list" role="list">
+      <ul className="pagination-list">
         {/* 첫 페이지 */}
-        <li className={`pagination-item${isDisabledFirst ? ' disabled' : ''}`} role="listitem">
+        <li className={`pagination-item${isDisabledFirst ? ' disabled' : ''}`}>
           <button
             type="button"
             className="pagination-button"
             disabled={isDisabledFirst}
-            aria-label="첫 페이지로 이동"
             onClick={() => updateValue(1)}
             onKeyDown={e => handleKeyDown(e, 1)}
           >
@@ -196,12 +194,11 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
         </li>
         {/* 이전 페이지 블록 */}
-        <li className={`pagination-item${isDisabledPrev ? ' disabled' : ''}`} role="listitem">
+        <li className={`pagination-item${isDisabledPrev ? ' disabled' : ''}`}>
           <button
             type="button"
             className="pagination-button"
             disabled={isDisabledPrev}
-            aria-label={`이전 ${pageBlock}페이지로 이동`}
             onClick={() => updateValue(prev)}
             onKeyDown={e => handleKeyDown(e, prev)}
           >
@@ -210,16 +207,10 @@ const Pagination: React.FC<PaginationProps> = ({
         </li>
         {/* 페이지 번호들 */}
         {pageList.map(item => (
-          <li
-            key={`page-${item.num}`}
-            className={`pagination-item${item.isOn ? ' active' : ''}`}
-            role="listitem"
-          >
+          <li key={`page-${item.num}`} className={`pagination-item${item.isOn ? ' active' : ''}`}>
             <button
               type="button"
               className="pagination-button"
-              aria-label={`${item.num}페이지로 이동`}
-              aria-current={item.isOn ? 'page' : undefined}
               onClick={() => updateValue(item.num)}
               onKeyDown={e => handleKeyDown(e, item.num)}
             >
@@ -228,12 +219,11 @@ const Pagination: React.FC<PaginationProps> = ({
           </li>
         ))}
         {/* 다음 페이지 블록 */}
-        <li className={`pagination-item${isDisabledNext ? ' disabled' : ''}`} role="listitem">
+        <li className={`pagination-item${isDisabledNext ? ' disabled' : ''}`}>
           <button
             type="button"
             className="pagination-button"
             disabled={isDisabledNext}
-            aria-label={`다음 ${pageBlock}페이지로 이동`}
             onClick={() => updateValue(next)}
             onKeyDown={e => handleKeyDown(e, next)}
           >
@@ -241,12 +231,11 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
         </li>
         {/* 마지막 페이지 */}
-        <li className={`pagination-item${isDisabledLast ? ' disabled' : ''}`} role="listitem">
+        <li className={`pagination-item${isDisabledLast ? ' disabled' : ''}`}>
           <button
             type="button"
             className="pagination-button"
             disabled={isDisabledLast}
-            aria-label="마지막 페이지로 이동"
             onClick={() => updateValue(maxPage)}
             onKeyDown={e => handleKeyDown(e, maxPage)}
           >

@@ -113,7 +113,6 @@ const SelectBox = React.memo(
         tabIndex={0}
         style={containerStyle}
         className={containerClassName}
-        onClick={toggleOption}
         onKeyDown={onEscapeKeyHandler}
       >
         {label && !inLabel && (
@@ -124,21 +123,17 @@ const SelectBox = React.memo(
             </label>
           </div>
         )}
-        <div ref={selectBoxRef} className={controllerClassName}>
+        <div ref={selectBoxRef} className={controllerClassName} onClick={toggleOption}>
           {/* 선택 텍스트/태그 */}
           <RenderSelectedText {...selectedTextProps} />
 
           {/* 클리어 버튼 */}
           {clearButtonShow && (
-            <CloseIcon
-              sx={{ width: 20, height: 20 }}
-              className="clear-value"
-              onClick={onClickClear}
-            />
+            <CloseIcon sx={{ fontSize: 20 }} className="clear-value" onClick={onClickClear} />
           )}
 
           {/* 화살표 아이콘 */}
-          <ChevronDownIcon className={iconClassName} sx={{ width: 20, height: 20 }} />
+          <ChevronDownIcon className={iconClassName} sx={{ fontSize: 20 }} />
 
           {/* 옵션 레이어 */}
           <AnimatePresence onExitComplete={handleTransitionExited}>

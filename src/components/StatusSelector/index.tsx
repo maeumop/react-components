@@ -65,10 +65,9 @@ const OptionItem = React.memo<{
       tabIndex={0}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      aria-selected={isSelected}
     >
       <div className="selector-wrap">
-        {circle && <span className={circleClassName} style={circleStyle} aria-hidden="true" />}
+        {circle && <span className={circleClassName} style={circleStyle} />}
         <span style={textStyle}>{item.text}</span>
       </div>
     </li>
@@ -297,30 +296,18 @@ const StatusSelector: React.FC<StatusSelectorProps> = ({
       className={selectorClassName}
       onClick={toggle}
       onKeyDown={handleKeydown}
-      role="combobox"
-      aria-expanded={isShow}
-      aria-haspopup="listbox"
-      aria-disabled={readOnly}
       tabIndex={0}
     >
       <div className={wrapClassName} style={wrapStyle}>
-        {circle && <span className={circleClassName} style={circleStyle} aria-hidden="true" />}
+        {circle && <span className={circleClassName} style={circleStyle} />}
         <span style={textStyle}>{currentText}</span>
-        {!readOnly && (
-          <ChevronDownIcon
-            sx={{ width: 12, height: 12 }}
-            className={iconClassName}
-            aria-hidden="true"
-          />
-        )}
+        {!readOnly && <ChevronDownIcon sx={{ width: 12, height: 12 }} className={iconClassName} />}
       </div>
       {/* 옵션 목록 트랜지션 */}
       <AnimatePresence>
         {isShow && (
           <motion.ul
             ref={listRef}
-            role="listbox"
-            aria-label="상태 선택 옵션"
             initial={dropdownVariants.initial}
             animate={dropdownVariants.animate}
             exit={dropdownVariants.exit}

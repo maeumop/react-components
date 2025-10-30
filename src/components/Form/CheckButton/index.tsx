@@ -74,7 +74,6 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
   const initCount = useRef<number>(0);
 
   useEffect(() => {
-    console.log(initCount.current);
     if (process.env.NODE_ENV === 'development' && initCount.current < 2) {
       return;
     }

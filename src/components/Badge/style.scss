@@ -48,6 +48,55 @@
   }
 }
 
+$badge-colors: (
+  primary: (
+    bg: $primary,
+    text: white,
+  ),
+  secondary: (
+    bg: $secondary,
+    text: white,
+  ),
+  success: (
+    bg: $success,
+    text: white,
+  ),
+  warning: (
+    bg: $warning,
+    text: white,
+  ),
+  error: (
+    bg: $error,
+    text: white,
+  ),
+  info: (
+    bg: $info,
+    text: white,
+  ),
+  light: (
+    bg: $gray-100,
+    text: $gray-800,
+  ),
+  dark: (
+    bg: $gray-800,
+    text: white,
+  ),
+);
+
+@mixin badge-variant($bg, $text, $hover-delta: -10%, $disabled-delta: 20%) {
+  background-color: $bg;
+  color: $text;
+
+  &:not(.disabled):hover {
+    background-color: color.adjust($bg, $lightness: $hover-delta);
+  }
+
+  &.disabled {
+    background-color: color.adjust($bg, $lightness: $disabled-delta);
+    opacity: 0.6;
+  }
+}
+
 /// 컴포넌트 color 스타일 정의
 /// @output - .badge.#{color-name} { ... }
 @mixin defineColorStyle {
@@ -84,118 +133,14 @@
     overflow: hidden;
     border-radius: 0.6rem;
     @include transition('all', 0.2s ease);
-  }
 
-  // 색상 스타일을 직접 정의
-  .badge.primary {
-    background-color: $primary;
-    color: white;
+    @each $name, $val in $badge-colors {
+      $bg: map.get($val, bg);
+      $text: map.get($val, text);
 
-    &:not(.disabled):hover {
-      background-color: color.adjust($primary, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($primary, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.secondary {
-    background-color: $secondary;
-    color: white;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($secondary, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($secondary, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.success {
-    background-color: $success;
-    color: white;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($success, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($success, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.warning {
-    background-color: $warning;
-    color: white;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($warning, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($warning, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.error {
-    background-color: $error;
-    color: white;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($error, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($error, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.info {
-    background-color: $info;
-    color: white;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($info, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($info, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.light {
-    background-color: $gray-100;
-    color: $gray-800;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($gray-100, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($gray-100, $lightness: 20%);
-      opacity: 0.6;
-    }
-  }
-
-  .badge.dark {
-    background-color: $gray-800;
-    color: white;
-
-    &:not(.disabled):hover {
-      background-color: color.adjust($gray-800, $lightness: -10%);
-    }
-
-    &.disabled {
-      background-color: color.adjust($gray-800, $lightness: 20%);
-      opacity: 0.6;
+      &.#{$name} {
+        @include badge-variant($bg, $text);
+      }
     }
   }
 
