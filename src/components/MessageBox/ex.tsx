@@ -92,7 +92,7 @@ const MessageBoxExampleInner: React.FC = () => {
   const showAsyncAlert = () => {
     alert({
       message: '비동기 처리가 포함된 Alert입니다.',
-      asyncOkay: async () => {
+      onClickAsyncOkay: async () => {
         await new Promise(rsv => setTimeout(rsv, 2000));
 
         console.log('Async alert completed');
@@ -102,12 +102,12 @@ const MessageBoxExampleInner: React.FC = () => {
   const showAsyncConfirm = () => {
     confirm({
       message: '비동기 처리가 포함된 Confirm입니다.',
-      asyncOkay: async () => {
+      onClickAsyncOkay: async () => {
         await new Promise(rsv => setTimeout(rsv, 2000));
 
         console.log('Async confirm completed');
       },
-      cancel: () => {
+      onClickCancel: () => {
         console.log('Async confirm cancelled');
       },
     });

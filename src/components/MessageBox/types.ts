@@ -8,9 +8,9 @@ export interface MessageBoxOptions {
   width?: string;
   btnOkayText?: string;
   btnCancelText?: string;
-  okay?: () => void;
-  cancel?: () => void;
-  asyncOkay?: () => Promise<void>;
+  onClickOkay?: () => void;
+  onClickCancel?: () => void;
+  onClickAsyncOkay?: () => Promise<void>;
   onClose?: () => void;
   escCancel?: boolean;
   enterOkay?: boolean;

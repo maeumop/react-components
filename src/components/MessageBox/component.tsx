@@ -20,9 +20,9 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
     width = '320px',
     btnOkayText = '확인',
     btnCancelText = '취소',
-    okay,
-    cancel,
-    asyncOkay,
+    onClickOkay: okay,
+    onClickCancel: cancel,
+    onClickAsyncOkay: asyncOkay,
     escCancel = true,
     enterOkay = true,
     noScrollStyleClass = 'hide-scroll',
@@ -150,7 +150,6 @@ const MessageBox: React.FC<MessageBoxOptions & { onClose: () => void }> = props 
 
   // 트랜지션 종료 후
   const handleExited = useCallback(() => {
-    console.log('handleExited');
     setIsShow(() => false);
     enableScroll();
     document.removeEventListener('keyup', keyupEvent);

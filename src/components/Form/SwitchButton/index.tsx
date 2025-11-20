@@ -16,7 +16,7 @@ import {
 import { useAppendFormComponent, useValidation } from '../hooks';
 import { ErrorMessage } from '../ErrorMessage';
 
-const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
+const SwitchButton = forwardRef<SwitchButtonModel, React.PropsWithChildren<SwitchButtonProps>>(
   (
     {
       value = false,
@@ -30,6 +30,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
       disabled = false,
       validate,
       errorMessage = '',
+      children,
     },
     ref,
   ) => {
@@ -146,7 +147,7 @@ const SwitchButton = forwardRef<SwitchButtonModel, SwitchButtonProps>(
           )}
           {/* 라벨 트랜지션 */}
           <div className="label-text" aria-live="polite">
-            {labelText}
+            {children || labelText}
           </div>
         </label>
 

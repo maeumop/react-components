@@ -109,9 +109,9 @@ export default function ExamplePage() {
 | `width`              | `string`              | `'320px'`         | 박스 너비                       |
 | `btnOkayText`        | `string`              | `'확인'`          | 확인 버튼 텍스트                |
 | `btnCancelText`      | `string`              | `'취소'`          | 취소 버튼 텍스트                |
-| `okay`               | `() => void`          | `-`               | 확인 클릭 콜백                  |
-| `cancel`             | `() => void`          | `-`               | 취소 클릭 콜백                  |
-| `asyncOkay`          | `() => Promise<void>` | `-`               | 비동기 확인 콜백                |
+| `onClickOkay`        | `() => void`          | `-`               | 확인 클릭 콜백                  |
+| `onClickCancel`      | `() => void`          | `-`               | 취소 클릭 콜백                  |
+| `onClickAsyncOkay`   | `() => Promise<void>` | `-`               | 비동기 확인 콜백                |
 | `escCancel`          | `boolean`             | `true`            | ESC로 닫기 허용                 |
 | `enterOkay`          | `boolean`             | `true`            | Enter로 확인 허용               |
 | `noScrollStyleClass` | `string`              | `'hide-scroll'`   | 스크롤 제거 클래스              |
@@ -138,7 +138,7 @@ export default function ExamplePage() {
 ```tsx
 alert({
   message: '비동기 Alert',
-  asyncOkay: async () => {
+  onClickAsyncOkay: async () => {
     await new Promise(resolve => setTimeout(resolve, 2000));
     // 완료 후 자동 닫힘
   },

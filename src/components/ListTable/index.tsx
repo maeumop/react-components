@@ -79,8 +79,10 @@ const ListTableBase = <T extends Record<string, unknown>>(
           setCheckedAll(false);
           onCheckedAll?.(false);
         }
+
         return;
       }
+
       setCheckedIndexList(checked ? [...selectableIndices] : []);
       setCheckedAll(checked);
       onCheckedAll?.(checked);
@@ -92,18 +94,24 @@ const ListTableBase = <T extends Record<string, unknown>>(
   const handleCheckItem = useCallback(
     (index: number, checked: boolean) => {
       if (index < 0 || index >= dataList.length) return;
+
       const disabled = disableFilter && disableFilter(dataList[index], index);
+
       if (disabled && checked) return;
+
       if (checkMode === 'radio') {
         setCheckedIndexList(checked ? [index] : []);
         setCheckedAll(false);
         onChecked?.(checked, index, checked ? [items[index]] : []);
         return;
       }
+
       setCheckedIndexList(prev => {
         const set = new Set(prev);
+
         if (checked) set.add(index);
         else set.delete(index);
+
         return Array.from(set);
       });
     },
@@ -115,6 +123,7 @@ const ListTableBase = <T extends Record<string, unknown>>(
     if (checkMode === 'checkbox') {
       setCheckedAll(isAllSelectableChecked);
     }
+
     if (onChecked && checkedIndexList.length > 0) {
       onChecked(false, -1, checkedItems);
     }
@@ -128,6 +137,7 @@ const ListTableBase = <T extends Record<string, unknown>>(
   // Intersection Observer
   useEffect(() => {
     if (!observer || !observerRef.current || isObserving) return;
+
     const obs = new window.IntersectionObserver(
       entries => {
         entries.forEach(entry => {
@@ -138,8 +148,10 @@ const ListTableBase = <T extends Record<string, unknown>>(
       },
       { threshold: 0.1 },
     );
+
     obs.observe(observerRef.current);
     setIsObserving(true);
+
     return () => {
       obs.disconnect();
       setIsObserving(false);
@@ -204,6 +216,7 @@ const ListTableBase = <T extends Record<string, unknown>>(
           ) : (
             dataList.map((item, idx) => {
               const disabled = disableFilter ? disableFilter(item, idx) : false;
+
               return (
                 <tr key={item.toString()} className={disabled ? 'disabled' : ''}>
                   {isCheckMode && (
@@ -231,6 +244,7 @@ const ListTableBase = <T extends Record<string, unknown>>(
             <tr>
               {footer.map((item, idx) => {
                 const Tag = (item.tag || 'td') as keyof JSX.IntrinsicElements;
+
                 return React.createElement(
                   Tag as keyof JSX.IntrinsicElements,
                   {
