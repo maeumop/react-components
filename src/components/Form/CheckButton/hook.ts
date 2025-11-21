@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import type { CheckButtonItem, CheckButtonProps } from './types';
-import { checkButtonType } from './const';
+
 import { useValidation } from '../hooks';
+
+import { checkButtonType } from './const';
+import type { CheckButtonItem, CheckButtonProps } from './types';
 
 export const useCheckButton = ({
   items = [],
@@ -116,11 +118,6 @@ export const useCheckButton = ({
     resetValidate();
     onChange(type === 'radio' ? '' : []);
   }, [type, onChange, resetValidate]);
-
-  // 외부 value prop 변경 시 내부 상태 동기화
-  useEffect(() => {
-    onChange(value ?? (type === 'radio' ? '' : []));
-  }, [value, type, onChange]);
 
   // 에러 트랜지션 자동 해제
   useEffect(() => {

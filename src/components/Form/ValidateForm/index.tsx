@@ -45,7 +45,7 @@ const ValidateFormBase = forwardRef<ValidateFormRef, ValidateFormProps>(({ child
   // 첫 번째 에러 요소로 스크롤
   const targetFirstEl = (element: HTMLElement): void => {
     if (formRef.current && element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 

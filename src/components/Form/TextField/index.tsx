@@ -41,6 +41,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
     errorMessage = '',
     onChange,
     onBlur,
+    onClick,
     className,
   } = props;
 
@@ -154,6 +155,14 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
     [onBlur, blurValidate, value, onChange, checkWithPattern],
   );
 
+  // click 핸들러
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      onClick?.(e);
+    },
+    [onClick],
+  );
+
   // 클리어 버튼 클릭
   const handleClear = useCallback(() => {
     onChange?.('');
@@ -230,6 +239,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
           readOnly={readonly}
           disabled={disabled}
           onBlur={handleBlur}
+          onClick={handleClick}
           onChange={handleChange}
         />
       ) : (
@@ -247,6 +257,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
               maxLength={maxLength > 0 ? maxLength : undefined}
               autoComplete={type === 'password' ? 'on' : 'off'}
               onBlur={handleBlur}
+              onClick={handleClick}
               onChange={handleChange}
             />
             {/* 왼쪽 아이콘 */}

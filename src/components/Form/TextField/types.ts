@@ -8,6 +8,7 @@ export interface TextFieldProps {
   value: string;
   onChange?: (value: string) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   type?: TextFieldType;
   rows?: number;
   label?: string;

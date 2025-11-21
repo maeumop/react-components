@@ -49,19 +49,18 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   // value 변경 시 유효성 검사
   const initCount = useRef<number>(0);
 
-  const { message, errorTransition, check, resetValidate, setErrorTransition } = useValidation<
-    string | string[]
-  >({
-    validate,
-    disabled,
-    value,
-    errorMessage,
-    onMounted: () => {
-      if (initCount.current < 2) {
-        initCount.current++;
-      }
-    },
-  });
+  const { message, setMessage, errorTransition, check, resetValidate, setErrorTransition } =
+    useValidation<string | string[]>({
+      validate,
+      disabled,
+      value,
+      errorMessage,
+      onMounted: () => {
+        if (initCount.current < 2) {
+          initCount.current++;
+        }
+      },
+    });
 
   const helper = useDatePickerHelper();
   const store = useDatePickerStore();
@@ -182,6 +181,12 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       // getState()로 최신 상태를 직접 읽기
       const { startDate: currentStartDate, endDate: currentEndDate } = storeInstance.getState();
 
+      // 날짜 선택 시 이전 오류 메시지 즉시 제거
+      if (message || selectedError) {
+        setMessage('');
+        setSelectedError('');
+      }
+
       // 단일 날짜 선택 모드
       if (!range) {
         updateValue();
@@ -212,7 +217,16 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
         }
       }
     },
-    [range, maxRange, updateValue, storeInstance, setStartDate, setEndDate],
+    [
+      range,
+      maxRange,
+      updateValue,
+      storeInstance,
+      setStartDate,
+      setEndDate,
+      setMessage,
+      setSelectedError,
+    ],
   );
 
   const setDateCalender = useCallback((): void => {
@@ -429,6 +443,14 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
   useEffect(() => {
     init();
   }, [init]);
+
+  // 날짜가 선택되면 오류 메시지 제거 (보험 처리)
+  useEffect(() => {
+    if ((selectedError || message) && (startDate || endDate)) {
+      setSelectedError('');
+      setMessage('');
+    }
+  }, [startDate, endDate, message, selectedError]);
 
   // 외부 클릭 이벤트 등록
   useEffect(() => {

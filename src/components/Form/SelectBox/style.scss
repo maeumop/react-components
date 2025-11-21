@@ -51,6 +51,12 @@
     justify-content: space-between;
     box-sizing: border-box;
 
+    &.disabled {
+      background-color: #f8f9fa !important;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+
     &:hover {
       border-color: #adb5bd;
     }

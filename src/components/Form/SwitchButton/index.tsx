@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useId,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -45,7 +46,9 @@ const SwitchButton = forwardRef<SwitchButtonModel, React.PropsWithChildren<Switc
       value,
     });
 
-    const inputId = useMemo(() => `switch-btn-${Math.random().toString(36).slice(2, 10)}`, []);
+    // useId를 사용하여 서버/클라이언트 간 동일한 ID 보장 (hydration mismatch 방지)
+    const id = useId();
+    const inputId = `switch-btn-${id}`;
     const inputRef = useRef<HTMLInputElement>(null);
 
     // 값 변경 핸들러
