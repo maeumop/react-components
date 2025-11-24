@@ -182,8 +182,7 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       const { startDate: currentStartDate, endDate: currentEndDate } = storeInstance.getState();
 
       // 날짜 선택 시 이전 오류 메시지 즉시 제거
-      if (message || selectedError) {
-        setMessage('');
+      if (selectedError) {
         setSelectedError('');
       }
 
@@ -444,14 +443,6 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     init();
   }, [init]);
 
-  // 날짜가 선택되면 오류 메시지 제거 (보험 처리)
-  useEffect(() => {
-    if ((selectedError || message) && (startDate || endDate)) {
-      setSelectedError('');
-      setMessage('');
-    }
-  }, [startDate, endDate, message, selectedError]);
-
   // 외부 클릭 이벤트 등록
   useEffect(() => {
     if (isShow) {
@@ -493,6 +484,7 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     accept();
   }, [accept]);
 
+  // 기능 보류
   const handleTransitionExited = useCallback(() => {
     if (blurValidate) {
       check();
@@ -587,12 +579,12 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     (evt: React.MouseEvent<SVGSVGElement>) => {
       evt.stopPropagation();
 
+      setStartDate('');
+
       if (range) {
-        setStartDate('');
         setEndDate('');
         onChange?.(['', '']);
       } else {
-        setStartDate('');
         onChange?.('');
       }
     },
@@ -612,8 +604,8 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
       return;
     }
 
-    check();
-  }, [value]);
+    resetValidate();
+  }, [startDate, endDate]);
 
   /**
    * 폼 초기화 처리
@@ -622,12 +614,12 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
     isReset.current = true;
     setToggleDateButton(prev => prev.map(item => ({ ...item, checked: false })));
 
+    setStartDate('');
+
     if (range) {
-      setStartDate('');
       setEndDate('');
       onChange?.(['', '']);
     } else {
-      setStartDate('');
       onChange?.('');
     }
 
@@ -695,7 +687,8 @@ const DatePickerBase = forwardRef<DatePickerModel, DatePickerProps>((props, ref)
           </div>
 
           {/* 달력 표시 */}
-          <AnimatePresence onExitComplete={handleTransitionExited}>
+          {/* <AnimatePresence onExitComplete={handleTransitionExited}> 기능 보류 */}
+          <AnimatePresence>
             {isShow && (
               <motion.div
                 ref={pickerRef}

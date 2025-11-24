@@ -58,7 +58,6 @@ const CalendarBase = ({
   const before: DateStateValueType = beforeState[caseStartEnd];
   const state: DateStateValueType = dateState[caseStartEnd];
 
-  const [focusedDateIndex, setFocusedDateIndex] = useState<{ row: number; col: number } | null>();
   const [transitionName, setTransitionName] = useState<TransitionCase>(transitionCase.down);
   const [calendarKey, setCalendarKey] = useState<number>(0);
 
@@ -200,73 +199,6 @@ const CalendarBase = ({
     ],
   );
 
-  // 키보드 네비게이션
-  const handleKeydown = useCallback(
-    (event: React.KeyboardEvent<HTMLLIElement>, row: number, col: number): void => {
-      const { type } = dateRender[row][col];
-
-      if (['beforeMonth', 'afterMonth', 'disabled'].includes(type)) {
-        return;
-      }
-
-      let newRow = row;
-      let newCol = col;
-
-      switch (event.key) {
-        case 'ArrowLeft':
-          if (col > 0) {
-            newCol = col - 1;
-          } else if (row > 0) {
-            newRow = row - 1;
-            newCol = 6;
-          }
-          break;
-        case 'ArrowRight':
-          if (col < 6) {
-            newCol = col + 1;
-          } else if (row < 5) {
-            newRow = row + 1;
-            newCol = 0;
-          }
-          break;
-        case 'ArrowUp':
-          if (row > 0) {
-            newRow = row - 1;
-          }
-          break;
-        case 'ArrowDown':
-          if (row < 5) {
-            newRow = row + 1;
-          }
-          break;
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          selectedDay(row, col);
-          return;
-        default:
-          return;
-      }
-
-      // 유효한 날짜인지 확인
-      const newCell = dateRender[newRow]?.[newCol];
-      if (newCell && !['beforeMonth', 'afterMonth', 'disabled'].includes(newCell.type)) {
-        setFocusedDateIndex({ row: newRow, col: newCol });
-      }
-    },
-    [dateRender, selectedDay],
-  );
-
-  // 포커스 설정
-  const setFocus = useCallback((row: number, col: number): void => {
-    setFocusedDateIndex({ row, col });
-  }, []);
-
-  // 날짜 셀의 포커스 가능 여부 확인
-  const isFocusable = useCallback((type: string): boolean => {
-    return !['beforeMonth', 'afterMonth', 'disabled'].includes(type);
-  }, []);
-
   useEffect(() => {
     const date = end ? endDate : startDate;
 
@@ -290,32 +222,23 @@ const CalendarBase = ({
 
     // key 변경으로 transition 트리거
     setCalendarKey(prev => prev + 1);
-
-    // 포커스 초기화
-    setTimeout(() => {
-      setFocusedDateIndex(null);
-    });
   }, [state.year, state.month, before.year, before.month]);
 
-  const dayClassName = useCallback(
-    (type: string, i: number, j: number): string => {
-      const classes = [type];
+  const dayClassName = useCallback((type: string, j: number): string => {
+    const classes = [type];
 
-      if (j === 0) classes.push('sun');
-      if (j === 6) classes.push('sat');
-      if (focusedDateIndex?.row === i && focusedDateIndex?.col === j) classes.push('focused');
+    if (j === 0) classes.push('sun');
+    if (j === 6) classes.push('sat');
 
-      return classes.join(' ');
-    },
-    [focusedDateIndex],
-  );
+    return classes.join(' ').trim();
+  }, []);
 
   // 헤더 className 메모이제이션
   const getHeaderClassName = useCallback((index: number): string => {
     const classes: string[] = [];
     if (index === 0) classes.push('sun');
     if (index === 6) classes.push('sat');
-    return classes.join(' ');
+    return classes.join(' ').trim();
   }, []);
 
   // 현재 transition variant 가져오기
@@ -346,11 +269,8 @@ const CalendarBase = ({
               {li.map((item, j) => (
                 <li
                   key={`calendar-${item.type}-${item.day}`}
-                  className={dayClassName(item.type, i, j)}
+                  className={dayClassName(item.type, j)}
                   onClick={e => selectedDay(i, j, e)}
-                  onKeyDown={e => handleKeydown(e, i, j)}
-                  onFocus={() => setFocus(i, j)}
-                  tabIndex={isFocusable(item.type) ? 0 : -1}
                 >
                   {item.day}
                 </li>
