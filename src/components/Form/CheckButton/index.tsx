@@ -81,7 +81,7 @@ const CheckButton = forwardRef<CheckButtonModel, CheckButtonProps>((props, ref) 
     if (initCount.current) {
       check();
     }
-  }, [value]);
+  }, [value, check]);
 
   useEffect(() => {
     initCount.current++;

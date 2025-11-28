@@ -16,10 +16,18 @@ export const useValidation = <T = unknown>({
   // errorMessage 변경시 check를 무한 반복하는 현상을 해결하기 위해 prevErrorMessage 추가
   const prevErrorMessage = useRef<string>(errorMessage);
 
+  // disabled를 ref로 관리하여 check 함수가 disabled 변경 시 재생성되지 않도록 함
+  const disabledRef = useRef<boolean>(disabled);
+
+  // disabled 값 동기화
+  useEffect(() => {
+    disabledRef.current = disabled;
+  }, [disabled]);
+
   const check = useCallback(
     (silence: boolean = false): boolean => {
       // disabled 상태인 경우 유효성 검사 무시
-      if (disabled) return true;
+      if (disabledRef.current) return true;
 
       if (errorMessage) {
         if (!silence) {
@@ -72,7 +80,7 @@ export const useValidation = <T = unknown>({
 
       return true;
     },
-    [disabled, errorMessage, validate, value, onValidationChange],
+    [errorMessage, validate, value, onValidationChange],
   );
 
   const validateValue = useCallback(async (): Promise<boolean> => {
