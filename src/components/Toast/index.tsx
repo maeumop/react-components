@@ -42,8 +42,15 @@ export const ToastProvider = ({ children }: React.PropsWithChildren) => {
     [remove, setToasts, remove, idRef],
   );
 
+  /**
+   * 페이지 이동간에 중복 처리 될 수 있는 문제를 해결 하기 위한 메서드
+   */
+  const toastClear = useCallback(() => {
+    setToasts([]);
+  }, [setToasts]);
+
   return (
-    <ToastContext.Provider value={{ toast }}>
+    <ToastContext.Provider value={{ toast, toastClear }}>
       {children}
       {createPortal(<ToastList toasts={toasts} remove={remove} />, document.body)}
     </ToastContext.Provider>

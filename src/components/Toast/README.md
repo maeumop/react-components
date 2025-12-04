@@ -65,9 +65,10 @@ export default function App() {
 
 ### useToast()
 
-| 반환값 | 설명                                              |
-| ------ | ------------------------------------------------- |
-| toast  | (message: string, options?: ToastOptions) => void |
+| 반환값     | 설명                                              |
+| ---------- | ------------------------------------------------- |
+| toast      | (message: string, options?: ToastOptions) => void |
+| toastClear | () => void                                        |
 
 #### ToastOptions
 
@@ -105,6 +106,7 @@ export default function App() {
 
 ## 업데이트 히스토리
 
+- **2025.12**: toastClear 메서드 추가
 - **2024.12**: @iconify/react에서 @mui/icons-material로 아이콘 라이브러리 변경
 - **2024.01**: Provider/Hook 패턴 도입
 - **2023.12**: 다양한 테마 및 위치 지원 추가

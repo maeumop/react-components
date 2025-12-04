@@ -26,4 +26,5 @@ export interface ToastItem {
 
 export interface ToastContextType {
   toast: (message: string, options?: ToastOptions) => void;
+  toastClear: () => void;
 }
