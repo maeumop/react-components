@@ -65,7 +65,7 @@ export interface OptionListProps {
 
   // 검색 관련
   searchInputRef?: React.RefObject<HTMLInputElement | null>;
-  onSearchTextChange?: (evt: React.FormEvent<HTMLInputElement>) => void;
+  onSearchTextChange?: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 
   // 유틸리티 함수
   isOptionSelected: (value: string) => boolean;

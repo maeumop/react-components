@@ -82,7 +82,7 @@ export const OptionList = React.memo<OptionListProps>(
                 ref={searchInputRef}
                 placeholder="검색어 입력"
                 type="text"
-                onInput={onSearchTextChange}
+                onChange={onSearchTextChange}
               />
               <SearchIcon sx={{ width: 28, height: 28 }} />
             </div>

@@ -109,7 +109,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
 
   // 옵션 리스트 (메모이제이션 적용)
   const optionList = useMemo(() => {
-    if (searchable) {
+    if (searchable && searchText) {
       return options.filter(({ text }) => text.toLowerCase().includes(searchText.toLowerCase()));
     }
 
@@ -355,17 +355,15 @@ export const useSelectBox = (props: SelectBoxProps) => {
     }
 
     if (!isShowOption) {
+      // 옵션을 열 때: 레이어 위치 설정 및 검색어 초기화
       setLayerPosition();
-    }
 
-    setIsShowOption(!isShowOption);
-
-    if (isShowOption) {
       if (searchable && searchInputRef.current) {
         searchInputRef.current.value = '';
         setSearchText('');
       }
-
+    } else {
+      // 옵션을 닫을 때: 스크롤 위치 복원
       setSelectedKeyIndex(0);
 
       setTimeout(() => {
@@ -373,6 +371,8 @@ export const useSelectBox = (props: SelectBoxProps) => {
         selected?.scrollIntoView();
       });
     }
+
+    setIsShowOption(!isShowOption);
   }, [disabled, readonly, searchable, isShowOption]);
 
   // 적용 버튼 클릭 이벤트 핸들러
@@ -525,24 +525,22 @@ export const useSelectBox = (props: SelectBoxProps) => {
   );
 
   // 검색 텍스트 변경 이벤트 핸들러
-  const searchTextHandler = useCallback((evt: React.FormEvent<HTMLInputElement>): void => {
+  // 검색 텍스트 변경 이벤트 핸들러
+  const searchTextHandler = useCallback((evt: React.ChangeEvent<HTMLInputElement>): void => {
     evt.stopPropagation();
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+    const v = evt.target.value;
 
-    timeoutRef.current = setTimeout(() => {
-      const v = (evt.target as HTMLInputElement).value;
-      setSearchText(v);
+    // 즉시 상태 업데이트 (debounce 제거)
+    setSearchText(v);
 
-      setTimeout(() => {
-        if (optionListRef.current) {
-          const li = optionListRef.current.querySelector<HTMLLIElement>('.option-item');
-          li?.scrollIntoView({ block: 'center' });
-        }
-      });
-    }, 300);
+    // 검색 결과로 스크롤
+    setTimeout(() => {
+      if (optionListRef.current) {
+        const li = optionListRef.current.querySelector<HTMLLIElement>('.option-item');
+        li?.scrollIntoView({ block: 'start' });
+      }
+    }, 0);
   }, []);
 
   // 방향키 이동 이벤트 핸들러
@@ -721,7 +719,7 @@ export const useSelectBox = (props: SelectBoxProps) => {
     prevIsShowOption.current = isShowOption;
 
     return () => {
-      setSearchText('');
+      // cleanup: 이벤트 리스너 제거
       document.removeEventListener('click', outSideClickEvent);
       document.removeEventListener('keydown', onArrowKeyHandler);
 
