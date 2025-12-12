@@ -238,6 +238,7 @@ const TextField = forwardRef<TextFieldModel, TextFieldProps>((props, ref) => {
           value={disabled ? '' : value}
           readOnly={readonly}
           disabled={disabled}
+          maxLength={maxLength > 0 ? maxLength : undefined}
           onBlur={handleBlur}
           onClick={handleClick}
           onChange={handleChange}
