@@ -648,9 +648,8 @@ export const useSelectBox = (props: SelectBoxProps) => {
     // 유효성 검사 규칙이 실제로 변경된 경우에만 재검사
     if (validate !== prevValidate.current) {
       prevValidate.current = validate;
-      check();
     }
-  }, [validate, check, selectedValue]);
+  }, [validate, selectedValue]);
 
   const prevValue = useRef<string | string[]>(value);
 
